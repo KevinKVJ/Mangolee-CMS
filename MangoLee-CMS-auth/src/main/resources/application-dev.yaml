@@ -1,0 +1,35 @@
+spring:
+  # 配置数据库
+  datasource:
+    username: root
+    password: a1923aAx#33
+    # 针对mysql8 确保数据库存在 使用gmt时区
+    url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      schema-locations: classpath:db/schema.sql
+      data-locations: classpath:db/data.sql
+      mode: always
+  # 配置文件编码
+  mandatory-file-encoding: utf-8
+
+# 配置mybatisplus
+mybatis-plus:
+  configuration:
+    # 日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 逻辑删除
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  # mapper路径位置
+  mapper-locations: classpath:mapper/*.xml
+
+# 配置tomcat端口号
+server:
+  port: 8080
+
+# 配置日志

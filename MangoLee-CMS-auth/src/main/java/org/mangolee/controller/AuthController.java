@@ -1,9 +1,11 @@
 package org.mangolee.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Api(tags = "授权Controller")
 public class AuthController {
 
     @PostMapping("/login")
