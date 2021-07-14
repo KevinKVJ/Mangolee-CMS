@@ -1,3 +1,4 @@
+
 spring:
   # 配置数据库
   datasource:
@@ -6,6 +7,36 @@ spring:
     # 针对mysql8 确保数据库存在 使用gmt时区
     url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      username: root
+      password: a1923aAx#33
+      url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initial-size: 8
+      max-active: 16
+      min-idle: 1
+      # 获取连接等待超时的时间
+      max-wait: 60000
+      # 打开强制回收连接功能
+      remove-abandoned: true
+      # 超时时间
+      remove-abandoned-timeout-millis: 600000
+      # 连接回收时记录日志
+      log-abandoned: true
+      # 采集 web-jdbc 关联监控的数据
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "/druid/*"
+      # 展示 Druid 的统计信息
+      stat-view-servlet:
+        enabled: true
+        login-username: admin
+        login-password: 123456
+        reset-enable: true
+        url-pattern: /druid/*
+
+
   sql:
     init:
       schema-locations: classpath:db/schema.sql
@@ -13,6 +44,11 @@ spring:
       mode: always
   # 配置文件编码
   mandatory-file-encoding: utf-8
+  # 配置spring security
+  security:
+    user:
+      name: admin
+      password: 123456
 
 # 配置mybatisplus
 mybatis-plus:
@@ -31,5 +67,3 @@ mybatis-plus:
 # 配置tomcat端口号
 server:
   port: 8080
-
-# 配置日志

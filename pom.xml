@@ -58,17 +58,27 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.4.3.1</version>
         </dependency>
-        <!-- 引入Druid依赖 -->
+        <!-- 引入Druid starter -->
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.10</version>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.6</version>
         </dependency>
         <!-- 引入Swagger3 -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
             <version>3.0.0</version>
+        </dependency>
+        <!-- 引入spring security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!-- 引入JRS303依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
     </dependencies>
 

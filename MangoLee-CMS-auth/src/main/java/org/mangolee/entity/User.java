@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -28,15 +28,19 @@ public class User {
     @ApiModelProperty(value = "密码")
     private String  password;
 
+    // 邮箱
+    @ApiModelProperty(value = "邮箱", example = "user@mangolee.com")
+    private String email;
+
     // 创建时间
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
-    private Date    gmtCreate;
+    private LocalDateTime gmtCreate;
 
     // 修改时间
     @ApiModelProperty(value = "修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date    gmtModified;
+    private LocalDateTime    gmtModified;
 
     // 乐观锁
     @ApiModelProperty(value = "乐观锁")
