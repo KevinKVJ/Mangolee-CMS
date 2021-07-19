@@ -13,6 +13,8 @@ import org.mangolee.utils.ResultUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import java.util.List;
 
 @RestController
@@ -25,7 +27,7 @@ public class UserController {
 
     @ApiOperation("根据主键ID获取用户")
     @GetMapping("/findbyid/{id}")
-    public Result<User> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Long id) {
+    public Result<User> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id")  @Valid Long id) {
         try {
             return ResultUtils.success(userService.getById(id));
         } catch (Exception e) {

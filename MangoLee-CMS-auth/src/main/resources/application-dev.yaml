@@ -3,13 +3,13 @@ spring:
   # 配置数据库
   datasource:
     username: root
-    password: a1923aAx#33
+    password: miaoxudong
     # 针对mysql8 确保数据库存在 使用gmt时区
     url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       username: root
-      password: a1923aAx#33
+      password: miaoxudong
       url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
       driver-class-name: com.mysql.cj.jdbc.Driver
       initial-size: 8
@@ -49,6 +49,16 @@ spring:
     user:
       name: admin
       password: 123456
+  # 配置redis
+  redis:
+    #修改为自己的redis地址， 需要提前对redis配置文件进行修改
+    host: localhost
+    port: 6379
+    #使用数据库
+    database: 0
+    #连接超时时间（毫秒
+    connect-timeout: 1000
+
 
 # 配置mybatisplus
 mybatis-plus:

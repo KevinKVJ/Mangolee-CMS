@@ -3,16 +3,16 @@ package org.mangolee;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.junit.jupiter.api.Test;
 import org.mangolee.entity.User;
-import org.mangolee.mapper.UserMapper;
 import org.mangolee.service.UserService;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class ApplicationTest {
@@ -98,5 +98,14 @@ class ApplicationTest {
         userService.save(user);
         user = userService.getOne(new QueryWrapper<User>().eq("username", "Lin"));
         System.out.println(user);
+    }
+
+    // Test Redis
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+    @Test
+    void TestRedis(){
+        redisTemplate.opsForValue().set("test","this is a test");
+        System.out.println(redisTemplate.opsForValue().get("test"));
     }
 }
