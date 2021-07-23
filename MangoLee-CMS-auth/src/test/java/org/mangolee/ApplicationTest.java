@@ -2,10 +2,12 @@ package org.mangolee;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.junit.jupiter.api.Test;
+import org.mangolee.config.SecurityConfig;
 import org.mangolee.entity.User;
 import org.mangolee.service.UserService;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -32,18 +34,18 @@ class ApplicationTest {
         String password = "password1";
         String newPassword = "password2";
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username", username)
-                .eq("password", password);
+        wrapper.eq("username", username);
         // obtain
         User user = userService.getOne(wrapper);
+        assertTrue(new BCryptPasswordEncoder().matches(password, user.getPassword()));
         // update
-        user.setPassword(newPassword);
+        user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
         userService.update(user, wrapper);
         // print
         wrapper = new QueryWrapper<>();
-        wrapper.eq("username", username)
-                .eq("password", newPassword);
+        wrapper.eq("username", username);
         user = userService.getOne(wrapper);
+        assertTrue(new BCryptPasswordEncoder().matches(newPassword, user.getPassword()));
         System.out.println(user);
     }
 
@@ -103,9 +105,16 @@ class ApplicationTest {
     // Test Redis
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
-    @Test
+    //@Test
     void TestRedis(){
         redisTemplate.opsForValue().set("test","this is a test");
         System.out.println(redisTemplate.opsForValue().get("test"));
+    }
+
+    //@Test
+    void f() {
+        System.out.println(new BCryptPasswordEncoder().encode("password2"));
+        System.out.println(new BCryptPasswordEncoder().encode("password3"));
+        System.out.println(new BCryptPasswordEncoder().encode("password4"));
     }
 }

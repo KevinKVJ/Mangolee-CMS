@@ -25,7 +25,7 @@ public class User {
     private String  username;
 
     // 密码
-    @ApiModelProperty(value = "密码")
+    @ApiModelProperty(value = "加密密码")
     private String  password;
 
     // 邮箱

@@ -5,7 +5,7 @@ drop table if exists `user`;
 CREATE TABLE `user` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `username` varchar(30) NOT NULL COMMENT '用户名',
-  `password` varchar(255) NOT NULL COMMENT '明文密码',
+  `password` varchar(255) NOT NULL COMMENT '加密密码',
   `email` VARCHAR(50) NULL DEFAULT NULL COMMENT '邮箱',
   `deleted` int DEFAULT '0' COMMENT '逻辑删除',
   `version` int DEFAULT '1' COMMENT '乐观锁',

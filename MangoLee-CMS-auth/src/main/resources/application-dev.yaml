@@ -44,11 +44,6 @@ spring:
       mode: always
   # 配置文件编码
   mandatory-file-encoding: utf-8
-  # 配置spring security
-  security:
-    user:
-      name: admin
-      password: 123456
   # 配置redis
   redis:
     #修改为自己的redis地址， 需要提前对redis配置文件进行修改
