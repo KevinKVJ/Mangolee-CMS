@@ -20,7 +20,7 @@ CREATE TABLE `user` (
 DROP TABLE IF EXISTS `permission`;
 CREATE TABLE `permission` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `name` VARCHAR (30) NOT NULL COMMENT '权限名称',    /** 管理员:ADMIN 普通用户:GUEST **/
+    `role` VARCHAR (30) NOT NULL COMMENT '权限角色名称',    /** 管理员:ADMIN 普通用户:GUEST **/
     `mount` INT DEFAULT '1' NOT NULL COMMENT '启用状态',    /** 默认启用 **/
     `deleted` INT DEFAULT '0' COMMENT '逻辑删除',
     `version` INT DEFAULT '1' COMMENT '乐观锁',

@@ -11,7 +11,7 @@ VALUES (1, 'Jack', '$2a$10$EdPwOZZwTHwMwHvCrDaOqOgcmP7m9yQY3r.s2cbzEhsr94GXo19vu
 
 /** 插入初始权限 **/
 DELETE FROM `permission`;
-INSERT INTO `permission` (`id`, `name`, `mount`)
+INSERT INTO `permission` (`id`, `role`, `mount`)
 VALUES (1, 'ADMIN', 1),
        (2, 'ADMIN', 1),
        (3, 'GUEST', 1),
