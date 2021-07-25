@@ -1,0 +1,4 @@
+# 设置当前环境
+spring:
+  profiles:
+    active: dev
