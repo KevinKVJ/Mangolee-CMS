@@ -1,8 +1,6 @@
 package org.mangolee;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.junit.jupiter.api.Test;
-import org.mangolee.config.SecurityConfig;
 import org.mangolee.entity.User;
 import org.mangolee.service.UserService;
 import org.springframework.boot.test.context.SpringBootTest;
