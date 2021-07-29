@@ -24,10 +24,6 @@ public class FilterResponseUtil {
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Mono.just(buffer));
     }
-    static public Mono<Void> response(ServerHttpResponse response, ResultEnum resultEnum)
-    {
-        return response(response,resultEnum.getCode(),resultEnum.getMessage(),null);
-    }
     static public Mono<Void> response(ServerHttpResponse response,Result result)
     {
         return response(response,result.getCode(),result.getMessage(),result.getData());
