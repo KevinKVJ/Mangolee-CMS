@@ -8,8 +8,6 @@ import org.mangolee.entity.User;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.UserService;
 import org.mangolee.utils.Result;
-import org.mangolee.utils.ResultEnum;
-import org.mangolee.utils.ResultUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +30,9 @@ public class UserController {
     @GetMapping("/findbyid/{id}")
     public Result<User> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Long id) {
         try {
-            return ResultUtils.success(userService.getById(id));
+            return Result.success(userService.getById(id));
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
@@ -42,9 +40,9 @@ public class UserController {
     @GetMapping("/find/all")
     public Result<List<User> > getUsers() {
         try {
-            return ResultUtils.success(userService.list());
+            return Result.success(userService.list());
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
@@ -55,9 +53,9 @@ public class UserController {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);
         try {
-            return ResultUtils.success(userService.getOne(wrapper));
+            return Result.success(userService.getOne(wrapper));
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
@@ -65,9 +63,9 @@ public class UserController {
     @GetMapping("/find/allusers")
     public Result<List<User> > getAllUsers() {
         try {
-            return ResultUtils.success(userService.getAllUsers());
+            return Result.success(userService.getAllUsers());
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
@@ -80,11 +78,11 @@ public class UserController {
             wrapper.eq("email", email);
             List<User> users = userService.list(wrapper);
             if (users == null) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
-            return ResultUtils.success(users);
+            return Result.success(users);
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
@@ -101,11 +99,11 @@ public class UserController {
             User user = userService.getOne(wrapper);
             // 若找不到用户则抛出异常
             if (user == null) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
             // 若找到用户但密码不正确则抛出异常
             if (!new BCryptPasswordEncoder().matches(password, user.getPassword())) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
             // 更新用户
             user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
@@ -115,15 +113,15 @@ public class UserController {
             user = userService.getOne(wrapper);
             // 若找不到更新后的用户则抛出异常
             if (user == null) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
             // 更新后的用户密码不正确则抛出异常
             if (!new BCryptPasswordEncoder().matches(newPassword, user.getPassword())) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
-            return ResultUtils.success(user);
+            return Result.success(user);
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
@@ -137,7 +135,7 @@ public class UserController {
             User user = userService.getOne(wrapper);
             // 若找不到用户则抛出异常
             if (user == null) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
             user.setEmail(email);
             userService.update(user, wrapper);
@@ -146,11 +144,11 @@ public class UserController {
             user = userService.getOne(wrapper);
             // 若找不到更新后的用户则抛出异常
             if (user == null) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
-            return ResultUtils.success(user);
+            return Result.success(user);
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
@@ -163,11 +161,11 @@ public class UserController {
             QueryWrapper<User> wrapper = new QueryWrapper<>();
             wrapper.eq("username", username);
             if (!userService.remove(wrapper)) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
-            return ResultUtils.success();
+            return Result.success();
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
@@ -176,11 +174,11 @@ public class UserController {
     public Result<User> logicalDeleteById(@ApiParam(value = "邮箱", required = true) @PathVariable("id") Long id) {
         try {
             if (!userService.removeById(id)) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
-            return ResultUtils.success();
+            return Result.success();
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
@@ -190,11 +188,11 @@ public class UserController {
         try {
             userService.physicalDeleteById(id);
             if (userService.getUserByIdIgnoreLogicalDeletion(id) != null) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
-            return ResultUtils.success();
+            return Result.success();
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
@@ -208,23 +206,23 @@ public class UserController {
             User user = userService.getOne(wrapper);
             // 检查是否存在此用户名 如果存在则抛出异常
             if (user != null) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
             user = new User();
             user.setUsername(username);
             user.setPassword(new BCryptPasswordEncoder().encode(password));
             user.setEmail(email);
             if (!userService.save(user)) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
             user = userService.getOne(wrapper);
             // 若创建的用户找不到则抛出异常
             if (user == null) {
-                throw new BaseException(ResultEnum.BAD_REQUEST);
+                throw new BaseException(Result.BAD_REQUEST);
             }
-            return ResultUtils.success(user);
+            return Result.success(user);
         } catch (Exception e) {
-            throw new BaseException(ResultEnum.BAD_REQUEST);
+            throw new BaseException(Result.BAD_REQUEST);
         }
     }
 
