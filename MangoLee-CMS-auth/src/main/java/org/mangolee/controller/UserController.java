@@ -8,8 +8,6 @@ import org.mangolee.entity.User;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.UserService;
 import org.mangolee.utils.Result;
-import org.mangolee.utils.ResultEnum;
-import org.mangolee.utils.ResultUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
