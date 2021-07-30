@@ -1,0 +1,16 @@
+server:
+  port: 9528
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes:
+        - id: consumer
+          uri: lb://nacos-consumer
+          predicates:
+            - Path=/consumer/**

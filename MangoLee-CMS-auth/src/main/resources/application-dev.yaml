@@ -3,13 +3,13 @@ spring:
   # 配置数据库
   datasource:
     username: root
-    password: miaoxudong
+    password: 284317
     # 针对mysql8 确保数据库存在 使用gmt时区
     url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       username: root
-      password: miaoxudong
+      password: 284317
       url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
       driver-class-name: com.mysql.cj.jdbc.Driver
       initial-size: 8

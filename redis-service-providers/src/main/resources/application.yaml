@@ -1,0 +1,15 @@
+spring:
+  redis:
+    database: 0
+    port: 6379
+    host: 159.89.156.59
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        service: redis-service-providers
+  application:
+    name: redis-service-providers
+
+server:
+  port: 7334

@@ -1,6 +1,7 @@
 package org.mangolee.utils;
 
 import org.mangolee.exception.BaseException;
+import org.mangolee.exception.MyFeignException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -20,4 +21,9 @@ public class GlobalExceptionHandler<T> {
         return Result.BAD_REQUEST;
     }
 
+    //处理远程调用异常
+    @ExceptionHandler({MyFeignException.class})
+    public Result FeignExceptionHandler(Exception e){
+        return Result.INTERNAL_ERROR;
+    }
 }
