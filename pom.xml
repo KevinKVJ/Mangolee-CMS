@@ -12,6 +12,8 @@
         <module>MangoLee-CMS-auth</module>
         <module>MangoLee-CMS-common</module>
         <module>MangoLee-CMS-Gateway</module>
+        <module>redis-service-consumer</module>
+        <module>redis-service-providers</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -21,10 +23,18 @@
         <java.version>1.8</java.version>
         <ali.version>0.2.2.RELEASE</ali.version>
         <springcloud.version>Hoxton.SR8</springcloud.version>
-        <springboot.version>2.3.3.RELEASE</springboot.version>
+        <springboot.version>2.2.6.RELEASE</springboot.version>
+        <swagger.version>3.0.0</swagger.version>
+        <fastjson.version>1.1.23</fastjson.version>
+        <lombok.version>1.18.20</lombok.version>
+        <mysql.version>8.0.25</mysql.version>
+        <mybatis-plus.version>3.4.3.1</mybatis-plus.version>
+        <druid.version>1.2.6</druid.version>
+        <junit-api.version>5.2.0</junit-api.version>
     </properties>
     <dependencyManagement>
         <dependencies>
+            <!--alibaba 依赖-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -32,6 +42,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!--springcloud依赖-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -39,6 +50,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!--springboot依赖-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -46,46 +58,52 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- 引入mysql依赖 -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+            <!-- 引入mybatisplus依赖 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <!-- 引入Druid  -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- lombok依赖 -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <optional>true</optional>
+            </dependency>
+            <!-- 引入Swagger3 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!--fastjson依赖-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <!--Junit-->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit-api.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-
-        <!-- 引入springboot热启动依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <!-- 引入lombok依赖 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- 引入Swagger3 -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
