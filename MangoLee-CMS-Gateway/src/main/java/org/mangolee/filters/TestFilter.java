@@ -2,7 +2,6 @@ package org.mangolee.filters;
 
 import org.mangolee.utils.FilterResponseUtil;
 import org.mangolee.utils.Result;
-import org.mangolee.utils.ResultEnum;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -19,9 +18,9 @@ import java.util.logging.Handler;
 public class TestFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        if(true)
+        if(false)
         {
-            return FilterResponseUtil.response(exchange.getResponse(),ResultEnum.BAD_REQUEST);
+            return FilterResponseUtil.response(exchange.getResponse(),Result.success("Helloworld"));
         }
 
         System.out.println("Before");
