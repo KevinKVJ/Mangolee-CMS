@@ -32,6 +32,10 @@ public class User {
     @ApiModelProperty(value = "邮箱", example = "user@mangolee.com")
     private String email;
 
+    // 角色权限
+    @ApiModelProperty(value = "角色权限", example = "ADMIN")
+    private String role;
+
     // 创建时间
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)

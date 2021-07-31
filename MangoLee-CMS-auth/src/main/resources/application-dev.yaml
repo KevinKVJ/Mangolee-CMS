@@ -1,4 +1,3 @@
-
 spring:
   # 配置数据库
   datasource:
@@ -35,7 +34,6 @@ spring:
         login-password: 123456
         reset-enable: true
         url-pattern: /druid/*
-
 
   sql:
     # 初始化数据库

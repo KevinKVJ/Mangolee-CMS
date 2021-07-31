@@ -1,6 +1,7 @@
 package org.mangolee;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.junit.jupiter.api.Test;
 import org.mangolee.entity.User;
 import org.mangolee.service.UserService;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +21,12 @@ class ApplicationTest {
     @Resource
     private UserService userService;
 
-    //@Test
+    @Test
+    void f() {
+        System.out.println(123);
+    }
+
+    @Test
     void getAllUsersTest() {
         List<User> users = userService.list(null);
         users.forEach(System.out::println);
@@ -107,12 +113,5 @@ class ApplicationTest {
     void TestRedis(){
         redisTemplate.opsForValue().set("test","this is a test");
         System.out.println(redisTemplate.opsForValue().get("test"));
-    }
-
-    //@Test
-    void f() {
-        System.out.println(new BCryptPasswordEncoder().encode("password2"));
-        System.out.println(new BCryptPasswordEncoder().encode("password3"));
-        System.out.println(new BCryptPasswordEncoder().encode("password4"));
     }
 }
