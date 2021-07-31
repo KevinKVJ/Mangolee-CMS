@@ -14,3 +14,7 @@ spring:
           uri: lb://nacos-consumer
           predicates:
             - Path=/consumer/**
+        - id: RedisConsumer
+          uri: lb://redis-consumer
+          predicates:
+            - Path=/consumer/**
