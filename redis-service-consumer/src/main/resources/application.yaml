@@ -6,6 +6,8 @@ spring:
     name: redis-consumer
   mvc:
     throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
   cloud:
     nacos:
       discovery:
