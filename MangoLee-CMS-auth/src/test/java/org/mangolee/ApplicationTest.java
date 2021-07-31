@@ -113,10 +113,4 @@ public class ApplicationTest {
         System.out.println(redisTemplate.opsForValue().get("test"));
     }
 
-    @Test
-    public void f() {
-        System.out.println(new BCryptPasswordEncoder().encode("password2"));
-        System.out.println(new BCryptPasswordEncoder().encode("password3"));
-        System.out.println(new BCryptPasswordEncoder().encode("password4"));
-    }
 }
