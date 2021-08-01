@@ -30,7 +30,7 @@ public class ApplicationTest {
         users.forEach(System.out::println);
     }
 
-    @Test
+    //@Test
     public void updateUserPasswordTest() {
         String username = "Jack";
         String password = "password1";
@@ -51,7 +51,7 @@ public class ApplicationTest {
         System.out.println(user);
     }
 
-    @Test
+    //@Test
     public void updateUserEmailTest() throws InterruptedException {
         String username = "Jack";
         String newEmail = "jackson@mangolee.com";
@@ -72,7 +72,7 @@ public class ApplicationTest {
         System.out.println(user);
     }
 
-    @Test
+    //@Test
     public void logicalDeleteByUsernameTest() {
         String username = "Jack";
         QueryWrapper<User> wrapper = new QueryWrapper<>();
@@ -80,20 +80,20 @@ public class ApplicationTest {
         assertTrue(userService.remove(wrapper));
     }
 
-    @Test
+    //@Test
     public void logicalDeleteByIdTest() {
         Long id = 1L;
         assertTrue(userService.removeById(id));
     }
 
-    @Test
+    //@Test
     public void physicalDeleteByIdTest()  {
         Long id = 1L;
         userService.physicalDeleteById(id);
         assertNull(userService.getById(id));
     }
 
-    @Test
+    //@Test
     public void createUserTest() {
         User user = new User();
         user.setUsername("Lin");
