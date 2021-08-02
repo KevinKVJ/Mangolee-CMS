@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mangolee.pojo.UserInfo;
 
 import java.time.LocalDateTime;
 
@@ -55,4 +56,6 @@ public class User {
     @ApiModelProperty(value = "逻辑删除")
     @TableLogic
     private Integer deleted;
+
+    public UserInfo getInfo(){return new UserInfo(id,username,password,email);}
 }
