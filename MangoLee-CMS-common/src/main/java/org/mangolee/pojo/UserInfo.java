@@ -19,11 +19,11 @@ public class UserInfo {
     @ApiModelProperty(value = "用户名", example = "Jack")
     private String  username;
 
-    // 密码
-    @ApiModelProperty(value = "加密密码")
-    private String  password;
-
     // 邮箱
     @ApiModelProperty(value = "邮箱", example = "user@mangolee.com")
     private String email;
+
+    // 角色权限
+    @ApiModelProperty(value = "角色权限", example = "ADMIN")
+    private String role;
 }

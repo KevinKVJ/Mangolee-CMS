@@ -57,5 +57,5 @@ public class User {
     @TableLogic
     private Integer deleted;
 
-    public UserInfo getInfo(){return new UserInfo(id,username,password,email);}
+    public UserInfo getInfo(){return new UserInfo(id,username,email,role);}
 }
