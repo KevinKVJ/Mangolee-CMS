@@ -1,33 +1,37 @@
 package org.mangolee;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mangolee.entity.User;
 import org.mangolee.service.UserService;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
-class ApplicationTest {
+public class ApplicationTest {
 
     @Resource
     private UserService userService;
 
-    //@Test
-    void getAllUsersTest() {
+    @Test
+    public void getAllUsersTest() {
         List<User> users = userService.list(null);
         users.forEach(System.out::println);
     }
 
     //@Test
-    void updateUserPasswordTest() {
+    public void updateUserPasswordTest() {
         String username = "Jack";
         String password = "password1";
         String newPassword = "password2";
@@ -48,7 +52,7 @@ class ApplicationTest {
     }
 
     //@Test
-    void updateUserEmailTest() throws InterruptedException {
+    public void updateUserEmailTest() throws InterruptedException {
         String username = "Jack";
         String newEmail = "jackson@mangolee.com";
         User user = new User();
@@ -69,7 +73,7 @@ class ApplicationTest {
     }
 
     //@Test
-    void logicalDeleteByUsernameTest() {
+    public void logicalDeleteByUsernameTest() {
         String username = "Jack";
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);
@@ -77,20 +81,20 @@ class ApplicationTest {
     }
 
     //@Test
-    void logicalDeleteByIdTest() {
+    public void logicalDeleteByIdTest() {
         Long id = 1L;
         assertTrue(userService.removeById(id));
     }
 
     //@Test
-    void physicalDeleteByIdTest()  {
+    public void physicalDeleteByIdTest()  {
         Long id = 1L;
         userService.physicalDeleteById(id);
         assertNull(userService.getById(id));
     }
 
     //@Test
-    void createUserTest() {
+    public void createUserTest() {
         User user = new User();
         user.setUsername("Lin");
         user.setPassword("passwordLin");
@@ -103,16 +107,10 @@ class ApplicationTest {
     // Test Redis
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
-    //@Test
-    void TestRedis(){
+    @Test
+    public void TestRedis(){
         redisTemplate.opsForValue().set("test","this is a test");
         System.out.println(redisTemplate.opsForValue().get("test"));
     }
 
-    //@Test
-    void f() {
-        System.out.println(new BCryptPasswordEncoder().encode("password2"));
-        System.out.println(new BCryptPasswordEncoder().encode("password3"));
-        System.out.println(new BCryptPasswordEncoder().encode("password4"));
-    }
 }

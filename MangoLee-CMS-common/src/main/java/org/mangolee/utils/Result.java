@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("结果实体类")
-public class Result<T>{
+public class Result<T> {
 
     @ApiModelProperty(value = "消息代码", example = "200")
     private Integer code;
@@ -21,13 +21,31 @@ public class Result<T>{
     @ApiModelProperty(value = "返回数据")
     private T data;
 
-    public final static Result BAD_REQUEST = new Result(400, "无效请求",null);
-    public final static Result UNAUTHORIZED = new Result(401, "未授权",null);
-    public final static Result FORBIDDEN = new Result(403, "禁止访问",null);
-    public final static Result NOT_FOUND = new Result(404, "找不到结果",null);
-    public final static Result INTERNAL_ERROR = new Result(500, "内部错误",null);
-    public static Result success(Object data) { return new Result(200,"操作成功",data); }
-    public static Result success() { return new Result(200,"操作成功",null); }
-    public static Result error(int code, String msg){ return new Result(code,msg,null);}
+    @SuppressWarnings("unchecked")
+    public final static Result BAD_REQUEST = new Result(400, "无效请求", null);
+
+    @SuppressWarnings("unchecked")
+    public final static Result UNAUTHORIZED = new Result(401, "未授权", null);
+
+    @SuppressWarnings("unchecked")
+    public final static Result FORBIDDEN = new Result(403, "禁止访问", null);
+
+    @SuppressWarnings("unchecked")
+    public final static Result NOT_FOUND = new Result(404, "找不到结果", null);
+
+    @SuppressWarnings("unchecked")
+    public final static Result INTERNAL_ERROR = new Result(500, "内部错误", null);
+
+    public static <T> Result<T> success(T data) {
+        return new Result<>(200, "操作成功", data);
+    }
+
+    public static <T> Result<T> success() {
+        return new Result<>(200, "操作成功", null);
+    }
+
+    public static <T> Result<T> error(int code, String msg) {
+        return new Result<>(code, msg, null);
+    }
 }
 
