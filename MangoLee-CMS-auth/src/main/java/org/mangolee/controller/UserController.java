@@ -24,7 +24,7 @@ import java.util.List;
 public class UserController {
 
     @Resource
-    UserService userService;
+    private UserService userService;
 
     @ApiOperation("根据主键ID获取用户")
     @GetMapping("/findbyid/{id}")
@@ -48,11 +48,12 @@ public class UserController {
 
     @ApiOperation("根据用户名获取用户")
     @GetMapping("/find/{username}")
-    public Result<User> getByUsernameAndPassword(@ApiParam(value = "用户名", required = true) @PathVariable(
+    public Result<User> getByUsername(@ApiParam(value = "用户名", required = true) @PathVariable(
             "username") @NotEmpty(message = "用户名不能为空") String username) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);
         try {
+            System.out.println(userService.getOne(wrapper));
             return Result.success(userService.getOne(wrapper));
         } catch (Exception e) {
             throw new BaseException(Result.BAD_REQUEST);

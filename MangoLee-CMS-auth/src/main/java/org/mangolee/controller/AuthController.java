@@ -10,23 +10,29 @@ import org.mangolee.utils.JwtUtils;
 import org.mangolee.utils.Result;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
+@Validated
 @RestController
+@RequestMapping("/auth")
 @Api(tags = "授权Controller")
 public class AuthController {
 
     @Resource
-    UserService userService;
+    private UserService userService;
 
     // 传入Username和Password作为参数, 调用下层Service接口
-    public Result<String> login(@PathVariable("username") String username, @PathVariable("password") String password) {
+
+    public Result<String> login(@PathVariable("username") @NotNull String username,
+                                @PathVariable("password") @NotNull String password) {
         try {
             // 判断用户名是否为null或者空
             if (username == null || StringUtils.isEmpty(username)) {
@@ -54,7 +60,14 @@ public class AuthController {
             UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), user.getEmail(),
                     user.getRole(), UUID.randomUUID().toString(), new Date(System.currentTimeMillis()));
             // 根据UserInfo生成对应的token
-            String token = JwtUtils.createToken(userInfo);
+            String token = JwtUtils.createTokenFromUserInfo(userInfo, JwtUtils.SECRET_KEY
+                    , JwtUtils.SIGNATURE_ALGORITHM);
+            // 判断token是否为null
+            if (token == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 将token保存到redis中去
+
             // 返回封装结果
             return Result.success(token);
         } catch (Exception e) {
@@ -63,7 +76,7 @@ public class AuthController {
     }
 
     // Verify token
-    public Result<UserInfo> verify(@PathVariable("token") String token) {
+    public Result<UserInfo> verify(@PathVariable("token") @NotNull String token) {
         // 检查token是否存在redis中
 
         // 如果不存在 报错
@@ -74,7 +87,7 @@ public class AuthController {
     }
 
     // Logout
-    public Result<Void> logout(@PathVariable("token") String token) {
+    public Result<Void> logout(@PathVariable("token") @NotNull String token) {
         // 删除redis中的token
         return null;
     }

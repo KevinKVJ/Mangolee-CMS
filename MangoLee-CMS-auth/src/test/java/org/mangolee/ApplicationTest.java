@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -30,15 +30,25 @@ public class ApplicationTest {
     private UserService userService;
 
     @Test
+    public void f() {
+        Class<?> g = UserInfo.class;
+        Field[]  fields = g.getDeclaredFields();
+        for (Field field : fields) {
+            System.out.println(field.getName());
+            System.out.println(field.getType());
+        }
+    }
+
+    @Test
     public void getAUser() {
         User user = userService.getById(1L);
         System.out.println(user);
-        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), user.getEmail(), user.getRole(),
+        UserInfo userInfo = new UserInfo(user.getId(), null, user.getEmail(), user.getRole(),
                 UUID.randomUUID().toString(), new Date(System.currentTimeMillis()));
         System.out.println(userInfo);
-        String token = JwtUtils.createToken(userInfo);
+        String token = JwtUtils.createTokenFromUserInfo(userInfo, JwtUtils.SECRET_KEY, JwtUtils.SIGNATURE_ALGORITHM);
         System.out.println(token);
-        userInfo = JwtUtils.getUserInfo(token);
+        userInfo = JwtUtils.getUserInfoFromToken(token, JwtUtils.SECRET_KEY, JwtUtils.SIGNATURE_ALGORITHM);
         System.out.println(userInfo);
     }
 

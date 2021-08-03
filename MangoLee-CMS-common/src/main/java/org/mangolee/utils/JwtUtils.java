@@ -14,16 +14,20 @@ import java.util.Date;
 public class JwtUtils {
 
     // 签名算法
-    private final static SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+    public final static SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
     // secret
-    private final static String SECRET_KEY = "hHnmgpUrSxNMbepoW5GPS/rumwzxMj+jGx/D0in5dDU=";
+    public final static String SECRET_KEY = "hHnmgpUrSxNMbepoW5GPS/rumwzxMj+jGx/D0in5dDU=";
 
     // 通过UserInfo生成token
-    public static String createToken(UserInfo userInfo) {
+    public static String createTokenFromUserInfo(UserInfo userInfo, String secretKey, SignatureAlgorithm signatureAlgorithm) {
 
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
-        Key    signingkey = new SecretKeySpec(apiKeySecretBytes, SIGNATURE_ALGORITHM.getJcaName());
+        if (userInfo == null || secretKey == null || signatureAlgorithm == null) {
+            return null;
+        }
+
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secretKey);
+        Key    signingkey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         // 创建并返回token
         return Jwts.builder()
@@ -34,16 +38,16 @@ public class JwtUtils {
                 .claim("role", userInfo.getRole())
                 .claim("uuid", userInfo.getUuid())
                 .claim("gmtCreate", userInfo.getGmtCreate())
-                .signWith(SIGNATURE_ALGORITHM, signingkey)
+                .signWith(signatureAlgorithm, signingkey)
                 .compact();
     }
 
     // 通过token生成UserInfo
-    public static UserInfo getUserInfo(String token) {
+    public static UserInfo getUserInfoFromToken(String token, String secretKey, SignatureAlgorithm signatureAlgorithm) {
 
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
-        Key    signingkey = new SecretKeySpec(apiKeySecretBytes, SIGNATURE_ALGORITHM.getJcaName());
-
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secretKey);
+        Key    signingkey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+        // 解析token抽取UserInfo
         Claims claims = Jwts.parser()
                .setSigningKey(signingkey)
                 .parseClaimsJws(token)
