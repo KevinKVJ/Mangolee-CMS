@@ -4,14 +4,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mangolee.entity.User;
+import org.mangolee.entity.UserInfo;
 import org.mangolee.service.UserService;
+import org.mangolee.utils.JwtUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertNull;
@@ -23,6 +28,19 @@ public class ApplicationTest {
 
     @Resource
     private UserService userService;
+
+    @Test
+    public void getAUser() {
+        User user = userService.getById(1L);
+        System.out.println(user);
+        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), user.getEmail(), user.getRole(),
+                UUID.randomUUID().toString(), new Date(System.currentTimeMillis()));
+        System.out.println(userInfo);
+        String token = JwtUtils.createToken(userInfo);
+        System.out.println(token);
+        userInfo = JwtUtils.getUserInfo(token);
+        System.out.println(userInfo);
+    }
 
     @Test
     public void getAllUsersTest() {
@@ -107,8 +125,9 @@ public class ApplicationTest {
     // Test Redis
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+
     @Test
-    public void TestRedis(){
+    public void TestRedis() {
         redisTemplate.opsForValue().set("test","this is a test");
         System.out.println(redisTemplate.opsForValue().get("test"));
     }

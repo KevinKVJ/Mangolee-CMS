@@ -45,8 +45,10 @@ spring:
   # 配置redis
   redis:
     #修改为自己的redis地址， 需要提前对redis配置文件进行修改
+    #如果需要远程调试 先进行ssh端口转发到本地12345
     host: localhost
-    port: 6379
+    port: 12345
+    #port: 6379
     #使用数据库
     database: 0
     #连接超时时间（毫秒

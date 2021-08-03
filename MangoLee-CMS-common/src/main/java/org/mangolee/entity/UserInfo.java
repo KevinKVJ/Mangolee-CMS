@@ -1,10 +1,13 @@
-package org.mangolee.pojo;
+package org.mangolee.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -26,4 +29,12 @@ public class UserInfo {
     // 角色权限
     @ApiModelProperty(value = "角色权限", example = "ADMIN")
     private String role;
+
+    // UUID (保证token随机性)
+    @ApiModelProperty(value = "UUID")
+    private String uuid;
+
+    // 创建时间
+    @ApiModelProperty(value = "创建时间")
+    private Date gmtCreate;
 }

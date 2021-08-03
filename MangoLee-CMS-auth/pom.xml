@@ -9,9 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MangoLee-auth</artifactId>
+    <artifactId>MangoLee-CMS-auth</artifactId>
 
     <dependencies>
+        <!-- 引用MangoLee-CMS-common-->
         <dependency>
             <groupId>org.mangolee</groupId>
             <artifactId>MangoLee-CMS-common</artifactId>
