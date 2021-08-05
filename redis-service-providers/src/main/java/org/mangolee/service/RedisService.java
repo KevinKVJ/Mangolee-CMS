@@ -1,18 +1,17 @@
 package org.mangolee.service;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 public interface RedisService {
+
     void set(String key, Object value);
 
     Object get(String key);
 
     Boolean setToken(String token);
 
-    Long getTokenTTL(String token);
+    Long getKeyTtl(String key);
 
-    Boolean updateTokenTTL(String token,Long newTtl);
+    Boolean updateKeyTtl(String key, Long newTtl);
 
-    Boolean remove(String key);
+    Boolean delete(String key);
 
 }

@@ -5,15 +5,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mangolee.entity.User;
 import org.mangolee.entity.UserInfo;
+import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
 import org.mangolee.utils.JwtUtils;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -23,21 +22,11 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-public class ApplicationTest {
+@SpringBootTest(classes = AuthApplication.class)
+public class AuthTests {
 
     @Resource
     private UserService userService;
-
-    @Test
-    public void f() {
-        Class<?> g = UserInfo.class;
-        Field[]  fields = g.getDeclaredFields();
-        for (Field field : fields) {
-            System.out.println(field.getName());
-            System.out.println(field.getType());
-        }
-    }
 
     @Test
     public void getAUser() {
@@ -134,12 +123,12 @@ public class ApplicationTest {
 
     // Test Redis
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisService redisService;
 
     @Test
-    public void TestRedis() {
-        redisTemplate.opsForValue().set("test","this is a test");
-        System.out.println(redisTemplate.opsForValue().get("test"));
+    public void testRedis() {
+        redisService.set("1234ss","this is a test");
+        System.out.println(redisService.get("1234ss"));
     }
 
 }

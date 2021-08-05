@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 public class RedisController {
+
     @Resource
     private RedisService redisService;
 
@@ -21,7 +22,7 @@ public class RedisController {
     //检测异常是否被捕获
     @GetMapping("/testException")
     public String test() throws InterruptedException {
-        Thread.currentThread().sleep(5000);
+        Thread.sleep(5000);
         return "Test";
     }
 
@@ -38,24 +39,21 @@ public class RedisController {
         return redisService.setToken(token);
     }
 
-    @GetMapping("/provider/redisService/getTTL/{token}")
-    public Long getTokenTTL(@PathVariable("token") String token){
-        return redisService.getTokenTTL(token);
+    @GetMapping("/provider/redisService/getTTL/{key}")
+    public Long getKeyTtl(@PathVariable("key") String key){
+        return redisService.getKeyTtl(key);
     }
 
-    @PostMapping("/provider/redisService/updateTTL/{token}/{newTtl}")
-    public Boolean updateTokenTTL(@PathVariable("token")  String token,
-                                  @PathVariable("newTtl") Long newTtl)
+    @PostMapping("/provider/redisService/updateTTL/{key}/{newTtl}")
+    public Boolean updateKeyTtl(@PathVariable("key")  String key,
+                                @PathVariable("newTtl") Long newTtl)
     {
-        return redisService.updateTokenTTL(token,newTtl);
+        return redisService.updateKeyTtl(key,newTtl);
     }
 
     @PostMapping("/provider/redisService/remove/{key}")
-    public Boolean remove(@PathVariable("key") String key){
-        return redisService.remove(key);
+    public Boolean delete(@PathVariable("key") String key){
+        return redisService.delete(key);
     }
-
-
-
 
 }

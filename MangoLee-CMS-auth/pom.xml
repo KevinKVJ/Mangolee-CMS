@@ -63,6 +63,12 @@
             <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- 引入redis-service-providers-->
+        <dependency>
+            <groupId>MangoLee-redis</groupId>
+            <artifactId>redis-service-providers</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
