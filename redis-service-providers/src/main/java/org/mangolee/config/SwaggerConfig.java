@@ -1,4 +1,4 @@
-package mangolee.config;
+package org.mangolee.config;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
