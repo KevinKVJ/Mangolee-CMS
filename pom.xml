@@ -14,6 +14,7 @@
         <module>MangoLee-CMS-Gateway</module>
         <module>redis-service-consumer</module>
         <module>redis-service-providers</module>
+        <module>TokenIntercepterTestService</module>
     </modules>
     <packaging>pom</packaging>
 

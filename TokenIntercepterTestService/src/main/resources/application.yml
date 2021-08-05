@@ -1,0 +1,19 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: token-intercepter
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+interceptor-config:
+  use-token: true
+  token-match: /**
+  token-exclude: /abc
