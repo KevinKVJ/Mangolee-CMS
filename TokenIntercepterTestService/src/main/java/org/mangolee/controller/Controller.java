@@ -1,7 +1,7 @@
 package org.mangolee.controller;
 
 
-import org.mangolee.utils.Result;
+import org.mangolee.entity.Result;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;

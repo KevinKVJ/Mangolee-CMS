@@ -1,28 +1,44 @@
 package org.mangolee;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
 import org.mangolee.entity.User;
+import org.mangolee.entity.UserInfo;
+import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
+import org.mangolee.utils.JwtUtils;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ApplicationTest {
+
+@SpringBootTest(classes = AuthApplication.class)
+public class AuthTests {
 
     @Resource
     private UserService userService;
+
+    //@Test
+    public void getAUser() {
+        User user = userService.getById(1L);
+        System.out.println(user);
+        UserInfo userInfo = new UserInfo(user.getId(), null, user.getEmail(), user.getRole(),
+                UUID.randomUUID().toString(), new Date(System.currentTimeMillis()));
+        System.out.println(userInfo);
+        String token = JwtUtils.createTokenFromUserInfo(userInfo, JwtUtils.SECRET_KEY, JwtUtils.SIGNATURE_ALGORITHM);
+        System.out.println(token);
+        userInfo = JwtUtils.getUserInfoFromToken(token, JwtUtils.SECRET_KEY, JwtUtils.SIGNATURE_ALGORITHM);
+        System.out.println(userInfo);
+    }
 
     @Test
     public void getAllUsersTest() {
@@ -106,11 +122,12 @@ public class ApplicationTest {
 
     // Test Redis
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisService redisService;
+
     @Test
-    public void TestRedis(){
-        redisTemplate.opsForValue().set("test","this is a test");
-        System.out.println(redisTemplate.opsForValue().get("test"));
+    public void testRedis() {
+        redisService.set("1234ss","this is a test");
+        System.out.println(redisService.get("1234ss"));
     }
 
 }

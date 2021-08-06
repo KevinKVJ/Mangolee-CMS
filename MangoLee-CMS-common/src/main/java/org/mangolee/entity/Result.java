@@ -1,4 +1,4 @@
-package org.mangolee.utils;
+package org.mangolee.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;

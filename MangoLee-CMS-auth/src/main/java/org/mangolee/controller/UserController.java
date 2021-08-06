@@ -7,14 +7,14 @@ import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.User;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.UserService;
-import org.mangolee.utils.Result;
+import org.mangolee.entity.Result;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Validated
@@ -24,11 +24,11 @@ import java.util.List;
 public class UserController {
 
     @Resource
-    UserService userService;
+    private UserService userService;
 
     @ApiOperation("根据主键ID获取用户")
     @GetMapping("/findbyid/{id}")
-    public Result<User> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Long id) {
+    public Result<User> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
         try {
             return Result.success(userService.getById(id));
         } catch (Exception e) {
@@ -48,11 +48,12 @@ public class UserController {
 
     @ApiOperation("根据用户名获取用户")
     @GetMapping("/find/{username}")
-    public Result<User> getByUsernameAndPassword(@ApiParam(value = "用户名", required = true) @PathVariable(
-            "username") @NotEmpty(message = "用户名不能为空") String username) {
+    public Result<User> getByUsername(@ApiParam(value = "用户名", required = true) @PathVariable(
+            "username") @NotNull String username) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);
         try {
+            System.out.println(userService.getOne(wrapper));
             return Result.success(userService.getOne(wrapper));
         } catch (Exception e) {
             throw new BaseException(Result.BAD_REQUEST);
@@ -89,10 +90,9 @@ public class UserController {
     @ApiOperation("根据用户名和旧密码修改密码")
     @PutMapping("/updatepassword/{username}/{password}/{newpassword}")
     public Result<User> updatePassword(@ApiParam(value = "用户名", required = true) @PathVariable(
-            "username") @NotEmpty(message = "用户名不能为空") String username,
-                               @ApiParam(value = "密码", required = true) @PathVariable("password") @NotEmpty(message =
-                                       "密码不能为空") String password,
-                               @ApiParam(value = "新密码", required = true) @PathVariable("newpassword") @NotEmpty(message = "密码不能为空") String newPassword) {
+            "username") @NotNull String username,
+                               @ApiParam(value = "密码", required = true) @PathVariable("password") @NotNull String password,
+                               @ApiParam(value = "新密码", required = true) @PathVariable("newpassword") @NotNull String newPassword) {
         try {
             QueryWrapper<User> wrapper = new QueryWrapper<>();
             wrapper.eq("username", username);
@@ -127,7 +127,7 @@ public class UserController {
 
     @ApiOperation("根据用户名修改邮箱")
     @PutMapping("/updateemail/{username}/{email}")
-    public Result<User> updateEmail(@ApiParam(value = "用户名", required = true) @PathVariable("username") @NotEmpty(message = "用户名不能为空") String username,
+    public Result<User> updateEmail(@ApiParam(value = "用户名", required = true) @PathVariable("username") @NotNull String username,
                                     @ApiParam(value = "新邮箱", required = true) @PathVariable("email") @Email(message = "邮箱格式不正确") String email) {
         try {
             QueryWrapper<User> wrapper = new QueryWrapper<>();
@@ -156,7 +156,7 @@ public class UserController {
     @DeleteMapping("/logicaldeletebyusername/{username}")
     public Result<User> logicalDeleteByUsername(
             @ApiParam(value = "用户名", required = true)
-            @PathVariable("username") @NotEmpty(message = "用户名不能为空") String username) {
+            @PathVariable("username") @NotNull String username) {
         try {
             QueryWrapper<User> wrapper = new QueryWrapper<>();
             wrapper.eq("username", username);
@@ -171,7 +171,7 @@ public class UserController {
 
     @ApiOperation("根据主键ID进行逻辑删除")
     @DeleteMapping("/logicaldeletebyid/{id}")
-    public Result<User> logicalDeleteById(@ApiParam(value = "邮箱", required = true) @PathVariable("id") Long id) {
+    public Result<User> logicalDeleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
         try {
             if (!userService.removeById(id)) {
                 throw new BaseException(Result.BAD_REQUEST);
@@ -184,7 +184,7 @@ public class UserController {
 
     @ApiOperation("根据主键ID进行物理删除")
     @DeleteMapping("/physicaldeletebyid/{id}")
-    public Result<User> physicalDeleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Long id) {
+    public Result<User> physicalDeleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
         try {
             userService.physicalDeleteById(id);
             if (userService.getUserByIdIgnoreLogicalDeletion(id) != null) {
@@ -198,8 +198,8 @@ public class UserController {
 
     @ApiOperation("根据用户名密码邮箱创建新账号")
     @PostMapping("/create/{username}/{password}/{email}")
-    public Result<User> createUser(@ApiParam(value = "用户名", required = true) @PathVariable("username") @NotEmpty(message = "用户名不能为空") String username,
-                                   @ApiParam(value = "密码", required = true) @PathVariable("password") @NotEmpty(message = "密码不能为空") String password,
+    public Result<User> createUser(@ApiParam(value = "用户名", required = true) @PathVariable("username") @NotNull String username,
+                                   @ApiParam(value = "密码", required = true) @PathVariable("password") @NotNull String password,
                                    @ApiParam(value = "邮箱", required = true) @PathVariable("email") @Email(message = "邮箱格式不正确") String email) {
         try {
             QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);

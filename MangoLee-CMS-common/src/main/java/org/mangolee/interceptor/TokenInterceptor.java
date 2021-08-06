@@ -3,16 +3,13 @@ package org.mangolee.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.tomcat.util.http.MimeHeaders;
+import org.mangolee.entity.Result;
 import org.mangolee.exception.BaseException;
-import org.mangolee.service.RedisServiceImp;
-import org.mangolee.utils.Result;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mangolee.service.RedisService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -26,7 +23,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     @Value("${spring.application.name}")
     private String applicationName;
     //@Autowired
-    private RedisServiceImp redisServiceImp = new RedisServiceImp();
+    private RedisService redisService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");

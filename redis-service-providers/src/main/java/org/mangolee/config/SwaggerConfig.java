@@ -14,17 +14,12 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 @EnableOpenApi
 public class SwaggerConfig {
-    // 配置 swagger3
+
     @Bean
-    public Docket docket(Environment env) {
-        // 设置要启用swagger的环境为开发环境 否则不启用
-        //Profiles profiles = Profiles.of("dev");
-        return  new Docket(DocumentationType.OAS_30)
-                //.enable(env.acceptsProfiles(profiles))
+    public Docket docket() {
+        return new Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo())
                 .select()
-                // 配置要扫描接口的方式
-                // basepackage
                 .apis(RequestHandlerSelectors.basePackage("org.mangolee.controller"))
                 .build();
     }
@@ -33,7 +28,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("MangoLee-CMS")
-                .description("MangoLee-auth接口文档")
+                .description("redis-service-provider接口文档")
                 .version("1.0")
                 .contact(contact())
                 .license("Apache 2.0")
@@ -48,5 +43,4 @@ public class SwaggerConfig {
                 "https://github.com/KevinKVJ/Mangolee-CMS",
                 "author@gmail.com");
     }
-
 }

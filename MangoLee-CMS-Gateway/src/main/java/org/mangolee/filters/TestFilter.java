@@ -1,19 +1,13 @@
 package org.mangolee.filters;
 
 import org.mangolee.utils.FilterResponseUtil;
-import org.mangolee.utils.Result;
+import org.mangolee.entity.Result;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.util.HashMap;
-import java.util.logging.Handler;
 
 public class TestFilter implements GlobalFilter, Ordered {
     @Override
