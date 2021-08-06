@@ -5,8 +5,8 @@ spring:
     add-mappings: false
   redis:
     database: 0
-    port: 6379
-    host: 159.89.156.59
+    port: 12345
+    host: localhost
   cloud:
     nacos:
       discovery:
@@ -14,6 +14,5 @@ spring:
         service: redis-service-providers
   application:
     name: redis-service-providers
-
 server:
   port: 7334

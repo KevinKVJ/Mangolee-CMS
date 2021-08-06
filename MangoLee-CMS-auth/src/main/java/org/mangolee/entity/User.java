@@ -18,15 +18,15 @@ public class User {
     // 主键ID
     @ApiModelProperty(value = "主键ID", example = "1")
     @TableId(type = IdType.AUTO)
-    private Long    id;
+    private Long id;
 
     // 用户名
     @ApiModelProperty(value = "用户名", example = "Jack")
-    private String  username;
+    private String username;
 
     // 密码
     @ApiModelProperty(value = "加密密码")
-    private String  password;
+    private String password;
 
     // 邮箱
     @ApiModelProperty(value = "邮箱", example = "user@mangolee.com")
@@ -44,7 +44,7 @@ public class User {
     // 修改时间
     @ApiModelProperty(value = "修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime    gmtModified;
+    private LocalDateTime gmtModified;
 
     // 乐观锁
     @ApiModelProperty(value = "乐观锁")
