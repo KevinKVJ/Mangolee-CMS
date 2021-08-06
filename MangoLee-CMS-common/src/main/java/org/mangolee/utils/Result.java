@@ -1,5 +1,7 @@
 package org.mangolee.utils;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.annotation.JSONType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -10,15 +12,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("结果实体类")
+@JSONType(orders = { "code", "message","data"})
 public class Result<T> {
 
     @ApiModelProperty(value = "消息代码", example = "200")
+    @JSONField(name = "code")
     private Integer code;
 
     @ApiModelProperty(value = "返回消息", example = "操作成功")
+    @JSONField(name = "message")
     private String message;
 
     @ApiModelProperty(value = "返回数据")
+    @JSONField(name = "data")
     private T data;
 
     @SuppressWarnings("unchecked")

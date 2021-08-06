@@ -1,6 +1,8 @@
 package org.mangolee.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,12 +16,10 @@ public class FilterResponseUtil {
     {
         response.setStatusCode(HttpStatus.valueOf(200));
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", statusCode);
-        jsonObject.put("message",msg);
-        jsonObject.put("data",data);
+        Result<Object> result = new Result<>(statusCode, msg, data);
         //把json对象转换成字节数组
-        byte[] bytes = jsonObject.toJSONString().getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = JSON.toJSONString(result, SerializerFeature.WriteMapNullValue)
+                .getBytes(StandardCharsets.UTF_8);
         //把字节数据转换成一个DataBuffer
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Mono.just(buffer));
