@@ -51,7 +51,7 @@ public class RedisController {
         return redisService.updateKeyTtl(key,newTtl);
     }
 
-    @PostMapping("/provider/redisService/remove/{key}")
+    @PostMapping("/provider/redisService/delete/{key}")
     public Boolean delete(@PathVariable("key") String key){
         return redisService.delete(key);
     }

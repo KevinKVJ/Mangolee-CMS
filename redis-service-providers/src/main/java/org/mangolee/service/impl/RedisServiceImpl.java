@@ -13,9 +13,9 @@ public class RedisServiceImpl implements RedisService {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    private final static Long DEFAULT_TTL = 1L;
+    public final static Long DEFAULT_TTL = 24*60*60*1000L;
 
-    private final static String DEFAULT_VALUE = "";
+    public final static String DEFAULT_VALUE = "";
 
     //存值
     @Override
@@ -44,7 +44,7 @@ public class RedisServiceImpl implements RedisService {
         if (token == null) {
             return false;
         }
-        redisTemplate.opsForValue().set(token, DEFAULT_VALUE, DEFAULT_TTL, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(token, DEFAULT_VALUE, DEFAULT_TTL, TimeUnit.MILLISECONDS);
         return true;
     }
 
@@ -62,19 +62,15 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public Boolean updateKeyTtl(String key, Long newTtl) {
-        if (key == null || newTtl == null) {
+        if (key == null || newTtl == null || newTtl <= 0) {
             return false;
         }
-        try {
-            if (newTtl > 0 && Boolean.TRUE.equals(redisTemplate.hasKey(key))) {
-                redisTemplate.opsForValue().set(key, "", newTtl, TimeUnit.MILLISECONDS);
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
+        Boolean hasKey = redisTemplate.hasKey(key);
+        if (hasKey == null || !hasKey) {
             return false;
         }
+        redisTemplate.opsForValue().set(key, DEFAULT_VALUE, newTtl, TimeUnit.MILLISECONDS);
+        return true;
     }
 
     @Override

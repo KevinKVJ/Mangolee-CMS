@@ -1,6 +1,5 @@
 package org.mangolee.service;
 
-import org.mangolee.entity.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +19,15 @@ public interface RedisFeignService {
     @GetMapping("/provider/redisService/set/{token}")
     Boolean setToken(@PathVariable("token")  String token);
 
-    //redis获得指定token存活时间
-    @GetMapping("/provider/redisService/getTTL/{token}")
-    Long getTokenTTL(@PathVariable("token") String token);
+    //redis获得指定key存活时间
+    @GetMapping("/provider/redisService/getTTL/{key}")
+    Long getKeyTtl(@PathVariable("key") String key);
 
-    //redis更新token存活时间
-    @PostMapping("/provider/redisService/updateTTL/{token}/{newTtl}")
-    Boolean updateTokenTTL(@PathVariable("token")  String token,
-                                  @PathVariable("newTtl") Long newTtl);
+    //redis更新key存活时间
+    @PostMapping("/provider/redisService/updateTTL/{key}/{newTtl}")
+    Boolean updateKeyTtl(@PathVariable("key")  String key,
+                         @PathVariable("newTtl") Long newTtl);
 
-    @PostMapping("/provider/redisService/remove/{key}")
-    Boolean remove(@PathVariable("key") String key);
+    @PostMapping("/provider/redisService/delete/{key}")
+    Boolean delete(@PathVariable("key") String key);
 }

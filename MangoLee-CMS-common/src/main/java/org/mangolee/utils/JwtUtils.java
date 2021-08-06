@@ -45,6 +45,10 @@ public class JwtUtils {
     // 通过token生成UserInfo
     public static UserInfo getUserInfoFromToken(String token, String secretKey, SignatureAlgorithm signatureAlgorithm) {
 
+        if (token == null || secretKey == null || signatureAlgorithm == null) {
+            return null;
+        }
+
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secretKey);
         Key    signingkey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
         // 解析token抽取UserInfo

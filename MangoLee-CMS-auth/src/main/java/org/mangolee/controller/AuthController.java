@@ -5,15 +5,15 @@ import io.swagger.annotations.Api;
 import org.mangolee.entity.User;
 import org.mangolee.entity.UserInfo;
 import org.mangolee.exception.BaseException;
+import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
+import org.mangolee.service.impl.RedisServiceImpl;
 import org.mangolee.utils.JwtUtils;
 import org.mangolee.utils.Result;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
@@ -29,8 +29,11 @@ public class AuthController {
     @Resource
     private UserService userService;
 
-    // 传入Username和Password作为参数, 调用下层Service接口
+    @Resource
+    private RedisService redisService;
 
+    // 传入Username和Password作为参数, 调用下层Service接口
+    @GetMapping("/login/{username}/{password}")
     public Result<String> login(@PathVariable("username") @NotNull String username,
                                 @PathVariable("password") @NotNull String password) {
         try {
@@ -66,8 +69,10 @@ public class AuthController {
             if (token == null) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
-            // 将token保存到redis中去
-
+            // 将token保存到redis中去 并判断是否保存成功
+            if (!redisService.setToken(token)) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
             // 返回封装结果
             return Result.success(token);
         } catch (Exception e) {
@@ -76,19 +81,40 @@ public class AuthController {
     }
 
     // Verify token
+    @PostMapping("/verify/{token}")
     public Result<UserInfo> verify(@PathVariable("token") @NotNull String token) {
-        // 检查token是否存在redis中
-
-        // 如果不存在 报错
-
-        // 如果存在 续期
-
-        return null;
+        try {
+            // 判断token是否为null
+            if (token == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 检查token是否存在redis中及其类型
+            Object object = redisService.get(token);
+            if (!(object instanceof UserInfo)) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 如果存在 续期一天 并检查是否成功
+            if (!redisService.updateKeyTtl(token, RedisServiceImpl.DEFAULT_TTL)) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 返回封装结果
+            return Result.success((UserInfo) object);
+        } catch (Exception e) {
+            throw new BaseException(Result.BAD_REQUEST);
+        }
     }
 
     // Logout
+    // 删除redis中的token
+    @DeleteMapping("/del/{token}")
     public Result<Void> logout(@PathVariable("token") @NotNull String token) {
-        // 删除redis中的token
-        return null;
+        try {
+            if (token == null || !redisService.delete(token)) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            return Result.success();
+        } catch (Exception e) {
+            throw new BaseException(Result.BAD_REQUEST);
+        }
     }
 }
