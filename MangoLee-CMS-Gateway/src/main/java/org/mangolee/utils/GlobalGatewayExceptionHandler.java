@@ -2,6 +2,7 @@ package org.mangolee.utils;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.mangolee.entity.Result;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.HttpMessageReader;
@@ -13,9 +14,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -23,8 +22,8 @@ public class GlobalGatewayExceptionHandler implements ErrorWebExceptionHandler {
 
     private List<HttpMessageReader<?>> messageReaders = Collections.emptyList();
     private List<HttpMessageWriter<?>> messageWriters = Collections.emptyList();
-    private List<ViewResolver> viewResolvers = Collections.emptyList();
-    private ThreadLocal<Result> threadLocal=new ThreadLocal<>();
+    private List<ViewResolver>  viewResolvers = Collections.emptyList();
+    private ThreadLocal<Result> threadLocal   =new ThreadLocal<>();
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {

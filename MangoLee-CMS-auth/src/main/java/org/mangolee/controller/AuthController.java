@@ -2,14 +2,16 @@ package org.mangolee.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.User;
 import org.mangolee.entity.UserInfo;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
 import org.mangolee.service.impl.RedisServiceImpl;
+import org.mangolee.entity.Result;
 import org.mangolee.utils.JwtUtils;
-import org.mangolee.utils.Result;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -32,10 +34,13 @@ public class AuthController {
     @Resource
     private RedisService redisService;
 
-    // 传入Username和Password作为参数, 调用下层Service接口
+    @ApiOperation("判断用户名和密码并在成功后生成token")
     @GetMapping("/login/{username}/{password}")
-    public Result<String> login(@PathVariable("username") @NotNull String username,
-                                @PathVariable("password") @NotNull String password) {
+    public Result<String> login(
+            @ApiParam(value = "用户名", required = true)
+            @PathVariable("username") @NotNull String username,
+            @ApiParam(value = "密码", required = true)
+            @PathVariable("password") @NotNull String password) {
         try {
             // 判断用户名是否为null或者空
             if (username == null || StringUtils.isEmpty(username)) {
@@ -81,8 +86,11 @@ public class AuthController {
     }
 
     // Verify token
+    @ApiOperation("根据token抽取UserInfo实例")
     @PostMapping("/verify/{token}")
-    public Result<UserInfo> verify(@PathVariable("token") @NotNull String token) {
+    public Result<UserInfo> verify(
+            @ApiParam(value = "令牌", required = true)
+            @PathVariable("token") @NotNull String token) {
         try {
             // 判断token是否为null
             if (token == null) {
@@ -105,9 +113,11 @@ public class AuthController {
     }
 
     // Logout
-    // 删除redis中的token
+    @ApiOperation("删除redis中的令牌")
     @DeleteMapping("/del/{token}")
-    public Result<Void> logout(@PathVariable("token") @NotNull String token) {
+    public Result<Void> logout(
+            @ApiParam(value = "令牌", required = true)
+            @PathVariable("token") @NotNull String token) {
         try {
             if (token == null || !redisService.delete(token)) {
                 throw new BaseException(Result.BAD_REQUEST);

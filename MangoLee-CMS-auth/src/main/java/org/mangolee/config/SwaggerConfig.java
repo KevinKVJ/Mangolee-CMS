@@ -3,7 +3,6 @@ package org.mangolee.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.oas.annotations.EnableOpenApi;
@@ -19,9 +18,9 @@ public class SwaggerConfig {
     @Bean
     public Docket docket(Environment env) {
         // 设置要启用swagger的环境为开发环境 否则不启用
-        Profiles profiles = Profiles.of("dev");
+        //Profiles profiles = Profiles.of("dev");
         return  new Docket(DocumentationType.OAS_30)
-                .enable(env.acceptsProfiles(profiles))
+                //.enable(env.acceptsProfiles(profiles))
                 .apiInfo(apiInfo())
                 .select()
                 // 配置要扫描接口的方式
@@ -34,7 +33,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("MangoLee-CMS")
-                .description("MangoLee-CMS接口文档")
+                .description("MangoLee-auth接口文档")
                 .version("1.0")
                 .contact(contact())
                 .license("Apache 2.0")

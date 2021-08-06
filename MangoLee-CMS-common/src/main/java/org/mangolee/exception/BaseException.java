@@ -3,7 +3,7 @@ package org.mangolee.exception;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
-import org.mangolee.utils.Result;
+import org.mangolee.entity.Result;
 
 
 @ApiModel("自定义基础异常类")

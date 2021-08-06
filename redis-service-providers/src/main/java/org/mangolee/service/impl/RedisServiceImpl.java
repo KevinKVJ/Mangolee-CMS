@@ -2,6 +2,7 @@ package org.mangolee.service.impl;
 
 import org.mangolee.service.RedisService;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -13,11 +14,20 @@ public class RedisServiceImpl implements RedisService {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
     public final static Long DEFAULT_TTL = 24*60*60*1000L;
 
     public final static String DEFAULT_VALUE = "";
 
-    //存值
+    @Override
+    public void setValueAsString(String key, String value) {
+        if (key != null && value != null) {
+            stringRedisTemplate.opsForValue().set(key, value);
+        }
+    }
+
     @Override
     public void set(String key, Object value) {
         if (key != null && value != null) {
@@ -25,7 +35,18 @@ public class RedisServiceImpl implements RedisService {
         }
     }
 
-    //取值
+    @Override
+    public String getValueAsString(String key) {
+        if (key == null) {
+            return null;
+        }
+        Boolean hasKey = stringRedisTemplate.hasKey(key);
+        if (hasKey == null || !hasKey) {
+            return null;
+        }
+        return stringRedisTemplate.opsForValue().get(key);
+    }
+
     @Override
     public Object get(String key) {
         if (key == null) {
@@ -38,7 +59,6 @@ public class RedisServiceImpl implements RedisService {
         return redisTemplate.opsForValue().get(key);
     }
 
-    // 存token 默认一天
     @Override
     public Boolean setToken(String token) {
         if (token == null) {

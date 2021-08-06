@@ -2,7 +2,6 @@ package org.mangolee.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +13,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 //redis配置
 @Configuration
+@SuppressWarnings("unchecked")
 public class RedisConfig {
 
     @Bean
@@ -37,7 +37,4 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template;
     }
-
-
-
 }

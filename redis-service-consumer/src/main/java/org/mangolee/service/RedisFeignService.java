@@ -1,33 +1,35 @@
 package org.mangolee.service;
 
+import org.mangolee.entity.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.constraints.NotNull;
 
 //可以直接复制到包里调用
+@Validated
 @Component
 @FeignClient("redis-service-providers")
 public interface RedisFeignService {
 
-    //用于测试异常处理
-    @GetMapping("/test")
-    String test();
-
     //redis存储token
-    @GetMapping("/provider/redisService/set/{token}")
-    Boolean setToken(@PathVariable("token")  String token);
+    @GetMapping("/redisprovider/settoken/{token}")
+    Result<Boolean> setToken(@PathVariable("token") @NotNull String token);
 
     //redis获得指定key存活时间
-    @GetMapping("/provider/redisService/getTTL/{key}")
-    Long getKeyTtl(@PathVariable("key") String key);
+    @GetMapping("/redisprovider/getkeyttl/{key}")
+    Result<Long> getKeyTtl(@PathVariable("key") @NotNull String key);
 
     //redis更新key存活时间
-    @PostMapping("/provider/redisService/updateTTL/{key}/{newTtl}")
-    Boolean updateKeyTtl(@PathVariable("key")  String key,
-                         @PathVariable("newTtl") Long newTtl);
+    @PostMapping("/redisprovider/updatekeyttl/{key}/{newTtl}")
+    Result<Boolean> updateKeyTtl(@PathVariable("key") @NotNull String key,
+                         @PathVariable("newTtl") @NotNull Long newTtl);
 
-    @PostMapping("/provider/redisService/delete/{key}")
-    Boolean delete(@PathVariable("key") String key);
+    @DeleteMapping("/redisprovider/delete/{key}")
+    Result<Boolean> delete(@PathVariable("key") @NotNull String key);
 }

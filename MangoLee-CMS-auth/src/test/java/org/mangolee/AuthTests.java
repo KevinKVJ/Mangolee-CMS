@@ -27,7 +27,7 @@ public class AuthTests {
     @Resource
     private UserService userService;
 
-    @Test
+    //@Test
     public void getAUser() {
         User user = userService.getById(1L);
         System.out.println(user);

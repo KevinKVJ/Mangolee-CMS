@@ -1,5 +1,6 @@
 package org.mangolee.utils;
 
+import org.mangolee.entity.Result;
 import org.mangolee.exception.BaseException;
 import org.mangolee.exception.MyFeignException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

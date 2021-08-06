@@ -1,4 +1,4 @@
-package org.mangolee.utils;
+package org.mangolee.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

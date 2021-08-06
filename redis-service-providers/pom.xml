@@ -27,6 +27,12 @@
             <artifactId>spring-cloud-starter</artifactId>
         </dependency>
 
+        <!-- 引入JRS303依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
         <!--Test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
