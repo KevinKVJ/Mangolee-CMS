@@ -48,7 +48,7 @@ spring:
     host: localhost
     port: 12345
     #port: 6379
-    #使用数据库
+    #确定auth模块使用的数据库编号
     database: 0
     #连接超时时间（毫秒
     timeout: 1000

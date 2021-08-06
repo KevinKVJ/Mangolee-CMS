@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 // 全局异常处理
 @RestControllerAdvice
 public class GlobalExceptionHandler<T> {
+
     @Value("${spring.application.name}")
     private String appName;
 
@@ -43,7 +44,6 @@ public class GlobalExceptionHandler<T> {
     }
 
     // 处理其他异常
-    @SuppressWarnings("unchecked")
     @ExceptionHandler({Exception.class})
     public Result<T> exceptionHandler(Exception e) {
         return Result.error(400, defaultMsgBuilder(e));

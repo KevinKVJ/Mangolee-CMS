@@ -3,10 +3,9 @@ package org.mangolee.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.mangolee.entity.Result;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
-import org.mangolee.entity.Result;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

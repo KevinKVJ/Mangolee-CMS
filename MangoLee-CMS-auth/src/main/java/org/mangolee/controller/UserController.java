@@ -187,9 +187,6 @@ public class UserController {
     public Result<User> physicalDeleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
         try {
             userService.physicalDeleteById(id);
-            if (userService.getUserByIdIgnoreLogicalDeletion(id) != null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
             return Result.success();
         } catch (Exception e) {
             throw new BaseException(Result.BAD_REQUEST);

@@ -30,6 +30,7 @@ public interface RedisFeignService {
     Result<Boolean> updateKeyTtl(@PathVariable("key") @NotNull String key,
                          @PathVariable("newTtl") @NotNull Long newTtl);
 
+    //redis删除键
     @DeleteMapping("/redisprovider/delete/{key}")
     Result<Boolean> delete(@PathVariable("key") @NotNull String key);
 }
