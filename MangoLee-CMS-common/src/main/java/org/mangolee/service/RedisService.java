@@ -1,5 +1,6 @@
 package org.mangolee.service;
 
+//TODO 把 RedisService 和 RedisFeignService 合并统一接口（使用result方式返回），并在provider中做好实现
 public interface RedisService {
     // 存值 值类型为String
     void setValueAsString(String key, String value);
