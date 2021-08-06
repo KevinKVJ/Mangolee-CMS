@@ -5,7 +5,7 @@ spring:
     add-mappings: false
   redis:
     database: 0
-    port: 12345
+    port: 6379
     host: localhost
   cloud:
     nacos:
