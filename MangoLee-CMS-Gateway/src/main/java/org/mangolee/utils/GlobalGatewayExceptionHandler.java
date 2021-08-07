@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Webflux式异常集中处理，集中处理为json返回格式
+ */
 @Getter
 @Setter
 public class GlobalGatewayExceptionHandler implements ErrorWebExceptionHandler {
@@ -27,6 +30,12 @@ public class GlobalGatewayExceptionHandler implements ErrorWebExceptionHandler {
     private List<ViewResolver> viewResolvers = Collections.emptyList();
     private ThreadLocal<Result> threadLocal=new ThreadLocal<>();
 
+    /**
+     * 异常集中处理，对throwable识别exception类型并编辑相应json返回信息
+     * @param exchange
+     * @param throwable
+     * @return
+     */
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
         if(!exchange.getResponse().isCommitted())
@@ -57,7 +66,7 @@ public class GlobalGatewayExceptionHandler implements ErrorWebExceptionHandler {
     }
 
     /**
-     * 参考DefaultErrorWebExceptionHandler
+     * 参考DefaultErrorWebExceptionHandler，对返回body写入
      */
     private Mono<? extends Void> write(ServerWebExchange exchange, ServerResponse response) {
         exchange.getResponse().getHeaders().setContentType(response.headers().getContentType());

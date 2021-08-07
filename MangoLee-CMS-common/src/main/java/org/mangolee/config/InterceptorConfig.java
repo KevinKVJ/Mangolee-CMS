@@ -12,8 +12,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 将拦截器注册进容器，并根据配置文件决定是否使用，如何使用
+ */
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
+    //自动填充token拦截器
     @Bean
     public TokenInterceptor getTokenInterceptor(){
         return new TokenInterceptor();
@@ -29,12 +33,12 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         InterceptorRegistration tokenRegistration =null;
-        if(useToken != null && useToken)
+        if(useToken != null && useToken)//当使用token拦截器
         {
             tokenRegistration = registry.addInterceptor(tokenInterceptor);
             if(tokenMatch == null ||
                     (tokenMatch.size() ==1 &&
-                            tokenMatch.get(0).trim().equals("null")))
+                            tokenMatch.get(0).trim().equals("null")))//当未设置拦截路径时自动采用
             {
                 tokenMatch = new ArrayList<>();
                 tokenMatch.add("/**");
@@ -42,7 +46,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
             tokenRegistration.addPathPatterns(tokenMatch);
             if(tokenExclude!= null &&
                     !(tokenExclude.size() == 1 &&
-                            tokenExclude.get(0).trim().equals("null")))
+                            tokenExclude.get(0).trim().equals("null")))//当设置了例外路径
             {
                 tokenRegistration.excludePathPatterns(tokenExclude);
             }

@@ -2,6 +2,7 @@ package org.mangolee.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import org.mangolee.entity.Result;
+import org.mangolee.entity.UserInfo;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,8 +13,10 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,7 +48,12 @@ public class FilterUtil {
         return response(response, result.getCode(), result.getMessage(), result.getData());
     }
 
-
+    /**
+     * 从exchange中创建新request，并在新request中填充请求参数
+     * @param exchange
+     * @param ParamMap
+     * @return
+     */
     static public ServerHttpRequest addRequestParam(ServerWebExchange exchange, Map<String,Object> ParamMap) {
         URI uri = exchange.getRequest().getURI();
         StringBuilder query = new StringBuilder();
@@ -68,5 +76,22 @@ public class FilterUtil {
         URI newUri = UriComponentsBuilder.fromUri(uri).replaceQuery(query.toString()).build(true).toUri();
         ServerHttpRequest request = exchange.getRequest().mutate().uri(newUri).build();
         return request;
+    }
+
+    /**
+     * 反射爆破遍历pojo类，只适合单层，配合{@link #addRequestParam(ServerWebExchange, Map)}使用
+     * @param pojo
+     * @return
+     * @throws IllegalAccessException
+     */
+    static public Map<String,Object> reflectPojo(Object pojo) throws IllegalAccessException {
+        Map<String, Object> map = new HashMap<>();
+        Field[] fields = pojo.getClass().getDeclaredFields();
+        for(Field field:fields)
+        {
+            field.setAccessible(true);
+            map.put(field.getName(),field.get(pojo));
+        }
+        return map;
     }
 }

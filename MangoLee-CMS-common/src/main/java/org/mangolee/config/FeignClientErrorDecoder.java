@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 将feign异常的返回值转化成现有的feign异常类
+ */
 @Configuration
 public class FeignClientErrorDecoder implements ErrorDecoder {
     @Override

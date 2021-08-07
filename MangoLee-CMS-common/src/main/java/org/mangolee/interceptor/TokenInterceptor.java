@@ -18,7 +18,11 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * token拦截器，将不带token的请求拦截返回，
+ * 若带token则向redis服务求证token是否存在
+ * 若token存在则将redis返回的UserInfo信息反射填充为数个header项，以供controller使用@RequestHeader访问
+ */
 public class TokenInterceptor extends HandlerInterceptorAdapter {
     @Value("${spring.application.name}")
     private String applicationName;
@@ -28,11 +32,11 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
         String consumer = request.getHeader("consumer-service");
-        if(consumer == null)
+        if(consumer == null)//若header不带消费服务的信息，则去获取其访问ip
         {
             consumer = getIpAddress(request);
         }
-        if(token == null)
+        if(token == null)//若未找到token项，则编辑json信息返回
         {
             PrintWriter writer = null;
             response.setCharacterEncoding("UTF-8");
@@ -59,6 +63,11 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
+    /**
+     * 获取请求来源ip
+     * @param request
+     * @return
+     */
     private String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip ==null || ip.length() ==0 ||"unknown".equalsIgnoreCase(ip)) {
@@ -86,6 +95,11 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         return ip;
     }
 
+    /**
+     * 对request类添加header项
+     * @param headerses
+     * @param request
+     */
     private void modifyHeaders(Map<String, String> headerses, HttpServletRequest request) {
         if (headerses == null || headerses.isEmpty()) {
             return;

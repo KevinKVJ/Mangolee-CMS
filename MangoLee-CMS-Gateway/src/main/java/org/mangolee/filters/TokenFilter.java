@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Token过滤器，属于非global，当路由选项配置此过滤器将会保证成功路由的请求都带有token，否则过滤并返回json信息
+ */
 @Component
 public class TokenFilter implements GatewayFilter, Ordered {
     //@Autowired
@@ -42,6 +45,11 @@ public class TokenFilter implements GatewayFilter, Ordered {
                      }));
     }
 
+    /**
+     * 从请求头取出token项
+     * @param exchange
+     * @return
+     */
     private String getTokenFromHeader(ServerWebExchange exchange){
         List<String> tokens = exchange.getRequest().getHeaders().get("token");
         if(tokens == null || tokens.size() != 1){
@@ -52,16 +60,7 @@ public class TokenFilter implements GatewayFilter, Ordered {
         }
     }
 
-    private Map<String,Object> reflectUserInfo(UserInfo userInfo) throws IllegalAccessException {
-        Map<String, Object> map = new HashMap<>();
-        Field[] fields = userInfo.getClass().getDeclaredFields();
-        for(Field field:fields)
-        {
-            field.setAccessible(true);
-            map.put(field.getName(),field.get(userInfo));
-        }
-        return map;
-    }
+
     @Override
     public int getOrder() {
         return 10;
