@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @ApiModel("结果实体类")
 @JSONType(orders = { "code", "message","data"})
+@SuppressWarnings("unchecked")
 public class Result<T> {
 
     @ApiModelProperty(value = "消息代码", example = "200")
@@ -27,19 +28,14 @@ public class Result<T> {
     @JSONField(name = "data")
     private T data;
 
-    @SuppressWarnings("unchecked")
     public final static Result BAD_REQUEST = new Result(400, "无效请求", null);
 
-    @SuppressWarnings("unchecked")
     public final static Result UNAUTHORIZED = new Result(401, "未授权", null);
 
-    @SuppressWarnings("unchecked")
     public final static Result FORBIDDEN = new Result(403, "禁止访问", null);
 
-    @SuppressWarnings("unchecked")
     public final static Result NOT_FOUND = new Result(404, "找不到结果", null);
 
-    @SuppressWarnings("unchecked")
     public final static Result INTERNAL_ERROR = new Result(500, "内部错误", null);
 
     public static <T> Result<T> success(T data) {
@@ -53,5 +49,7 @@ public class Result<T> {
     public static <T> Result<T> error(int code, String msg) {
         return new Result<>(code, msg, null);
     }
+
+    public static <T> Boolean successful(Result<T> result) { return result.getCode().equals(200); }
 }
 

@@ -1,7 +1,6 @@
 package org.mangolee;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
 import org.junit.jupiter.api.Test;
 import org.mangolee.entity.User;
 import org.mangolee.entity.UserInfo;
@@ -26,6 +25,9 @@ public class AuthTests {
 
     @Resource
     private UserService userService;
+    // Test Redis
+    @Resource
+    private RedisService redisService;
 
     //@Test
     public void getAUser() {
@@ -48,10 +50,10 @@ public class AuthTests {
 
     //@Test
     public void updateUserPasswordTest() {
-        String username = "Jack";
-        String password = "password1";
-        String newPassword = "password2";
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        String             username    = "Jack";
+        String             password    = "password1";
+        String             newPassword = "password2";
+        QueryWrapper<User> wrapper     = new QueryWrapper<>();
         wrapper.eq("username", username);
         // obtain
         User user = userService.getOne(wrapper);
@@ -71,7 +73,7 @@ public class AuthTests {
     public void updateUserEmailTest() throws InterruptedException {
         String username = "Jack";
         String newEmail = "jackson@mangolee.com";
-        User user = new User();
+        User   user     = new User();
         user.setUsername(username);
         user.setEmail(newEmail);
         QueryWrapper<User> wrapper = new QueryWrapper<>();
@@ -90,8 +92,8 @@ public class AuthTests {
 
     //@Test
     public void logicalDeleteByUsernameTest() {
-        String username = "Jack";
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        String             username = "Jack";
+        QueryWrapper<User> wrapper  = new QueryWrapper<>();
         wrapper.eq("username", username);
         assertTrue(userService.remove(wrapper));
     }
@@ -103,7 +105,7 @@ public class AuthTests {
     }
 
     //@Test
-    public void physicalDeleteByIdTest()  {
+    public void physicalDeleteByIdTest() {
         Long id = 1L;
         userService.physicalDeleteById(id);
         assertNull(userService.getById(id));
@@ -120,13 +122,9 @@ public class AuthTests {
         System.out.println(user);
     }
 
-    // Test Redis
-    @Resource
-    private RedisService redisService;
-
     @Test
     public void testRedis() {
-        redisService.set("1234ss","this is a test");
+        redisService.set("1234ss", "this is a test");
         System.out.println(redisService.get("1234ss"));
     }
 

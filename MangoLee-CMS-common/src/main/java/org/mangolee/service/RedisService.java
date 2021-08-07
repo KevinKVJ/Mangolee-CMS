@@ -1,22 +1,86 @@
 package org.mangolee.service;
 
 
-//TODO 把 RedisService 和 RedisFeignService 合并统一接口（使用result方式返回），并在provider中做好实现
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.mangolee.entity.Result;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.constraints.NotNull;
+
+@Validated
+@Component
+@FeignClient("redis-service-providers")
 public interface RedisService {
-    // 存值 值类型为String
-    void setValueAsString(String key, String value);
-    // 存值
-    void set(String key, Object value);
-    // 取值 值类型为String
-    String getValueAsString(String key);
-    // 取值
-    Object get(String key);
-    // 存token 默认一天
-    Boolean setToken(String token);
-    // 获取键的ttl
-    Long getKeyTtl(String key);
-    // 更新键的ttl
-    Boolean updateKeyTtl(String key, Long newTtl);
+
+    @ApiOperation("存储或修改key的值为value value的类型为字符串")
+    @PostMapping("/redisprovider/setvalueasstring/{key}/{value}")
+    Result<Void> setValueAsString(
+            @ApiParam(value = "键", required = true)
+            @PathVariable("key") @NotNull
+                    String key,
+            @ApiParam(value = "值", required = true)
+            @PathVariable("value") @NotNull
+                    String value);
+
+    @ApiOperation("存储或修改key的值为value")
+    @PostMapping("/redisprovider/set/{key}/{value}")
+    Result<Void> set(
+            @ApiParam(value = "键", required = true)
+            @PathVariable("key") @NotNull
+                    String key,
+            @ApiParam(value = "值", required = true)
+            @PathVariable("value") @NotNull
+                    Object value);
+
+    @ApiOperation("获取key的value value的类型为字符串")
+    @GetMapping("/redisprovider/getvalueasstring/{key}")
+    Result<String> getValueAsString(
+            @ApiParam(value = "键", required = true)
+            @PathVariable("key") @NotNull
+                    String key);
+
+    @ApiOperation("获取key的value")
+    @PostMapping("/redisprovider/set/{key}")
+    Result<Object> get(
+            @ApiParam(value = "键", required = true)
+            @PathVariable("key") @NotNull
+                    String key);
+
+    @ApiOperation("往redis中存储token")
+    @GetMapping("/redisprovider/settoken/{token}")
+    Result<String> setToken(
+            @ApiParam(value = "令牌", required = true)
+            @PathVariable("token") @NotNull
+                    String token);
+
+    @ApiOperation("获取redis中对应key的过期时间")
+    @GetMapping("/redisprovider/getkeyttl/{key}")
+    Result<Long> getKeyTtl(
+            @ApiParam(value = "键", required = true)
+            @PathVariable("key") @NotNull
+                    String key);
+
+    @ApiOperation("根据键和新的过期时间更新redis旧的过期时间 以毫秒为单位")
+    @PostMapping("/redisprovider/updatekeyttl/{key}/{newTtl}")
+    Result<Long> updateKeyTtl(
+            @ApiParam(value = "键", required = true)
+            @PathVariable("key") @NotNull String key,
+            @ApiParam(value = "新的过期时间", required = true)
+            @PathVariable("newTtl") @NotNull Long newTtl);
+
     // 删除键
-    Boolean delete(String key);
+    @ApiOperation("删除redis中的指定键")
+    @DeleteMapping("/redisprovider/delete/{key}")
+    Result<Void> delete(
+            @ApiParam(value = "键", required = true)
+            @PathVariable("key")
+            @NotNull
+                    String key);
 }

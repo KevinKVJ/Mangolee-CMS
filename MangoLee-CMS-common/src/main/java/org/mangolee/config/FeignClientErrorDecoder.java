@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 public class FeignClientErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String s, Response response) {
-        String errorContent = null;
+        String errorContent;
         try{
             errorContent = Util.toString(response.body().asReader(StandardCharsets.UTF_8));
         } catch (IOException ioException) {

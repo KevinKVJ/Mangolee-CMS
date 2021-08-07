@@ -12,7 +12,6 @@
         <module>MangoLee-CMS-auth</module>
         <module>MangoLee-CMS-common</module>
         <module>MangoLee-CMS-Gateway</module>
-        <module>redis-service-consumer</module>
         <module>redis-service-providers</module>
         <module>TokenIntercepterTestService</module>
     </modules>

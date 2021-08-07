@@ -19,7 +19,7 @@ public class SwaggerConfig {
     public Docket docket(Environment env) {
         // 设置要启用swagger的环境为开发环境 否则不启用
         //Profiles profiles = Profiles.of("dev");
-        return  new Docket(DocumentationType.OAS_30)
+        return new Docket(DocumentationType.OAS_30)
                 //.enable(env.acceptsProfiles(profiles))
                 .apiInfo(apiInfo())
                 .select()
