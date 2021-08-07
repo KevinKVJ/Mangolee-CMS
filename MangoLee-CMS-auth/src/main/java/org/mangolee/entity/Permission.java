@@ -36,7 +36,7 @@ public class Permission {
     // 修改时间
     @ApiModelProperty(value = "修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime    gmtModified;
+    private LocalDateTime gmtModified;
 
     // 乐观锁
     @ApiModelProperty(value = "乐观锁")

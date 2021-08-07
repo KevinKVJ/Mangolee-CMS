@@ -21,10 +21,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void physicalDeleteById(Long id) { userMapper.physicalDeleteById(id); }
+    public User getUserByIdIgnoreLogicalDeletion(Long id) {
+        return userMapper.getUserByIdIgnoreLogicalDeletion(id);
+    }
 
     @Override
-    public void saveBatchByRole(String role, String newRole) {
-        userMapper.saveBatchByRole(role, newRole);
+    public void physicalDeleteById(Long id) {
+        userMapper.physicalDeleteById(id);
+    }
+
+    @Override
+    public void updateRoleBatchWithNull(String role) {
+        userMapper.updateRoleBatchWithNull(role);
     }
 }

@@ -21,12 +21,12 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public void physicalDeleteById(Long id) {
-        permissionMapper.physicalDeleteById(id);
+    public Permission getPermissionByIdIgnoreLogicalDeletion(Long id) {
+        return permissionMapper.getPermissionByIdIgnoreLogicalDeletion(id);
     }
 
     @Override
-    public void physicalDeleteByRole(String role) {
-        permissionMapper.physicalDeleteByRole(role);
+    public void physicalDeleteById(Long id) {
+        permissionMapper.physicalDeleteById(id);
     }
 }

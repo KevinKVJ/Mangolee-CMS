@@ -1,5 +1,6 @@
 package org.mangolee.service.impl;
 
+import org.mangolee.entity.Result;
 import org.mangolee.service.RedisService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -9,6 +10,7 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@SuppressWarnings("unchecked")
 public class RedisServiceImpl implements RedisService {
 
     @Resource
@@ -22,87 +24,110 @@ public class RedisServiceImpl implements RedisService {
     public final static String DEFAULT_VALUE = "";
 
     @Override
-    public void setValueAsString(String key, String value) {
-        if (key != null && value != null) {
-            stringRedisTemplate.opsForValue().set(key, value);
+    public Result<Void> setValueAsString(String key, String value) {
+        if (key == null || value == null) {
+            return Result.BAD_REQUEST;
         }
+        stringRedisTemplate.opsForValue().set(key, value);
+        return Result.success();
     }
 
     @Override
-    public void set(String key, Object value) {
-        if (key != null && value != null) {
+    public Result<Void> set(String key, Object value) {
+        if (key == null || value == null) {
+            return Result.BAD_REQUEST;
+        }
+        if (value instanceof String) {
+            stringRedisTemplate.opsForValue().set(key, (String) value);
+        }
+        else {
             redisTemplate.opsForValue().set(key, value);
         }
+        return Result.success();
     }
 
     @Override
-    public String getValueAsString(String key) {
+    public Result<String> getValueAsString(String key) {
         if (key == null) {
-            return null;
+            return Result.BAD_REQUEST;
         }
         Boolean hasKey = stringRedisTemplate.hasKey(key);
         if (hasKey == null || !hasKey) {
-            return null;
+            return Result.BAD_REQUEST;
         }
-        return stringRedisTemplate.opsForValue().get(key);
+        String value = stringRedisTemplate.opsForValue().get(key);
+        return Result.success(value);
     }
 
     @Override
-    public Object get(String key) {
+    public Result<Object> get(String key) {
         if (key == null) {
-            return null;
+            return Result.BAD_REQUEST;
         }
         Boolean hasKey = redisTemplate.hasKey(key);
         if (hasKey == null || !hasKey) {
-            return null;
+            return Result.BAD_REQUEST;
         }
-        return redisTemplate.opsForValue().get(key);
+        Object object = redisTemplate.opsForValue().get(key);
+        if (object instanceof String) {
+            String value = stringRedisTemplate.opsForValue().get(key);
+            return Result.success(value);
+        }
+        return Result.success(object);
     }
 
     @Override
-    public Boolean setToken(String token) {
+    public Result<String> setToken(String token) {
         if (token == null) {
-            return false;
+            return Result.BAD_REQUEST;
         }
         redisTemplate.opsForValue().set(token, DEFAULT_VALUE, DEFAULT_TTL, TimeUnit.MILLISECONDS);
-        return true;
+        return Result.success(token);
     }
 
     @Override
-    public Long getKeyTtl(String key) {
+    public Result<Long> getKeyTtl(String key) {
         if (key == null) {
-            return null;
+            return Result.BAD_REQUEST;
         }
         Boolean hasKey = redisTemplate.hasKey(key);
         if (hasKey == null || !hasKey) {
-            return null;
+            return Result.BAD_REQUEST;
         }
-        return redisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
+        Long ttl = redisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
+        return Result.success(ttl);
     }
 
     @Override
-    public Boolean updateKeyTtl(String key, Long newTtl) {
+    public Result<Long> updateKeyTtl(String key, Long newTtl) {
         if (key == null || newTtl == null || newTtl <= 0) {
-            return false;
+            return Result.BAD_REQUEST;
         }
         Boolean hasKey = redisTemplate.hasKey(key);
         if (hasKey == null || !hasKey) {
-            return false;
+            return Result.BAD_REQUEST;
         }
-        redisTemplate.opsForValue().set(key, DEFAULT_VALUE, newTtl, TimeUnit.MILLISECONDS);
-        return true;
+        Boolean expire = redisTemplate.expire(key, newTtl, TimeUnit.MILLISECONDS);
+        if (expire == null || !expire) {
+            return Result.BAD_REQUEST;
+        }
+        return Result.success(newTtl);
     }
 
     @Override
-    public Boolean delete(String key) {
+    public Result<Void> delete(String key) {
         if (key == null) {
-            return false;
+            return Result.BAD_REQUEST;
         }
         Boolean hasKey = redisTemplate.hasKey(key);
-        if (hasKey != null && hasKey) {
-            return redisTemplate.delete(key);
+        if (hasKey == null || !hasKey) {
+            return Result.BAD_REQUEST;
         }
-        return false;
+        Boolean delete = redisTemplate.delete(key);
+        if (delete == null || !delete) {
+            return Result.BAD_REQUEST;
+        }
+        return Result.success();
     }
 
 }

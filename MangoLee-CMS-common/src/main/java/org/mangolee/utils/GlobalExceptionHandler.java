@@ -50,14 +50,12 @@ public class GlobalExceptionHandler<T> {
     }
 
     //处理路径错误异常
-    @SuppressWarnings("unchecked")
     @ExceptionHandler({NoHandlerFoundException.class})
     public Result<T> noFoundHandler(Exception e) {
         return Result.error(404, defaultMsgBuilder(e));
     }
 
     //处理远程调用异常
-    @SuppressWarnings("unchecked")
     @ExceptionHandler({MyFeignException.class})
     public Result<T> feignExceptionHandler(Exception e) {
         return Result.error(500,defaultMsgBuilder(e));

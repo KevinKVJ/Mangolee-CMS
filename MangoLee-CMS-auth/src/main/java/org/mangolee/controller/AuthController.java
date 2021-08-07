@@ -4,13 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.mangolee.entity.Result;
 import org.mangolee.entity.User;
 import org.mangolee.entity.UserInfo;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
 import org.mangolee.service.impl.RedisServiceImpl;
-import org.mangolee.entity.Result;
 import org.mangolee.utils.JwtUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -53,8 +53,7 @@ public class AuthController {
             // 根据用户生成User实体 并查询其在数据库是否存在
             User user = new User();
             user.setUsername(username);
-            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("username", username);
+            QueryWrapper<User> queryWrapper = new QueryWrapper<User>().eq("username", username);
             user = userService.getOne(queryWrapper);
             // 判断拥有该用户名的用户是否存在
             if (user == null) {
@@ -75,11 +74,12 @@ public class AuthController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             // 将token保存到redis中去 并判断是否保存成功
-            if (!redisService.setToken(token)) {
+            Result<String> result = redisService.setToken(token);
+            if (!Result.successful(result)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             // 返回封装结果
-            return Result.success(token);
+            return result;
         } catch (Exception e) {
             throw new BaseException(Result.BAD_REQUEST);
         }
@@ -97,16 +97,17 @@ public class AuthController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             // 检查token是否存在redis中及其类型
-            Object object = redisService.get(token);
-            if (!(object instanceof UserInfo)) {
+            Result<Object> result = redisService.get(token);
+            if (!Result.successful(result) || !(result.getData() instanceof UserInfo)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             // 如果存在 续期一天 并检查是否成功
-            if (!redisService.updateKeyTtl(token, RedisServiceImpl.DEFAULT_TTL)) {
+            Result<Long> result1 = redisService.updateKeyTtl(token, RedisServiceImpl.DEFAULT_TTL);
+            if (!Result.successful(result1)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             // 返回封装结果
-            return Result.success((UserInfo) object);
+            return Result.success((UserInfo) result.getData());
         } catch (Exception e) {
             throw new BaseException(Result.BAD_REQUEST);
         }
@@ -114,15 +115,16 @@ public class AuthController {
 
     // Logout
     @ApiOperation("删除redis中的令牌")
-    @DeleteMapping("/del/{token}")
+    @DeleteMapping("/delete/{token}")
     public Result<Void> logout(
             @ApiParam(value = "令牌", required = true)
             @PathVariable("token") @NotNull String token) {
         try {
-            if (token == null || !redisService.delete(token)) {
+            Result<Void> delete = redisService.delete(token);
+            if (!Result.successful(delete)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
-            return Result.success();
+            return delete;
         } catch (Exception e) {
             throw new BaseException(Result.BAD_REQUEST);
         }

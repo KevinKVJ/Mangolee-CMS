@@ -1,4 +1,3 @@
-
 spring:
   # 配置数据库
   datasource:

@@ -27,7 +27,7 @@ public class JwtUtils {
         }
 
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secretKey);
-        Key    signingkey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+        Key    signingkey        = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         // 创建并返回token
         return Jwts.builder()
@@ -50,10 +50,10 @@ public class JwtUtils {
         }
 
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secretKey);
-        Key    signingkey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+        Key    signingkey        = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
         // 解析token抽取UserInfo
         Claims claims = Jwts.parser()
-               .setSigningKey(signingkey)
+                .setSigningKey(signingkey)
                 .parseClaimsJws(token)
                 .getBody();
         UserInfo userInfo = new UserInfo();
