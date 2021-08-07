@@ -14,7 +14,9 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -22,19 +24,25 @@ public class GlobalGatewayExceptionHandler implements ErrorWebExceptionHandler {
 
     private List<HttpMessageReader<?>> messageReaders = Collections.emptyList();
     private List<HttpMessageWriter<?>> messageWriters = Collections.emptyList();
-    private List<ViewResolver>  viewResolvers = Collections.emptyList();
-    private ThreadLocal<Result> threadLocal   =new ThreadLocal<>();
+    private List<ViewResolver> viewResolvers = Collections.emptyList();
+    private ThreadLocal<Result> threadLocal=new ThreadLocal<>();
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
-        //这里只是做个最简单的同一的异常结果输出，实际业务可根据throwable不同的异常处理不同的逻辑
-        Result result = Result.error(Result.INTERNAL_ERROR.getCode(),Result.INTERNAL_ERROR.getMessage());
-        threadLocal.set(result);
-        ServerRequest newRequest = ServerRequest.create(exchange, this.messageReaders);
-        return RouterFunctions.route(RequestPredicates.all(), this::renderErrorResponse).route(newRequest)
-                .switchIfEmpty(Mono.error(throwable))
-                .flatMap((handler) -> handler.handle(newRequest))
-                .flatMap((response) -> write(exchange, response));
+        if(!exchange.getResponse().isCommitted())
+        {
+            Result result = Result.INTERNAL_ERROR;//TODO 未来对不同throwable类型返回不同error
+            threadLocal.set(result);
+            ServerRequest newRequest = ServerRequest.create(exchange, this.messageReaders);
+            return RouterFunctions.route(RequestPredicates.all(), this::renderErrorResponse).route(newRequest)
+                    .switchIfEmpty(Mono.error(throwable))
+                    .flatMap((handler) -> handler.handle(newRequest))
+                    .flatMap((response) -> write(exchange, response));
+        }
+        else
+        {
+            return Mono.error(throwable);
+        }
     }
 
     /**
