@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Validated
 @RestController
@@ -29,7 +30,6 @@ public class RedisController {
         try {
             Result<String> result = redisService.getValueAsString(key);
             if (!Result.successful(result)) {
-                System.out.println(result);
                 throw new BaseException(Result.BAD_REQUEST);
             }
             return result;
@@ -71,8 +71,10 @@ public class RedisController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             return result;
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<String>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<String>().exceptionHandler(e);
         }
     }
 
@@ -87,8 +89,10 @@ public class RedisController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             return result;
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Long>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<Long>().exceptionHandler(e);
         }
     }
 
@@ -105,8 +109,10 @@ public class RedisController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             return result;
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Long>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<Long>().exceptionHandler(e);
         }
     }
 
@@ -122,9 +128,26 @@ public class RedisController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             return result;
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
         }
     }
 
+    @ApiOperation("列出redis所有key")
+    @GetMapping("/redisprovider/getkeys")
+    public Result<List<String>> getKeys() {
+        try {
+            Result<List<String>> result = redisService.getKeys();
+            if (!Result.successful(result)) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            return result;
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<List<String>>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<List<String>>().exceptionHandler(e);
+        }
+    }
 }

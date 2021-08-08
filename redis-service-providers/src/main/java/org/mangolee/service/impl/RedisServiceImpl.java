@@ -7,6 +7,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -131,6 +135,16 @@ public class RedisServiceImpl implements RedisService {
             return Result.BAD_REQUEST;
         }
         return Result.success();
+    }
+
+    @Override
+    public Result<List<String>> getKeys() {
+        Set<String> keys = redisTemplate.keys("*");
+        if (keys == null) {
+            return Result.BAD_REQUEST;
+        }
+        List<String> keysList = new ArrayList<>(keys);
+        return Result.success(keysList);
     }
 
 }
