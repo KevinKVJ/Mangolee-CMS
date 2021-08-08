@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>MangoLee-CMS-auth</module>
+        <module>MangoLee-CMS-Authentication</module>
         <module>MangoLee-CMS-common</module>
         <module>MangoLee-CMS-Gateway</module>
         <module>redis-service-providers</module>
@@ -106,7 +106,7 @@
                 <version>${lombok.version}</version>
                 <optional>true</optional>
             </dependency>
-            <!-- 引入Swagger3 -->
+            <!-- Swagger3依赖 -->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-boot-starter</artifactId>

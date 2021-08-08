@@ -1,0 +1,24 @@
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  #修改为自己的redis地址， 需要提前对redis配置文件进行修改
+  #如果需要远程调试 先进行ssh端口转发到本地12345
+  redis:
+    database: 0
+    port: 12345
+    host: localhost
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        service: redis-service-providers
+  application:
+    name: redis-service-providers
+  # 配置热部署
+  devtools:
+    livereload:
+      port: 40001
+server:
+  port: 7334

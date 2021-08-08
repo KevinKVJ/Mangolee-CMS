@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Validated
 @Component
@@ -47,7 +48,7 @@ public interface RedisService {
                     String key);
 
     @ApiOperation("获取key的value")
-    @PostMapping("/redisprovider/set/{key}")
+    @PostMapping("/redisprovider/get/{key}")
     Result<Object> get(
             @ApiParam(value = "键", required = true)
             @PathVariable("key") @NotNull
@@ -75,7 +76,6 @@ public interface RedisService {
             @ApiParam(value = "新的过期时间", required = true)
             @PathVariable("newTtl") @NotNull Long newTtl);
 
-    // 删除键
     @ApiOperation("删除redis中的指定键")
     @DeleteMapping("/redisprovider/delete/{key}")
     Result<Void> delete(
@@ -83,4 +83,8 @@ public interface RedisService {
             @PathVariable("key")
             @NotNull
                     String key);
+
+    @ApiOperation("列出redis所有key")
+    @GetMapping("/redisprovider/getkeys")
+    Result<List<String>> getKeys();
 }

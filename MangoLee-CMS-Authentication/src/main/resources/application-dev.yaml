@@ -46,7 +46,6 @@ spring:
     #如果需要远程调试 先进行ssh端口转发到本地12345
     host: localhost
     port: 12345
-    #port: 6379
     #确定auth模块使用的数据库编号
     database: 0
     #连接超时时间（毫秒
@@ -56,9 +55,13 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
-        service: auth
+        service: authentication
   application:
-    name: auth
+    name: authentication
+  # 配置热部署
+  devtools:
+    livereload:
+      port: 40000
 
 # 配置mybatisplus
 mybatis-plus:

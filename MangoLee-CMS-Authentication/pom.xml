@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MangoLee-CMS-auth</artifactId>
+    <artifactId>MangoLee-CMS-Authentication</artifactId>
 
     <dependencies>
         <!-- 引用MangoLee-CMS-common-->
@@ -24,48 +24,53 @@
             <artifactId>redis-service-providers</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <!-- 引入spring starter web依赖 -->
+        <!-- spring starter web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!-- 引入spring cloud依赖 -->
+        <!-- spring cloud依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter</artifactId>
         </dependency>
-        <!-- 引入nacos依赖 -->
+        <!-- nacos依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery
             </artifactId>
         </dependency>
-        <!-- 引入mysql依赖 -->
+        <!-- mysql依赖 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <!-- 引入mybatisplus依赖 -->
+        <!-- mybatisplus依赖 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
-        <!-- 引入Druid  -->
+        <!-- Druid依赖  -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
         </dependency>
-        <!-- 引入JRS303依赖 -->
+        <!-- JRS303依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-        <!-- 引入 Redis依赖 -->
+        <!-- Redis依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!--Test-->
+        <!--热启动-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+        <!-- Springboot Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -83,6 +88,7 @@
             </exclusions>
             <scope>test</scope>
         </dependency>
+        <!-- junit相关依赖-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>

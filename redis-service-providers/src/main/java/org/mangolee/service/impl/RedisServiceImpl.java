@@ -7,21 +7,22 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
 @SuppressWarnings("unchecked")
 public class RedisServiceImpl implements RedisService {
 
+    public final static Long DEFAULT_TTL = 24 * 60 * 60 * 1000L;
+    public final static String DEFAULT_VALUE = "";
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
-
     @Resource
     private StringRedisTemplate stringRedisTemplate;
-
-    public final static Long DEFAULT_TTL = 24*60*60*1000L;
-
-    public final static String DEFAULT_VALUE = "";
 
     @Override
     public Result<Void> setValueAsString(String key, String value) {
@@ -39,8 +40,7 @@ public class RedisServiceImpl implements RedisService {
         }
         if (value instanceof String) {
             stringRedisTemplate.opsForValue().set(key, (String) value);
-        }
-        else {
+        } else {
             redisTemplate.opsForValue().set(key, value);
         }
         return Result.success();
@@ -52,8 +52,11 @@ public class RedisServiceImpl implements RedisService {
             return Result.BAD_REQUEST;
         }
         Boolean hasKey = stringRedisTemplate.hasKey(key);
-        if (hasKey == null || !hasKey) {
+        if (hasKey == null) {
             return Result.BAD_REQUEST;
+        }
+        if (!hasKey) {
+            return Result.success();
         }
         String value = stringRedisTemplate.opsForValue().get(key);
         return Result.success(value);
@@ -65,8 +68,11 @@ public class RedisServiceImpl implements RedisService {
             return Result.BAD_REQUEST;
         }
         Boolean hasKey = redisTemplate.hasKey(key);
-        if (hasKey == null || !hasKey) {
+        if (hasKey == null) {
             return Result.BAD_REQUEST;
+        }
+        if (!hasKey) {
+            return Result.success();
         }
         Object object = redisTemplate.opsForValue().get(key);
         if (object instanceof String) {
@@ -91,9 +97,10 @@ public class RedisServiceImpl implements RedisService {
             return Result.BAD_REQUEST;
         }
         Boolean hasKey = redisTemplate.hasKey(key);
-        if (hasKey == null || !hasKey) {
+        if (hasKey == null) {
             return Result.BAD_REQUEST;
         }
+        // 返回值和redis一致 返回-1说明key未设置ttl 返回-2说明key不存在
         Long ttl = redisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
         return Result.success(ttl);
     }
@@ -128,6 +135,16 @@ public class RedisServiceImpl implements RedisService {
             return Result.BAD_REQUEST;
         }
         return Result.success();
+    }
+
+    @Override
+    public Result<List<String>> getKeys() {
+        Set<String> keys = redisTemplate.keys("*");
+        if (keys == null) {
+            return Result.BAD_REQUEST;
+        }
+        List<String> keysList = new ArrayList<>(keys);
+        return Result.success(keysList);
     }
 
 }
