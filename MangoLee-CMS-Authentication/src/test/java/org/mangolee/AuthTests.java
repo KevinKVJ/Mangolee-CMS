@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
 @SpringBootTest(classes = AuthenticationApplication.class)
 public class AuthTests {
 
@@ -40,11 +39,6 @@ public class AuthTests {
         System.out.println(token);
         userInfo = JwtUtils.getUserInfoFromToken(token, JwtUtils.SECRET_KEY, JwtUtils.SIGNATURE_ALGORITHM);
         System.out.println(userInfo);
-    }
-
-    @Test
-    public void getAllRedisKeys() {
-
     }
 
     @Test
