@@ -11,6 +11,7 @@ import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
 import org.mangolee.service.impl.RedisServiceImpl;
+import org.mangolee.utils.GlobalExceptionHandler;
 import org.mangolee.utils.JwtUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -80,8 +81,10 @@ public class AuthController {
             }
             // 返回封装结果
             return result;
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<String>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<String>().exceptionHandler(e);
         }
     }
 
@@ -108,8 +111,10 @@ public class AuthController {
             }
             // 返回封装结果
             return Result.success((UserInfo) result.getData());
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<UserInfo>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<UserInfo>().exceptionHandler(e);
         }
     }
 
@@ -125,8 +130,10 @@ public class AuthController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             return delete;
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
         }
     }
 }

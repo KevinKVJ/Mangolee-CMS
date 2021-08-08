@@ -10,6 +10,7 @@ import org.mangolee.entity.User;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.PermissionService;
 import org.mangolee.service.UserService;
+import org.mangolee.utils.GlobalExceptionHandler;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,24 +30,22 @@ public class PermissionController {
     @Resource
     UserService userService;
 
+    @ApiOperation("根据主键ID获取权限")
+    @GetMapping("/get/{id}")
+    public Result<Permission> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
+        return Result.success(permissionService.getById(id));
+    }
+
     @ApiOperation("获取所有未被逻辑删除的权限")
     @GetMapping("/get")
     public Result<List<Permission>> getPermissions() {
-        try {
-            return Result.success(permissionService.list());
-        } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
-        }
+        return Result.success(permissionService.list());
     }
 
     @ApiOperation("获取所有权限")
     @GetMapping("/getall")
     public Result<List<Permission>> getAllPermissions() {
-        try {
-            return Result.success(permissionService.getAllPermissions());
-        } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
-        }
+        return Result.success(permissionService.getAllPermissions());
     }
 
     @ApiOperation("根据权限角色名创建权限")
@@ -65,8 +64,10 @@ public class PermissionController {
             QueryWrapper<Permission> wrapper = new QueryWrapper<Permission>().eq("role", role);
             permission = permissionService.getOne(wrapper);
             return Result.success(permission);
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Permission>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<Permission>().exceptionHandler(e);
         }
     }
 
@@ -100,8 +101,10 @@ public class PermissionController {
             userService.update(user, wrapper);
             permission = permissionService.getById(id);
             return Result.success(permission);
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Permission>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<Permission>().exceptionHandler(e);
         }
     }
 
@@ -122,8 +125,10 @@ public class PermissionController {
             }
             userService.updateRoleBatchWithNull(role);
             return Result.success();
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
         }
     }
 
@@ -140,8 +145,10 @@ public class PermissionController {
             }
             userService.updateRoleBatchWithNull(role);
             return Result.success();
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
         }
     }
 
@@ -161,8 +168,10 @@ public class PermissionController {
             // User表只对未被逻辑删除的条目进行更新
             userService.updateRoleBatchWithNull(role);
             return Result.success();
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
         }
     }
 }

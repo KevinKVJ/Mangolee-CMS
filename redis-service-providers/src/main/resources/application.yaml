@@ -14,5 +14,10 @@ spring:
         service: redis-service-providers
   application:
     name: redis-service-providers
+  # 配置热部署
+  devtools:
+    livereload:
+      port: 40001
 server:
   port: 7334
+

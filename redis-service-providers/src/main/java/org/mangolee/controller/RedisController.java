@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.Result;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
+import org.mangolee.utils.GlobalExceptionHandler;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,14 +29,16 @@ public class RedisController {
         try {
             Result<String> result = redisService.getValueAsString(key);
             if (!Result.successful(result)) {
+                System.out.println(result);
                 throw new BaseException(Result.BAD_REQUEST);
             }
             return result;
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<String>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<String>().exceptionHandler(e);
         }
     }
-
 
     @ApiOperation("存储或修改key的值为value value的类型为字符串")
     @PostMapping("/redisprovider/setvalueasstring/{key}/{value}")
@@ -43,16 +46,17 @@ public class RedisController {
             @ApiParam(value = "键", required = true)
             @PathVariable("key") @NotNull String key,
             @ApiParam(value = "值", required = true)
-            @PathVariable("value") @NotNull String value)
-    {
+            @PathVariable("value") @NotNull String value) {
         try {
             Result<Void> result = redisService.setValueAsString(key, value);
             if (!Result.successful(result)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             return result;
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
         } catch (Exception e) {
-            throw new BaseException(Result.BAD_REQUEST);
+            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
         }
     }
 
@@ -94,8 +98,7 @@ public class RedisController {
             @ApiParam(value = "键", required = true)
             @PathVariable("key") @NotNull String key,
             @ApiParam(value = "新的过期时间", required = true)
-            @PathVariable("newTtl") @NotNull Long newTtl)
-    {
+            @PathVariable("newTtl") @NotNull Long newTtl) {
         try {
             Result<Long> result = redisService.updateKeyTtl(key, newTtl);
             if (!Result.successful(result)) {

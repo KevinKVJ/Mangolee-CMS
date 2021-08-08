@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MangoLee-CMS-auth</artifactId>
+    <artifactId>MangoLee-CMS-Authentication</artifactId>
 
     <dependencies>
         <!-- 引用MangoLee-CMS-common-->
@@ -64,6 +64,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!--添加热启动-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
         </dependency>
         <!--Test-->
         <dependency>

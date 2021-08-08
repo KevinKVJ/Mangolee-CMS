@@ -20,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@SpringBootTest(classes = AuthApplication.class)
+@SpringBootTest(classes = AuthenticationApplication.class)
 public class AuthTests {
 
     @Resource
-    private UserService userService;
+    private UserService  userService;
     // Test Redis
     @Resource
     private RedisService redisService;
