@@ -10,9 +10,9 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 @EnableDiscoveryClient
 @EnableOpenApi
 @SpringBootApplication
-public class AuthenticationApplication {
+public class AuthorizationApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AuthenticationApplication.class, args);
+        SpringApplication.run(AuthorizationApplication.class, args);
     }
 }
 

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MangoLee-CMS-Authentication</artifactId>
+    <artifactId>MangoLee-CMS-Authorization</artifactId>
 
     <dependencies>
         <!-- 引用MangoLee-CMS-common-->

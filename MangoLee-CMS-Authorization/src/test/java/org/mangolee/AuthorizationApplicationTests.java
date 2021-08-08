@@ -7,6 +7,7 @@ import org.mangolee.entity.UserInfo;
 import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
 import org.mangolee.utils.JwtUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -19,8 +20,8 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(classes = AuthenticationApplication.class)
-public class AuthTests {
+@SpringBootTest(classes = AuthorizationApplication.class)
+public class AuthorizationApplicationTests {
 
     @Resource
     private UserService  userService;
@@ -41,7 +42,7 @@ public class AuthTests {
         System.out.println(userInfo);
     }
 
-    @Test
+    //@Test
     public void getAllUsersTest() {
         List<User> users = userService.list(null);
         users.forEach(System.out::println);
@@ -121,7 +122,7 @@ public class AuthTests {
         System.out.println(user);
     }
 
-    @Test
+    //@Test
     public void testRedis() {
         redisService.set("1234ss", "this is a test");
         System.out.println(redisService.get("1234ss"));

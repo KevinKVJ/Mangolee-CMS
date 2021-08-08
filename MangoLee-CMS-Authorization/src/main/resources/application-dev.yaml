@@ -55,9 +55,9 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
-        service: authentication
+        service: authorization
   application:
-    name: authentication
+    name: authorization
   # 配置热部署
   devtools:
     livereload:

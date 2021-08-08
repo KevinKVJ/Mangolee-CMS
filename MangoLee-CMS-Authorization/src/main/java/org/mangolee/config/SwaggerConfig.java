@@ -33,7 +33,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("MangoLee-CMS")
-                .description("MangoLee-auth接口文档")
+                .description("MangoLee-CMS-Authorization接口文档")
                 .version("1.0")
                 .contact(contact())
                 .license("Apache 2.0")
