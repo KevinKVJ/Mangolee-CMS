@@ -4,21 +4,19 @@ import feign.Response;
 import feign.Util;
 import feign.codec.ErrorDecoder;
 import org.mangolee.exception.MyFeignException;
-import org.mangolee.utils.Result;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.mangolee.entity.Result;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class FeignClientErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String s, Response response) {
-        String errorContent = null;
+        String errorContent;
         try{
-            errorContent = Util.toString(response.body().asReader(Charset.forName("UTF-8")));
+            errorContent = Util.toString(response.body().asReader(StandardCharsets.UTF_8));
         } catch (IOException ioException) {
             ioException.printStackTrace();
             return new RuntimeException(ioException);

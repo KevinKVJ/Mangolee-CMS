@@ -1,6 +1,7 @@
 package org.mangolee.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import org.mangolee.entity.Result;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +25,7 @@ public class FilterResponseUtil {
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         return response.writeWith(Mono.just(buffer));
     }
-    static public Mono<Void> response(ServerHttpResponse response,Result result)
+    static public Mono<Void> response(ServerHttpResponse response, Result result)
     {
         return response(response,result.getCode(),result.getMessage(),result.getData());
     }

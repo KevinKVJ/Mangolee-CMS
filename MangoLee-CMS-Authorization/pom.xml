@@ -1,46 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>MangoLee-CMS</artifactId>
         <groupId>org.mangolee</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>MangoLee-redis</groupId>
-    <artifactId>redis-service-providers</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>redis-service-providers</name>
-    <description>redis-service-providers</description>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>MangoLee-CMS-Authorization</artifactId>
 
     <dependencies>
-        <!-- 引入Mangolee-CMS-common模块 -->
+        <!-- 引用MangoLee-CMS-common-->
         <dependency>
             <groupId>org.mangolee</groupId>
             <artifactId>MangoLee-CMS-common</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+        </dependency>
+        <!-- 引入redis-service-providers-->
+        <dependency>
+            <groupId>MangoLee-redis</groupId>
+            <artifactId>redis-service-providers</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- spring starter web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!-- spring cloud starter -->
+        <!-- spring cloud依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter</artifactId>
-        </dependency>
-        <!-- JRS303依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-        <!--热启动-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
         </dependency>
         <!-- nacos依赖 -->
         <dependency>
@@ -48,22 +40,37 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery
             </artifactId>
         </dependency>
+        <!-- mysql依赖 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <!-- mybatisplus依赖 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+        <!-- Druid依赖  -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- JRS303依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
         <!-- Redis依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!-- Swagger3依赖 -->
+        <!--热启动-->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
         </dependency>
-        <!-- lombok依赖 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <!--Test-->
+        <!-- Springboot Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -81,7 +88,7 @@
             </exclusions>
             <scope>test</scope>
         </dependency>
-        <!-- junit相关依赖 -->
+        <!-- junit相关依赖-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -97,15 +104,7 @@
             <artifactId>junit-jupiter-params</artifactId>
             <scope>test</scope>
         </dependency>
-    </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+    </dependencies>
 
 </project>
