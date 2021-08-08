@@ -1,0 +1,16 @@
+# 配置jasypt
+jasypt:
+  encryptor:
+    # jasypt密钥
+    password: Y/R6XXdHMo7Cp8Q7wNRI7+Kg5PRIVIB8b5iS9b2Cc+M=
+    algorithm: PBEWITHHMACSHA512ANDAES_256
+    salt-generator-classname: org.jasypt.salt.RandomSaltGenerator
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
+    key-obtention-iterations: 1000
+    string-output-type: base64
+    pool-size: 1
+    provider-name: SunJCE
+    # 自定义加密前后缀
+    property:
+      prefix: GTzXAawuB2lELEUr(
+      suffix: )

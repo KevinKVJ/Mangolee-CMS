@@ -1,15 +1,21 @@
 spring:
   # 配置数据库
   datasource:
-    username: root
-    password: 284317
+    # username: root
+    username: GTzXAawuB2lELEUr(7tYsyjMCmmuDn2OboBM7+rhO65eiNTBybQSl+9d4FACleSoHaXfoXlfO8x2edxQ/)
+    # password: 284317
+    password: GTzXAawuB2lELEUr(E7ENA7UpCRl438nchqyK4cnLomHA5VQqZ8RlCut28sszcra3UKSd2tFD6jqHZ300)
     # 针对mysql8 确保数据库存在 使用gmt时区
-    url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    # url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    url: GTzXAawuB2lELEUr(8iu7nQhtjDzCeQBrP/hw7t/0VvqtbKfGeqKeXzKwtStzeOWFMNGZNey0NexrNr8mjVUkSfLP72rhunzUMs4wHLSh334naWc0i00PbeCE2jNx64qRzQzmor51Yc08G6jpN+Pp7W5ImnxKM3vg93fkysDB0e0aOPPGY3+WDspbL6RhrAPXU+kOJsYsFQXTHTZl)
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
-      username: root
-      password: 284317
-      url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+      # username: root
+      username: GTzXAawuB2lELEUr(7dQw5+3ISurts7fQq2UKgIlq9vLRqXI+08qPKuMPdQRqVWa6Gn1pBtYEhRd6PuRb)
+      # password: 284317
+      password: GTzXAawuB2lELEUr(dwoK6Vz31vcgGSz3WYauiFnrNp6FCNH5tvHEonIP9JkInf2q/uOz4s/LTy9ylzZZ)
+      # url: jdbc:mysql://localhost:3306/mangolee?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+      url: GTzXAawuB2lELEUr(dz/IO9a6rGoFKXTRV+ZGBlkkip3dCTuN/nbNc18pwmb6s0wgD5C+9oyQZAYt2sTZLtu43wqxKavDcB+IVyK+IxMbM9wG2XkcGT9C5CZILv6tTqpuy8ovz5z56f3Vsg66Rir1699uMHr3yt8DnBIpQMPLCRUIbmgXtj4WlP4JP5oGvl6kaU5gK4o+LxejQimI)
       driver-class-name: com.mysql.cj.jdbc.Driver
       initial-size: 8
       max-active: 16
@@ -30,8 +36,10 @@ spring:
       # 展示 Druid 的统计信息
       stat-view-servlet:
         enabled: true
-        login-username: admin
-        login-password: 123456
+        # login-username: admin
+        login-username: GTzXAawuB2lELEUr(PloOnXJSbNHkGX3ZFVXu17ro933GMkg/URFb76v2/pYlGvqLXwu+UsE1ecV9S17s)
+        # login-password: 123456
+        login-password: GTzXAawuB2lELEUr(uZQa3YXU53cUBzN/I4og6xqKOdQ1zILCj0CtC0Md9w/iyfAp4QT3IuHzcae+Sh+7)
         reset-enable: true
         url-pattern: /druid/*
     # 初始化数据库
