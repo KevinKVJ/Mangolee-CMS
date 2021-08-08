@@ -16,4 +16,3 @@ spring:
 interceptor-config:
   use-token: true
   token-match: /**
-  token-exclude: /abc

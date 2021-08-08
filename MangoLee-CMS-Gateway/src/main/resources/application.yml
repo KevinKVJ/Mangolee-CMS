@@ -18,3 +18,6 @@ spring:
           uri: lb://redis-consumer
           predicates:
             - Path=/consumer/**
+  devtools:
+    livereload:
+      port: 15333

@@ -6,6 +6,7 @@ import org.apache.tomcat.util.http.MimeHeaders;
 import org.mangolee.entity.Result;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class TokenInterceptor extends HandlerInterceptorAdapter {
     @Value("${spring.application.name}")
     private String applicationName;
-    //@Autowired
+    @Autowired
     private RedisService redisService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -38,23 +39,24 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         }
         if(token == null)//若未找到token项，则编辑json信息返回
         {
-            PrintWriter writer = null;
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html; charset=utf-8");
+
             String msg ="Authorization error: no Token found when <"+ consumer+
                     "> called <" + applicationName + ">'s #"+
                     ((HandlerMethod)handler).getMethod().getName()+" Handler.";
             Result<Void> result = new Result(403, msg, null);
-            String jsonString = JSON.toJSONString(result, SerializerFeature.WriteMapNullValue);
-            try {
-                writer = response.getWriter();
-                writer.print(jsonString);
-            } catch (IOException e) {
-                throw new BaseException(result);
-            } finally {
-                if (writer != null)
-                    writer.close();
-            }
+            writeResult2Response(result,response);
+            return false;
+        }
+        Result<String> verifyRes = redisService.getValueAsString(token);
+        System.out.println(verifyRes.toString());
+        if(verifyRes.getCode()!=200 || verifyRes.getData() == null)
+        {
+            String msg ="Authorization error: Token not found in Redis because: "
+                    +verifyRes.getMessage()+",when <"+ consumer+
+                    "> called <" + applicationName + ">'s #"+
+                    ((HandlerMethod)handler).getMethod().getName()+" Handler.";
+            Result<Void> result = new Result(403, msg, null);
+            writeResult2Response(result,response);
             return false;
         }
         HashMap<String, String> map = new HashMap<>();
@@ -121,6 +123,28 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 将结果对象写入相应体中
+     * @param result
+     * @param response
+     */
+    private void writeResult2Response(Result result, HttpServletResponse response)
+    {
+        PrintWriter writer = null;
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=utf-8");
+        String jsonString = JSON.toJSONString(result, SerializerFeature.WriteMapNullValue);
+        try {
+            writer = response.getWriter();
+            writer.print(jsonString);
+        } catch (IOException e) {
+            throw new BaseException(result);
+        } finally {
+            if (writer != null)
+                writer.close();
         }
     }
 }
