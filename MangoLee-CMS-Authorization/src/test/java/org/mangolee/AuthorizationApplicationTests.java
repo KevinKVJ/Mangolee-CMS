@@ -42,7 +42,7 @@ public class AuthorizationApplicationTests {
         System.out.println(userInfo);
     }
 
-    //@Test
+    @Test
     public void getAllUsersTest() {
         List<User> users = userService.list(null);
         users.forEach(System.out::println);
