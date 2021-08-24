@@ -20,6 +20,14 @@
             <groupId>org.mangolee</groupId>
             <artifactId>common-security</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- 引入Mangolee-CMS-common模块 -->
+        <dependency>
+            <groupId>org.mangolee</groupId>
+            <artifactId>common-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <!-- spring starter web -->
         <dependency>
