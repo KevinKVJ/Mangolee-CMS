@@ -18,7 +18,8 @@ import java.util.List;
 @Component
 @FeignClient("redis-service-providers")
 public interface RedisService {
-
+    public final static Long DEFAULT_TTL = 24 * 60 * 60 * 1000L;
+    public final static String DEFAULT_VALUE = "";
     @ApiOperation("存储或修改key的值为value value的类型为字符串")
     @PostMapping("/redisprovider/setvalueasstring/{key}/{value}")
     Result<Void> setValueAsString(

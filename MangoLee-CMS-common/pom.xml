@@ -16,6 +16,7 @@
         <module>common-security</module>
         <module>common-core</module>
         <module>common-swagger</module>
+        <module>common-redis</module>
     </modules>
 
     <dependencies>

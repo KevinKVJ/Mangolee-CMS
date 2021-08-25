@@ -12,23 +12,23 @@
     <artifactId>MangoLee-CMS-Authorization</artifactId>
 
     <dependencies>
+        <!--启动swagger-->
         <dependency>
             <groupId>org.mangolee</groupId>
             <artifactId>common-swagger</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <!-- 引用MangoLee-CMS-common-->
+        <!-- 引用common提供的exception和常量-->
         <dependency>
             <groupId>org.mangolee</groupId>
             <artifactId>common-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-        <!-- 引入redis-service-providers-->
+        <!--使用redis服务-->
         <dependency>
-            <groupId>MangoLee-redis</groupId>
-            <artifactId>redis-service-providers</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.mangolee</groupId>
+            <artifactId>common-redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- spring starter web -->
         <dependency>

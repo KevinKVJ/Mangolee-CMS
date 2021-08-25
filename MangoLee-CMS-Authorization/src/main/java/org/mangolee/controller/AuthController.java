@@ -10,7 +10,6 @@ import org.mangolee.entity.UserInfo;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
-import org.mangolee.service.impl.RedisServiceImpl;
 import org.mangolee.utils.GlobalExceptionHandler;
 import org.mangolee.utils.JwtUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -105,10 +104,11 @@ public class AuthController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             // 如果存在 续期一天 并检查是否成功
-            Result<Long> result1 = redisService.updateKeyTtl(token, RedisServiceImpl.DEFAULT_TTL);
+            Result<Long> result1 = redisService.updateKeyTtl(token, RedisService.DEFAULT_TTL);
             if (!Result.successful(result1)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
+
             // 返回封装结果
             return Result.success((UserInfo) result.getData());
         } catch (BaseException e) {
