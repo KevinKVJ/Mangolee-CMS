@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>org.mangolee</groupId>
-            <artifactId>common-core</artifactId>
+            <artifactId>common-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- Swagger3依赖 -->

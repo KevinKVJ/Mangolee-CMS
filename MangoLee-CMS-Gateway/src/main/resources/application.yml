@@ -10,11 +10,11 @@ spring:
         server-addr: localhost:8848
     gateway:
       routes:
-        - id: consumer
-          uri: lb://nacos-consumer
+        - id: Redis
+          uri: lb://redis-service-providers
           predicates:
-            - Path=/consumer/**
-        - id: RedisConsumer
-          uri: lb://redis-consumer
-          predicates:
-            - Path=/consumer/**
+            - Path=/redis/**
+          filters:
+            - Token
+            - StripPrefix=1
+            - PrefixPath=/redisprovider
