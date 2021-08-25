@@ -25,6 +25,12 @@
         <!-- 引入Mangolee-CMS-common模块 -->
         <dependency>
             <groupId>org.mangolee</groupId>
+            <artifactId>common-swagger</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- 引入Mangolee-CMS-common模块 -->
+        <dependency>
+            <groupId>org.mangolee</groupId>
             <artifactId>common-core</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>

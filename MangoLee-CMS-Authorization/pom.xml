@@ -12,12 +12,18 @@
     <artifactId>MangoLee-CMS-Authorization</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>org.mangolee</groupId>
+            <artifactId>common-swagger</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!-- 引用MangoLee-CMS-common-->
         <dependency>
             <groupId>org.mangolee</groupId>
             <artifactId>common-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
         <!-- 引入redis-service-providers-->
         <dependency>
             <groupId>MangoLee-redis</groupId>
