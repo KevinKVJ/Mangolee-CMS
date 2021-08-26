@@ -95,5 +95,5 @@ mybatis-plus:
 server:
   port: 8080
 
-filter-config:
-  use-token: true
+#filter-config:
+#  use-token: true
