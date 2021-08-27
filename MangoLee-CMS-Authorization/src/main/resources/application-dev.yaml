@@ -1,4 +1,10 @@
 spring:
+  # 适应异常捕捉
+  mvc:
+    throw-exception-if-no-handler-found: true
+  #未找到路径时抛出异常
+  resources:
+    add-mappings: false
   # 配置数据库
   datasource:
     # username: root
@@ -88,3 +94,6 @@ mybatis-plus:
 # 配置tomcat端口号
 server:
   port: 8080
+
+#filter-config:
+#  use-token: true

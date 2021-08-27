@@ -17,8 +17,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unchecked")
 public class RedisServiceImpl implements RedisService {
 
-    public final static Long DEFAULT_TTL = 24 * 60 * 60 * 1000L;
-    public final static String DEFAULT_VALUE = "";
+
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     @Resource

@@ -10,7 +10,6 @@ import org.mangolee.entity.UserInfo;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
-import org.mangolee.service.impl.RedisServiceImpl;
 import org.mangolee.utils.GlobalExceptionHandler;
 import org.mangolee.utils.JwtUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -94,28 +93,23 @@ public class AuthController {
     public Result<UserInfo> verify(
             @ApiParam(value = "令牌", required = true)
             @PathVariable("token") @NotNull String token) {
-        try {
-            // 判断token是否为null
-            if (token == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            // 检查token是否存在redis中及其类型
-            Result<Object> result = redisService.get(token);
-            if (!Result.successful(result) || !(result.getData() instanceof UserInfo)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            // 如果存在 续期一天 并检查是否成功
-            Result<Long> result1 = redisService.updateKeyTtl(token, RedisServiceImpl.DEFAULT_TTL);
-            if (!Result.successful(result1)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            // 返回封装结果
-            return Result.success((UserInfo) result.getData());
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<UserInfo>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<UserInfo>().exceptionHandler(e);
+        // 判断token是否为null
+        if (token == null) {
+            throw new BaseException(Result.BAD_REQUEST);
         }
+        // 检查token是否存在redis中及其类型
+        Result<String> result = redisService.getValueAsString(token);
+        if (!Result.successful(result) || !(result.getData() instanceof String)) {
+            throw new BaseException(Result.BAD_REQUEST);
+        }
+        // 如果存在 续期一天 并检查是否成功
+        Result<Long> result1 = redisService.updateKeyTtl(token, RedisService.DEFAULT_TTL);
+        if (!Result.successful(result1)) {
+            throw new BaseException(Result.BAD_REQUEST);
+        }
+
+        //TODO 返回UserInfo封装结果
+        return Result.success(null);
     }
 
     // Logout

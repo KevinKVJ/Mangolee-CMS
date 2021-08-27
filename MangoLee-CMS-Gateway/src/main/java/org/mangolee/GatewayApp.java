@@ -8,7 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = {org.mangolee.utils.GlobalExceptionHandler.class}))
 @EnableDiscoveryClient
 public class GatewayApp {
     public static void main(String[] args) {

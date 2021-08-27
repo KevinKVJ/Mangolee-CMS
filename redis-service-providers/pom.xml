@@ -18,9 +18,20 @@
         <!-- 引入Mangolee-CMS-common模块 -->
         <dependency>
             <groupId>org.mangolee</groupId>
-            <artifactId>MangoLee-CMS-common</artifactId>
+            <artifactId>common-swagger</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- 引入Mangolee-CMS-common模块 -->
+        <dependency>
+            <groupId>org.mangolee</groupId>
+            <artifactId>common-core</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mangolee</groupId>
+            <artifactId>common-redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- spring starter web -->
         <dependency>

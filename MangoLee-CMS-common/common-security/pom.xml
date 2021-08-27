@@ -3,41 +3,41 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>MangoLee-CMS</artifactId>
+        <artifactId>MangoLee-CMS-common</artifactId>
         <groupId>org.mangolee</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MangoLee-CMS-Gateway</artifactId>
+    <artifactId>common-security</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
 
     <dependencies>
+        <!--使用常量和异常管理-->
         <dependency>
             <groupId>org.mangolee</groupId>
             <artifactId>common-redis</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!-- spring starter web -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!--Validation-->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
         </dependency>
+        <!-- openfeign依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
     </dependencies>
+
 </project>
