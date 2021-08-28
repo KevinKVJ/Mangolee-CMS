@@ -5,7 +5,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.Log;
-import org.mangolee.entity.Permission;
 import org.mangolee.entity.Result;
 import org.mangolee.entity.User;
 import org.mangolee.exception.BaseException;
