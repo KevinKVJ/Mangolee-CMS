@@ -77,45 +77,33 @@ public class LogController {
             @ApiParam(value = "IPv4", required = true) @PathVariable("ipAddress") @NotNull String ipAddress,
             @ApiParam(value = "日志信息", required = true) @PathVariable("message") @NotNull String message,
             @ApiParam(value = "状态码", required = true) @PathVariable("statusCode") @NotNull String statusCode) {
-        try {
-            // 检查用户ID是否存在
-            User user = userService.getById(userId);
-            if (user == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            // 检查ipv4是否合法
-            if (!ipv4Pattern.matcher(ipAddress).matches()) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            Log log1 = new Log();
-            log1.setUserId(userId);
-            log1.setIpAddress(ipAddress);
-            log1.setMessage(message);
-            log1.setStatusCode(statusCode);
-            if (!logService.save(log1)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success();
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
+        // 检查用户ID是否存在
+        User user = userService.getById(userId);
+        if (user == null) {
+            return Result.error(500,"User id does not exist");
         }
+        // 检查ipv4是否合法
+        if (!ipv4Pattern.matcher(ipAddress).matches()) {
+            return Result.error(500,"ipv4 does not match");
+        }
+        Log log1 = new Log();
+        log1.setUserId(userId);
+        log1.setIpAddress(ipAddress);
+        log1.setMessage(message);
+        log1.setStatusCode(statusCode);
+        if (!logService.save(log1)) {
+            return Result.error(500,"log service error");
+        }
+        return Result.success();
     }
 
     @ApiOperation("根据主键ID逻辑删除日志")
     @DeleteMapping("/logicaldeletebyid/{id}")
     public Result<Void> logicalDeleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
-        try {
-            if (!logService.removeById(id)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success();
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
+        if (!logService.removeById(id)) {
+            return Result.error(500,"log service remove logic id error");
         }
+        return Result.success();
     }
 
     @ApiOperation("根据主键ID进行物理删除")
@@ -124,19 +112,12 @@ public class LogController {
             @ApiParam(value = "主键ID", required = true)
             @PathVariable("id")
             @NotNull Long id) {
-        try {
-            Log log = logService.getLogByIdIgnoreLogicalDeletion(id);
-            if (log == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            logService.physicalDeleteById(id);
-            return Result.success();
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
+        Log log = logService.getLogByIdIgnoreLogicalDeletion(id);
+        if (log == null) {
+            return Result.error(500,"log service remove physical id error");
         }
-
+        logService.physicalDeleteById(id);
+        return Result.success();
     }
 
     @ApiOperation("根据主键ID修改日志")
@@ -147,33 +128,27 @@ public class LogController {
                                              @ApiParam(value = "IPv4", required = true) @PathVariable("ipAddress") @NotNull String ipAddress,
                                              @ApiParam(value = "日志信息", required = true) @PathVariable("message") @NotNull String message,
                                              @ApiParam(value = "状态码", required = true) @PathVariable("statusCode") @NotNull String statusCode) {
-        try {
-            Log log = logService.getById(id);
-            if (log == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            User user = userService.getById(userId);
-            if (user == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            // 检查ipv4是否合法
-            if (!ipv4Pattern.matcher(ipAddress).matches()) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            log.setUserId(userId);
-            log.setIpAddress(ipAddress);
-            log.setMessage(message);
-            log.setStatusCode(statusCode);
-            // 更新修改时间
-            log.setGmtModified(null);
-            if (!logService.updateById(log)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success(logService.getById(log.getId()));
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Log>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Log>().exceptionHandler(e);
+        Log log = logService.getById(id);
+        if (log == null) {
+            return Result.error(500,"No log exist for the id");
         }
+        User user = userService.getById(userId);
+        if (user == null) {
+            return Result.error(500,"No user exist for the id");
+        }
+        // 检查ipv4是否合法
+        if (!ipv4Pattern.matcher(ipAddress).matches()) {
+            return Result.error(500,"Invalid ipv4");
+        }
+        log.setUserId(userId);
+        log.setIpAddress(ipAddress);
+        log.setMessage(message);
+        log.setStatusCode(statusCode);
+        // 更新修改时间
+        log.setGmtModified(null);
+        if (!logService.updateById(log)) {
+            return Result.error(500,"Log update error");
+        }
+        return Result.success(logService.getById(log.getId()));
     }
 }
