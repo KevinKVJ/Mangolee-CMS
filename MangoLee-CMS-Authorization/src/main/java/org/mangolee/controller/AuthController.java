@@ -1,5 +1,6 @@
 package org.mangolee.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -74,12 +75,14 @@ public class AuthController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             // 将token保存到redis中去 并判断是否保存成功
-            Result<String> result = redisService.setToken(token);
+            Result<Void> result = redisService.setValue(token, JSON.toJSONString(userInfo));
+            //设置登录token保存时长
+            redisService.updateKeyTtl(token,RedisService.DEFAULT_TTL);
             if (!Result.successful(result)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             // 返回封装结果
-            return result;
+            return Result.success(token);
         } catch (BaseException e) {
             return new GlobalExceptionHandler<String>().baseExceptionHandler(e);
         } catch (Exception e) {
@@ -98,7 +101,7 @@ public class AuthController {
             throw new BaseException(Result.BAD_REQUEST);
         }
         // 检查token是否存在redis中及其类型
-        Result<String> result = redisService.getValueAsString(token);
+        Result<String> result = redisService.getValue(token);
         if (!Result.successful(result) || !(result.getData() instanceof String)) {
             throw new BaseException(Result.BAD_REQUEST);
         }
@@ -109,7 +112,7 @@ public class AuthController {
         }
 
         //TODO 返回UserInfo封装结果
-        return Result.success(null);
+        return Result.success(JSON.parseObject(result.getData(), UserInfo.class));
     }
 
     // Logout

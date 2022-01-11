@@ -5,7 +5,6 @@ import org.mangolee.service.RedisService;
 import org.mangolee.utils.FilterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +43,7 @@ public class TokenFilter implements Filter {
             return ;
         }
         //TODO 试图获取userinfo
-        Result<String> verifyRes = redisService.getValueAsString(token);
+        Result<String> verifyRes = redisService.getValue(token);
         if(verifyRes.getCode()!=200 || verifyRes.getData() == null)
         {
             String msg ="Authorization error: Token not found in Redis because: "

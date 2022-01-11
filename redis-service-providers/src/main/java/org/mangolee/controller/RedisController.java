@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.Result;
+import org.mangolee.entity.UserInfo;
 import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
 import org.mangolee.utils.GlobalExceptionHandler;
@@ -23,77 +24,30 @@ public class RedisController {
     private RedisService redisService;
 
     @ApiOperation("获取key的value value的类型为字符串")
-    @GetMapping("/redisprovider/getvalueasstring/{key}")
-    public Result<String> getValueAsString(
+    @GetMapping("/redisprovider/getvalue/{key}")
+    public Result<String> getValue(
             @ApiParam(value = "键", required = true)
             @PathVariable("key") @NotNull String key) {
-        try {
-            Result<String> result = redisService.getValueAsString(key);
-            if (!Result.successful(result)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return result;
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<String>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<String>().exceptionHandler(e);
-        }
+        return redisService.getValue(key);
     }
 
     @ApiOperation("存储或修改key的值为value value的类型为字符串")
-    @PostMapping("/redisprovider/setvalueasstring/{key}/{value}")
-    public Result<Void> setValueAsString(
+    @PostMapping("/redisprovider/setvalue/{key}/{value}")
+    public Result<Void> setValue(
             @ApiParam(value = "键", required = true)
             @PathVariable("key") @NotNull String key,
             @ApiParam(value = "值", required = true)
             @PathVariable("value") @NotNull String value) {
-        try {
-            Result<Void> result = redisService.setValueAsString(key, value);
-            if (!Result.successful(result)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return result;
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
-        }
+        return redisService.setValue(key, value);
     }
 
-    @ApiOperation("往redis中存储token")
-    @GetMapping("/redisprovider/settoken/{token}")
-    public Result<String> setToken(
-            @ApiParam(value = "令牌", required = true)
-            @PathVariable("token") @NotNull String token) {
-        try {
-            Result<String> result = redisService.setToken(token);
-            if (!Result.successful(result)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return result;
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<String>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<String>().exceptionHandler(e);
-        }
-    }
 
     @ApiOperation("获取redis中对应key的过期时间")
     @GetMapping("/redisprovider/getkeyttl/{key}")
     public Result<Long> getKeyTtl(
             @ApiParam(value = "键", required = true)
             @PathVariable("key") @NotNull String key) {
-        try {
-            Result<Long> result = redisService.getKeyTtl(key);
-            if (!Result.successful(result)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return result;
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Long>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Long>().exceptionHandler(e);
-        }
+        return redisService.getKeyTtl(key);
     }
 
     @ApiOperation("根据键和新的过期时间更新redis旧的过期时间 以毫秒为单位")
@@ -103,17 +57,7 @@ public class RedisController {
             @PathVariable("key") @NotNull String key,
             @ApiParam(value = "新的过期时间", required = true)
             @PathVariable("newTtl") @NotNull Long newTtl) {
-        try {
-            Result<Long> result = redisService.updateKeyTtl(key, newTtl);
-            if (!Result.successful(result)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return result;
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Long>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Long>().exceptionHandler(e);
-        }
+        return redisService.updateKeyTtl(key, newTtl);
     }
 
     @ApiOperation("删除redis中的指定键")
@@ -122,32 +66,20 @@ public class RedisController {
             @ApiParam(value = "键", required = true)
             @PathVariable("key")
             @NotNull String key) {
-        try {
-            Result<Void> result = redisService.delete(key);
-            if (!Result.successful(result)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return result;
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
-        }
+        return redisService.delete(key);
     }
 
     @ApiOperation("列出redis所有key")
     @GetMapping("/redisprovider/getkeys")
     public Result<List<String>> getKeys() {
-        try {
-            Result<List<String>> result = redisService.getKeys();
-            if (!Result.successful(result)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return result;
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<List<String>>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<List<String>>().exceptionHandler(e);
-        }
+        return redisService.getKeys();
+    }
+
+    @ApiOperation("验证key获取信息并更新过期时间")
+    @GetMapping("/redisprovider/verify/{key}")
+    public Result<UserInfo> verify( @ApiParam(value = "键", required = true)
+                                        @PathVariable("key")
+                                        @NotNull String key) {
+        return redisService.verify(key);
     }
 }
