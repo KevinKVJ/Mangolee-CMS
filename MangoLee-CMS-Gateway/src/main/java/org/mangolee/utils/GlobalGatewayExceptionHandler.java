@@ -27,6 +27,7 @@ public class GlobalGatewayExceptionHandler implements ErrorWebExceptionHandler {
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
+        System.out.println(throwable.toString());//For dubug
         //这里只是做个最简单的同一的异常结果输出，实际业务可根据throwable不同的异常处理不同的逻辑
         Result result = Result.error(Result.INTERNAL_ERROR.getCode(),Result.INTERNAL_ERROR.getMessage());
         threadLocal.set(result);

@@ -3,6 +3,7 @@ package org.mangolee.service;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.Result;
+import org.mangolee.entity.UserInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -21,8 +22,8 @@ public interface RedisService {
     public final static Long DEFAULT_TTL = 24 * 60 * 60 * 1000L;
     public final static String DEFAULT_VALUE = "";
     @ApiOperation("存储或修改key的值为value value的类型为字符串")
-    @PostMapping("/redisprovider/setvalueasstring/{key}/{value}")
-    Result<Void> setValueAsString(
+    @PostMapping("/redisprovider/setvalue/{key}/{value}")
+    Result<Void> setValue(
             @ApiParam(value = "键", required = true)
             @PathVariable("key") @NotNull
                     String key,
@@ -30,36 +31,13 @@ public interface RedisService {
             @PathVariable("value") @NotNull
                     String value);
 
-    @ApiOperation("存储或修改key的值为value")
-    @PostMapping("/redisprovider/set/{key}/{value}")
-    Result<Void> set(
-            @ApiParam(value = "键", required = true)
-            @PathVariable("key") @NotNull
-                    String key,
-            @ApiParam(value = "值", required = true)
-            @PathVariable("value") @NotNull
-                    Object value);
-
     @ApiOperation("获取key的value value的类型为字符串")
-    @GetMapping("/redisprovider/getvalueasstring/{key}")
-    Result<String> getValueAsString(
+    @GetMapping("/redisprovider/getvalue/{key}")
+    Result<String> getValue(
             @ApiParam(value = "键", required = true)
             @PathVariable("key") @NotNull
                     String key);
 
-    @ApiOperation("获取key的value")
-    @PostMapping("/redisprovider/get/{key}")
-    Result<Object> get(
-            @ApiParam(value = "键", required = true)
-            @PathVariable("key") @NotNull
-                    String key);
-
-    @ApiOperation("往redis中存储token")
-    @GetMapping("/redisprovider/settoken/{token}")
-    Result<String> setToken(
-            @ApiParam(value = "令牌", required = true)
-            @PathVariable("token") @NotNull
-                    String token);
 
     @ApiOperation("获取redis中对应key的过期时间")
     @GetMapping("/redisprovider/getkeyttl/{key}")
@@ -87,4 +65,12 @@ public interface RedisService {
     @ApiOperation("列出redis所有key")
     @GetMapping("/redisprovider/getkeys")
     Result<List<String>> getKeys();
+
+    @ApiOperation("验证key是否存在并获取对应用户信息")
+    @GetMapping("/redisprovider/verify/{key}")
+    Result<UserInfo> verify(
+            @ApiParam(value = "键", required = true)
+            @PathVariable("key")
+            @NotNull
+                    String key);
 }

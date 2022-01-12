@@ -1,26 +1,23 @@
 package org.mangolee.filter;
 
 import org.mangolee.entity.Result;
+import org.mangolee.entity.UserInfo;
 import org.mangolee.service.RedisService;
 import org.mangolee.utils.FilterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class TokenFilter implements Filter {
-    @Value("${spring.application.name}")
     private String applicationName;
-    @Autowired
     private RedisService redisService;
     @Override
-
-
     public void init(FilterConfig filterConfig) throws ServletException {
     }
 
@@ -44,7 +41,7 @@ public class TokenFilter implements Filter {
             return ;
         }
         //TODO 试图获取userinfo
-        Result<String> verifyRes = redisService.getValueAsString(token);
+        Result<UserInfo> verifyRes = redisService.verify(token);
         if(verifyRes.getCode()!=200 || verifyRes.getData() == null)
         {
             String msg ="Authorization error: Token not found in Redis because: "
@@ -55,15 +52,22 @@ public class TokenFilter implements Filter {
             FilterUtils.writeResult2Response(result,(HttpServletResponse) response);
             return;
         }
-        HashMap<String, String> map = new HashMap<>();
-        //TODO 试图填充获取的userinfo各个字段进header
-        map.put("message","helloworld");
-        FilterUtils.modifyHeaders(map,req);
+        Map<String, Object> stringObjectMap = FilterUtils.reflectPojo(verifyRes.getData());
+        FilterUtils.modifyHeaders(stringObjectMap,req);
         chain.doFilter(request,response);
         return;
     }
 
     @Override
     public void destroy() {
+    }
+
+    public void setApplicationName(String name)
+    {
+        applicationName = name;
+    }
+    public void setRedisService(RedisService service)
+    {
+        this.redisService = service;
     }
 }
