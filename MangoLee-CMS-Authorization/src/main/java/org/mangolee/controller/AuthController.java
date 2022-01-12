@@ -14,7 +14,6 @@ import org.mangolee.service.UserService;
 import org.mangolee.utils.GlobalExceptionHandler;
 import org.mangolee.utils.JwtUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,63 +41,77 @@ public class AuthController {
             @PathVariable("username") @NotNull String username,
             @ApiParam(value = "密码", required = true)
             @PathVariable("password") @NotNull String password) {
-        // 判断用户名是否为null或者空
-        if (username == null || StringUtils.isEmpty(username)) {
-            return Result.error(400,"Invalid empty username");
+
+        try {
+            // 判断用户名和密码是否为null
+            if (username == null || password == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 根据用户名生成User实体 并查询其在数据库是否存在
+            User user = userService.getOne(new QueryWrapper<User>().eq("username", username));
+            // 判断拥有该用户名的用户是否存在
+            if (user == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 判断密码是否匹配
+            if (!new BCryptPasswordEncoder().matches(password, user.getPassword())) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 根据User生成对应的UserInfo
+            UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), UUID.randomUUID().toString(), new Date(System.currentTimeMillis()));
+            // 根据UserInfo生成对应的token
+            String token = JwtUtils.createTokenFromUserInfo(userInfo, JwtUtils.SECRET_KEY, JwtUtils.SIGNATURE_ALGORITHM);
+            // 判断token是否为null
+            if (token == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 将token保存到redis中去 并判断是否保存成功
+            Result<Void> result = redisService.setValue(token, JSON.toJSONString(userInfo));
+            // 设置登录token保存时长
+            redisService.updateKeyTtl(token, RedisService.DEFAULT_TTL);
+            if (!Result.successful(result)) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 返回封装结果
+            return Result.success(token);
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<String>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<String>().exceptionHandler(e);
         }
-        // 判断密码是否为null或者空
-        if (password == null || StringUtils.isEmpty(password)) {
-            return Result.error(400,"Invalid empty password");
-        }
-        // 根据用户生成User实体 并查询其在数据库是否存在
-        User user = new User();
-        user.setUsername(username);
-        QueryWrapper<User> queryWrapper = new QueryWrapper<User>().eq("username", username);
-        user = userService.getOne(queryWrapper);
-        // 判断拥有该用户名的用户是否存在
-        if (user == null) {
-            return Result.error(400,"User does not exist");
-        }
-        // 判断密码是否匹配
-        if (!new BCryptPasswordEncoder().matches(password, user.getPassword())) {
-            return Result.error(400,"Password does not match");
-        }
-        // 根据User生成对应的UserInfo
-        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), user.getEmail(),
-                user.getRole(), UUID.randomUUID().toString(), new Date(System.currentTimeMillis()));
-        // 根据UserInfo生成对应的token
-        String token = JwtUtils.createTokenFromUserInfo(userInfo, JwtUtils.SECRET_KEY
-                , JwtUtils.SIGNATURE_ALGORITHM);
-        // 判断token是否为null
-        if (token == null) {
-            return Result.error(500,"Token generation error");
-        }
-        // 将token保存到redis中去 并判断是否保存成功
-        Result<Void> result = redisService.setValue(token, JSON.toJSONString(userInfo));
-        //设置登录token保存时长
-        redisService.updateKeyTtl(token, RedisService.DEFAULT_TTL);
-        if (!Result.successful(result)) {
-            return Result.error(500,"Redis save token error");
-        }
-        // 返回封装结果
-        return Result.success(token);
     }
 
-    // Verify token
     @ApiOperation("根据token抽取UserInfo实例")
     @PostMapping("/verify/{token}")
     public Result<UserInfo> verify(
             @ApiParam(value = "令牌", required = true)
             @PathVariable("token") @NotNull String token) {
-        return redisService.verify(token);
+        try {
+            if (token == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            return redisService.verify(token);
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<UserInfo>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<UserInfo>().exceptionHandler(e);
+        }
     }
 
-    // Logout
-    @ApiOperation("删除redis中的令牌")
+    @ApiOperation("登出 即删除redis中的令牌")
     @DeleteMapping("/delete/{token}")
     public Result<Void> logout(
             @ApiParam(value = "令牌", required = true)
             @PathVariable("token") @NotNull String token) {
-        return redisService.delete(token);
+        try {
+            if (token == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            return redisService.delete(token);
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
+        }
     }
 }

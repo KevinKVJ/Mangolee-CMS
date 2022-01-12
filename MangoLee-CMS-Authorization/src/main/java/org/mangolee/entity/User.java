@@ -1,13 +1,12 @@
 package org.mangolee.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -35,4 +34,8 @@ public class User {
     // 角色权限
     @ApiModelProperty(value = "角色权限", example = "ADMIN")
     private String role;
+
+    // 角色等级
+    @ApiModelProperty(value = "角色等级", example = "1")
+    private Integer level;
 }

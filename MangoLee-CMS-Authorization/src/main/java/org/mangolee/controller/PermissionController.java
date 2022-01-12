@@ -31,38 +31,30 @@ public class PermissionController {
     UserService userService;
 
     @ApiOperation("根据主键ID获取权限")
-    @GetMapping("/get/{id}")
+    @GetMapping("/getbyid/{id}")
     public Result<Permission> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
-        return Result.success(permissionService.getById(id));
-    }
-
-    @ApiOperation("获取所有未被逻辑删除的权限")
-    @GetMapping("/get")
-    public Result<List<Permission>> getPermissions() {
-        return Result.success(permissionService.list());
+        try {
+            if (id == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            return Result.success(permissionService.getById(id));
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Permission>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<Permission>().exceptionHandler(e);
+        }
     }
 
     @ApiOperation("获取所有权限")
-    @GetMapping("/getall")
-    public Result<List<Permission>> getAllPermissions() {
-        return Result.success(permissionService.getAllPermissions());
-    }
-
-    @ApiOperation("根据权限角色名创建权限")
-    @PostMapping("/create/{role}")
-    public Result<Permission> createPermission(
-            @ApiParam(value = "权限角色", required = true)
-            @PathVariable("role")
-            @NotNull String role
-    ) {
-        Permission permission = new Permission();
-        permission.setRole(role);
-        if (!permissionService.save(permission)) {
-            return Result.error(500,"Set permission error");
+    @GetMapping("/get")
+    public Result<List<Permission>> get() {
+        try {
+            return Result.success(permissionService.list());
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<List<Permission>>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<List<Permission>>().exceptionHandler(e);
         }
-        QueryWrapper<Permission> wrapper = new QueryWrapper<Permission>().eq("role", role);
-        permission = permissionService.getOne(wrapper);
-        return Result.success(permission);
     }
 
     @ApiOperation("根据主键ID和权限角色名修改权限名")
@@ -75,73 +67,60 @@ public class PermissionController {
             @PathVariable("role")
             @NotNull String newRole
     ) {
-        // 判断权限是否为null
-        Permission permission = permissionService.getById(id);
-        if (permission == null) {
-            return Result.error(500,"Permission check error");
+        try {
+            if (id == null || newRole == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 判断权限是否为null
+            Permission permission = permissionService.getById(id);
+            if (permission == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            String oldRole = permission.getRole();
+            // 更新权限名称
+            permission.setRole(newRole);
+            if (!permissionService.updateById((permission))) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            // 批量更新User
+            User user = new User();
+            user.setRole(newRole);
+            if (!userService.update(user, new QueryWrapper<User>().eq("role", oldRole))) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            permission = permissionService.getById(id);
+            return Result.success(permission);
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Permission>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<Permission>().exceptionHandler(e);
         }
-        String oldRole = permission.getRole();
-        // 更新权限名称
-        permission.setRole(newRole);
-        permission.setGmtModified(null);
-        if (!permissionService.updateById((permission))) {
-            return Result.error(500,"Permission update error");
-        }
-        // 批量更新User
-        User user = new User();
-        user.setRole(newRole);
-        QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("role", oldRole);
-        userService.update(user, wrapper);
-        permission = permissionService.getById(id);
-        return Result.success(permission);
     }
 
-    @ApiOperation("根据主键ID进行逻辑删除")
-    @DeleteMapping("/logicaldeletebyid/{id}")
-    public Result<Void> logicalDeleteById(
+    @ApiOperation("根据主键ID进行删除")
+    @DeleteMapping("/delete/{id}")
+    public Result<Void> deleteById(
             @ApiParam(value = "主键ID", required = true)
             @PathVariable("id")
             @NotNull Long id) {
-        Permission permission = permissionService.getById(id);
-        if (permission == null) {
-            return Result.error(500,"Permission check error");
+        try {
+            if (id == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            Permission permission = permissionService.getById(id);
+            if (permission == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            String role = permission.getRole();
+            if (!permissionService.removeById(id)) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            userService.updateRoleBatchWithNull(role);
+            return Result.success();
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
         }
-        String role = permission.getRole();
-        if (!permissionService.removeById(id)) {
-            return Result.error(500,"Permission update error");
-        }
-        userService.updateRoleBatchWithNull(role);
-        return Result.success();
-    }
-
-    @ApiOperation("根据角色权限进行逻辑删除")
-    @DeleteMapping("/logicaldeletebyrole/{role}")
-    public Result<Void> logicalDeleteByRole(
-            @ApiParam(value = "权限角色", required = true)
-            @PathVariable("role")
-            @NotNull String role) {
-        QueryWrapper<Permission> wrapper = new QueryWrapper<Permission>().eq("role", role);
-        if (!permissionService.remove(wrapper)) {
-            return Result.error(500,"Permission update error");
-        }
-        userService.updateRoleBatchWithNull(role);
-        return Result.success();
-    }
-
-    @ApiOperation("根据主键ID进行物理删除")
-    @DeleteMapping("/physicaldeletebyid/{id}")
-    public Result<Void> physicalDeleteById(
-            @ApiParam(value = "主键ID", required = true)
-            @PathVariable("id")
-            @NotNull Long id) {
-        Permission permission = permissionService.getPermissionByIdIgnoreLogicalDeletion(id);
-        if (permission == null) {
-            return Result.error(500,"Permission update error");
-        }
-        String role = permission.getRole();
-        permissionService.physicalDeleteById(id);
-        // User表只对未被逻辑删除的条目进行更新
-        userService.updateRoleBatchWithNull(role);
-        return Result.success();
     }
 }

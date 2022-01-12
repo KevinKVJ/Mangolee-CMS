@@ -35,33 +35,60 @@ public class UserController {
     @ApiOperation("根据主键ID获取用户")
     @GetMapping("/getbyid/{id}")
     public Result<User> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
-        return Result.success(userService.getById(id));
+        try {
+            if (id == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            return Result.success(userService.getById(id));
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<User>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<User>().exceptionHandler(e);
+        }
     }
 
     @ApiOperation("获取所有用户")
     @GetMapping("/get")
     public Result<List<User>> getUsers() {
-        return Result.success(userService.list());
+        try {
+            return Result.success(userService.list());
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<List<User>>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<List<User>>().exceptionHandler(e);
+        }
     }
 
     @ApiOperation("根据用户名获取用户")
-    @GetMapping("/get/{username}")
+    @GetMapping("/getbyusername/{username}")
     public Result<User> getByUsername(@ApiParam(value = "用户名", required = true) @PathVariable(
             "username") @NotNull String username) {
-        return Result.success(userService.getOne(new QueryWrapper<User>().eq("username", username)));
-    }
-
-    @ApiOperation("获取所有用户")
-    @GetMapping("/getall")
-    public Result<List<User>> getAllUsers() {
-        return Result.success(userService.list());
+        try {
+            if (username == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            return Result.success(userService.getOne(new QueryWrapper<User>().eq("username", username)));
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<User>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<User>().exceptionHandler(e);
+        }
     }
 
     @ApiOperation("根据邮箱获取用户")
     @GetMapping("/getbyemail/{email}")
     public Result<List<User>> getUsersByEmail(@ApiParam(value = "邮箱", required = true) @PathVariable(
             "email") @Email(message = "邮箱格式不正确") String email) {
-        return Result.success(userService.list(new QueryWrapper<User>().eq("email", email)));
+        try {
+            if (email == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            return Result.success(userService.list(new QueryWrapper<User>().eq("email", email)));
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<List<User>>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<List<User>>().exceptionHandler(e);
+        }
     }
 
     @ApiOperation("根据用户名修改用户权限")
@@ -76,20 +103,21 @@ public class UserController {
             @NotNull
                     String role) {
         try {
-            QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
-            User               user    = userService.getOne(wrapper);
+            if (username == null || role == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            User               user    = userService.getOne(new QueryWrapper<User>().eq("username", username));
             // 若找不到用户则抛出异常
             if (user == null) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
-            QueryWrapper<Permission> wrapper1 = new QueryWrapper<Permission>().eq("role", role);
             // 若找不到权限则抛出异常
-            Permission permission = permissionService.getOne(wrapper1);
+            Permission permission = permissionService.getOne(new QueryWrapper<Permission>().eq("role", role));
             if (permission == null) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             user.setRole(role);
-            if (!userService.update(user, wrapper)) {
+            if (!userService.updateById(user)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             return Result.success(user);
@@ -102,11 +130,14 @@ public class UserController {
 
     @ApiOperation("根据用户名和旧密码修改密码")
     @PutMapping("/updatepassword/{username}/{password}/{newpassword}")
-    public Result<User> updatePassword(@ApiParam(value = "用户名", required = true) @PathVariable(
-            "username") @NotNull String username,
-                                       @ApiParam(value = "密码", required = true) @PathVariable("password") @NotNull String password,
-                                       @ApiParam(value = "新密码", required = true) @PathVariable("newpassword") @NotNull String newPassword) {
+    public Result<User> updatePassword(
+            @ApiParam(value = "用户名", required = true) @PathVariable("username") @NotNull String username,
+            @ApiParam(value = "密码", required = true) @PathVariable("password") @NotNull String password,
+            @ApiParam(value = "新密码", required = true) @PathVariable("newpassword") @NotNull String newPassword) {
         try {
+            if (username == null || password == null || newPassword == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
             QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
             User               user    = userService.getOne(wrapper);
             // 若找不到用户则抛出异常
@@ -135,6 +166,9 @@ public class UserController {
     public Result<User> updateEmail(@ApiParam(value = "用户名", required = true) @PathVariable("username") @NotNull String username,
                                     @ApiParam(value = "新邮箱", required = true) @PathVariable("email") @Email(message = "邮箱格式不正确") String email) {
         try {
+            if (username == null || email == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
             QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
             User               user    = userService.getOne(wrapper);
             // 若找不到用户则抛出异常
@@ -153,14 +187,16 @@ public class UserController {
         }
     }
 
-    @ApiOperation("根据用户名进行逻辑删除")
-    @DeleteMapping("/logicaldeletebyusername/{username}")
-    public Result<Void> logicalDeleteByUsername(
+    @ApiOperation("根据用户名进行删除")
+    @DeleteMapping("/deletebyusername/{username}")
+    public Result<Void> deleteByUsername(
             @ApiParam(value = "用户名", required = true)
             @PathVariable("username") @NotNull String username) {
         try {
-            QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
-            if (!userService.remove(wrapper)) {
+            if (username == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            if (!userService.remove(new QueryWrapper<User>().eq("username", username))) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             return Result.success();
@@ -171,10 +207,13 @@ public class UserController {
         }
     }
 
-    @ApiOperation("根据主键ID进行逻辑删除")
-    @DeleteMapping("/logicaldeletebyid/{id}")
-    public Result<Void> logicalDeleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
+    @ApiOperation("根据主键ID进行删除")
+    @DeleteMapping("/deletebyid/{id}")
+    public Result<Void> deleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
         try {
+            if (id == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
             if (!userService.removeById(id)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
@@ -190,14 +229,15 @@ public class UserController {
     @PostMapping("/create/{username}/{password}/{email}/{role}")
     public Result<User> createUser(@ApiParam(value = "用户名", required = true) @PathVariable("username") @NotNull String username,
                                    @ApiParam(value = "密码", required = true) @PathVariable("password") @NotNull String password,
-                                   @ApiParam(value = "邮箱", required = true) @PathVariable("email") @Email(message =
-                                           "邮箱格式不正确") String email,
+                                   @ApiParam(value = "邮箱", required = true) @PathVariable("email") @Email(message = "邮箱格式不正确") String email,
                                    @ApiParam(value = "权限角色", required = true) @PathVariable("role") @NotNull String role
 
     ) {
         try {
-            QueryWrapper<Permission> wrapper    = new QueryWrapper<Permission>().eq("role", role);
-            Permission               permission = permissionService.getOne(wrapper);
+            if (username == null || password == null || email == null || role == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            Permission  permission = permissionService.getOne(new QueryWrapper<Permission>().eq("role", role));
             if (permission == null) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
@@ -206,6 +246,11 @@ public class UserController {
             user.setPassword(new BCryptPasswordEncoder().encode(password));
             user.setEmail(email);
             user.setRole(role);
+            if (role.equals("ADMIN")) {
+                user.setLevel(0);
+            } else {
+                user.setLevel(1);
+            }
             if (!userService.save(user)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
@@ -218,5 +263,4 @@ public class UserController {
             return new GlobalExceptionHandler<User>().exceptionHandler(e);
         }
     }
-
 }

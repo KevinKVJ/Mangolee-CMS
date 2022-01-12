@@ -1,4 +1,5 @@
 SET NAMES utf8mb4;
+SET foreign_key_checks = 0;
 
 /** 用户表 **/
 DROP TABLE IF EXISTS `user`;
@@ -27,4 +28,13 @@ CREATE TABLE `permission`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='权限';
 
-/** 等级表 **/
+/** 等级表(静态表) **/
+DROP TABLE IF EXISTS `level`;
+CREATE TABLE `level`
+(
+    `level`    INT NOT NULL DEFAULT 0 COMMENT '用户等级',    /** 管理员等级默认为0 guest等级从1开始 **/
+    `description`   VARCHAR(512) NOT NULL COMMENT '等级描述',
+    PRIMARY KEY (`level`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='等级';
