@@ -77,31 +77,25 @@ public class UserController {
             @PathVariable("role")
             @NotNull
                     String role) {
-        try {
-            QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
-            User               user    = userService.getOne(wrapper);
-            // 若找不到用户则抛出异常
-            if (user == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            QueryWrapper<Permission> wrapper1 = new QueryWrapper<Permission>().eq("role", role);
-            // 若找不到权限则抛出异常
-            Permission permission = permissionService.getOne(wrapper1);
-            if (permission == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            user.setRole(role);
-            // 更新修改时间
-            user.setGmtModified(null);
-            if (!userService.update(user, wrapper)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success(user);
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<User>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<User>().exceptionHandler(e);
+        QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
+        User               user    = userService.getOne(wrapper);
+        // 若找不到用户则抛出异常
+        if (user == null) {
+            return Result.error(400,"Can not find user");
         }
+        QueryWrapper<Permission> wrapper1 = new QueryWrapper<Permission>().eq("role", role);
+        // 若找不到权限则抛出异常
+        Permission permission = permissionService.getOne(wrapper1);
+        if (permission == null) {
+            return Result.error(400,"Can not find permission for the user");
+        }
+        user.setRole(role);
+        // 更新修改时间
+        user.setGmtModified(null);
+        if (!userService.update(user, wrapper)) {
+            return Result.error(500,"Gmt update error");
+        }
+        return Result.success(user);
     }
 
     @ApiOperation("根据用户名和旧密码修改密码")
@@ -110,55 +104,43 @@ public class UserController {
             "username") @NotNull String username,
                                        @ApiParam(value = "密码", required = true) @PathVariable("password") @NotNull String password,
                                        @ApiParam(value = "新密码", required = true) @PathVariable("newpassword") @NotNull String newPassword) {
-        try {
-            QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
-            User               user    = userService.getOne(wrapper);
-            // 若找不到用户则抛出异常
-            if (user == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            // 若找到用户但密码不正确则抛出异常
-            if (!new BCryptPasswordEncoder().matches(password, user.getPassword())) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            // 更新用户
-            user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
-            // 更新修改时间
-            user.setGmtModified(null);
-            userService.update(user, wrapper);
-            wrapper = new QueryWrapper<User>().eq("username", username);
-            user = userService.getOne(wrapper);
-            return Result.success(user);
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<User>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<User>().exceptionHandler(e);
+        QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
+        User               user    = userService.getOne(wrapper);
+        // 若找不到用户则抛出异常
+        if (user == null) {
+            return Result.error(400,"Can not find user");
         }
+        // 若找到用户但密码不正确则抛出异常
+        if (!new BCryptPasswordEncoder().matches(password, user.getPassword())) {
+            return Result.error(400,"Password does not match");
+        }
+        // 更新用户
+        user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+        // 更新修改时间
+        user.setGmtModified(null);
+        userService.update(user, wrapper);
+        wrapper = new QueryWrapper<User>().eq("username", username);
+        user = userService.getOne(wrapper);
+        return Result.success(user);
     }
 
     @ApiOperation("根据用户名修改邮箱")
     @PutMapping("/updateemail/{username}/{email}")
     public Result<User> updateEmail(@ApiParam(value = "用户名", required = true) @PathVariable("username") @NotNull String username,
                                     @ApiParam(value = "新邮箱", required = true) @PathVariable("email") @Email(message = "邮箱格式不正确") String email) {
-        try {
-            QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
-            User               user    = userService.getOne(wrapper);
-            // 若找不到用户则抛出异常
-            if (user == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            user.setEmail(email);
-            // 更新修改时间
-            user.setGmtModified(null);
-            if (!userService.update(user, wrapper)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success(user);
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<User>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<User>().exceptionHandler(e);
+        QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
+        User               user    = userService.getOne(wrapper);
+        // 若找不到用户则抛出异常
+        if (user == null) {
+            return Result.error(400,"Can not find user");
         }
+        user.setEmail(email);
+        // 更新修改时间
+        user.setGmtModified(null);
+        if (!userService.update(user, wrapper)) {
+            return Result.error(500,"Email update error");
+        }
+        return Result.success(user);
     }
 
     @ApiOperation("根据用户名进行逻辑删除")
@@ -166,49 +148,31 @@ public class UserController {
     public Result<Void> logicalDeleteByUsername(
             @ApiParam(value = "用户名", required = true)
             @PathVariable("username") @NotNull String username) {
-        try {
-            QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
-            if (!userService.remove(wrapper)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success();
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
+        QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
+        if (!userService.remove(wrapper)) {
+            return Result.error(500,"Delete user error");
         }
+        return Result.success();
     }
 
     @ApiOperation("根据主键ID进行逻辑删除")
     @DeleteMapping("/logicaldeletebyid/{id}")
     public Result<Void> logicalDeleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
-        try {
-            if (!userService.removeById(id)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success();
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
+        if (!userService.removeById(id)) {
+            return Result.error(500,"Delete user error");
         }
+        return Result.success();
     }
 
     @ApiOperation("根据主键ID进行物理删除")
     @DeleteMapping("/physicaldeletebyid/{id}")
     public Result<Void> physicalDeleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
-        try {
-            User user = userService.getUserByIdIgnoreLogicalDeletion(id);
-            if (user == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            userService.physicalDeleteById(id);
-            return Result.success();
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
+        User user = userService.getUserByIdIgnoreLogicalDeletion(id);
+        if (user == null) {
+            return Result.error(400,"Get user error");
         }
+        userService.physicalDeleteById(id);
+        return Result.success();
     }
 
     @ApiOperation("根据用户名密码邮箱权限创建新账号")
@@ -220,28 +184,22 @@ public class UserController {
                                    @ApiParam(value = "权限角色", required = true) @PathVariable("role") @NotNull String role
 
     ) {
-        try {
-            QueryWrapper<Permission> wrapper    = new QueryWrapper<Permission>().eq("role", role);
-            Permission               permission = permissionService.getOne(wrapper);
-            if (permission == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            User user = new User();
-            user.setUsername(username);
-            user.setPassword(new BCryptPasswordEncoder().encode(password));
-            user.setEmail(email);
-            user.setRole(role);
-            if (!userService.save(user)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            QueryWrapper<User> wrapper1 = new QueryWrapper<User>().eq("username", username);
-            user = userService.getOne(wrapper1);
-            return Result.success(user);
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<User>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<User>().exceptionHandler(e);
+        QueryWrapper<Permission> wrapper    = new QueryWrapper<Permission>().eq("role", role);
+        Permission               permission = permissionService.getOne(wrapper);
+        if (permission == null) {
+            return Result.error(400,"Get permission error");
         }
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(new BCryptPasswordEncoder().encode(password));
+        user.setEmail(email);
+        user.setRole(role);
+        if (!userService.save(user)) {
+            return Result.error(500,"Save new user error");
+        }
+        QueryWrapper<User> wrapper1 = new QueryWrapper<User>().eq("username", username);
+        user = userService.getOne(wrapper1);
+        return Result.success(user);
     }
 
 }

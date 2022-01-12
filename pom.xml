@@ -13,6 +13,7 @@
         <module>MangoLee-CMS-common</module>
         <module>MangoLee-CMS-Gateway</module>
         <module>redis-service-providers</module>
+        <module>SecurityTest</module>
     </modules>
     <packaging>pom</packaging>
 

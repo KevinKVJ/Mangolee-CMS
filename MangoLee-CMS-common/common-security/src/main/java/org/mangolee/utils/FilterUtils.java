@@ -21,15 +21,22 @@ public class FilterUtils {
      * @return
      * @throws IllegalAccessException
      */
-    static public Map<String,Object> reflectPojo(Object pojo) throws IllegalAccessException {
-        Map<String, Object> map = new HashMap<>();
-        Field[] fields = pojo.getClass().getDeclaredFields();
-        for(Field field:fields)
+    static public Map<String,Object> reflectPojo(Object pojo) {
+        try
         {
-            field.setAccessible(true);
-            map.put(field.getName(),field.get(pojo));
+            Map<String, Object> map = new HashMap<>();
+            Field[] fields = pojo.getClass().getDeclaredFields();
+            for(Field field:fields)
+            {
+                field.setAccessible(true);
+                map.put(field.getName(),field.get(pojo));
+            }
+            return map;
         }
-        return map;
+        catch (IllegalAccessException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -69,7 +76,7 @@ public class FilterUtils {
      * @param headerses
      * @param request
      */
-    static public void modifyHeaders(Map<String, String> headerses, HttpServletRequest request) {
+    static public void modifyHeaders(Map<String, Object> headerses, HttpServletRequest request) {
         if (headerses == null || headerses.isEmpty()) {
             return;
         }
@@ -84,12 +91,12 @@ public class FilterUtils {
             Field headers = o1.getClass().getDeclaredField("headers");
             headers.setAccessible(true);
             MimeHeaders o2 = (MimeHeaders)headers.get(o1);
-            for (Map.Entry<String, String> entry : headerses.entrySet()) {
+            for (Map.Entry<String, Object> entry : headerses.entrySet()) {
                 o2.removeHeader(entry.getKey());
-                o2.addValue(entry.getKey()).setString(entry.getValue());
+                o2.addValue(entry.getKey().toString()).setString(entry.getValue().toString());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

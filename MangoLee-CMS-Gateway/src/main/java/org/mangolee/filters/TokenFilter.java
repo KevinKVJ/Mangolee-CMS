@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @Component
 public class TokenFilter implements GatewayFilter, Ordered {
-    //@Autowired
+    @Autowired
     private RedisService redisService;
     @Value("${spring.application.name}")
     private String appName;
@@ -34,11 +34,11 @@ public class TokenFilter implements GatewayFilter, Ordered {
         String token = getTokenFromHeader(exchange);
         if(token == null)
             return FilterUtil.response(exchange.getResponse(),
-                    Result.error(403,appName+" Receives unauthorized request, no token"));
+                    Result.error(403,appName+" 验证错误 请求无Token"));
 
-//        Result<UserInfo> userVerify = redisService.verify(token);
-//        if(userVerify.getCode()!= 200)
-//            return FilterUtil.response(exchange.getResponse(),userVerify);
+        Result<Long> ttl = redisService.getKeyTtl(token);
+        if(ttl.getData() < 0 )
+            return FilterUtil.response(exchange.getResponse(), new Result(403,appName+"验证错误 Token过期或不存在",null));
 
         return chain.filter(exchange).then(
                 Mono.fromRunnable(()->{//to do post filter

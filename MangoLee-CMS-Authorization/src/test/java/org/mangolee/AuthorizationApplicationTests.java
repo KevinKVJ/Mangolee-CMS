@@ -124,8 +124,8 @@ public class AuthorizationApplicationTests {
 
     //@Test
     public void testRedis() {
-        redisService.set("1234ss", "this is a test");
-        System.out.println(redisService.get("1234ss"));
+        redisService.setValue("1234ss", "this is a test");
+        System.out.println(redisService.getValue("1234ss"));
     }
 
 }
