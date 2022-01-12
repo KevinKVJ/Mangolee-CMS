@@ -38,7 +38,7 @@ public class UserController {
         return Result.success(userService.getById(id));
     }
 
-    @ApiOperation("获取所有未被逻辑删除的用户")
+    @ApiOperation("获取所有用户")
     @GetMapping("/get")
     public Result<List<User>> getUsers() {
         return Result.success(userService.list());
@@ -48,22 +48,20 @@ public class UserController {
     @GetMapping("/get/{username}")
     public Result<User> getByUsername(@ApiParam(value = "用户名", required = true) @PathVariable(
             "username") @NotNull String username) {
-        QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
-        return Result.success(userService.getOne(wrapper));
+        return Result.success(userService.getOne(new QueryWrapper<User>().eq("username", username)));
     }
 
     @ApiOperation("获取所有用户")
     @GetMapping("/getall")
     public Result<List<User>> getAllUsers() {
-        return Result.success(userService.getAllUsers());
+        return Result.success(userService.list());
     }
 
     @ApiOperation("根据邮箱获取用户")
     @GetMapping("/getbyemail/{email}")
     public Result<List<User>> getUsersByEmail(@ApiParam(value = "邮箱", required = true) @PathVariable(
             "email") @Email(message = "邮箱格式不正确") String email) {
-        QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("email", email);
-        return Result.success(userService.list(wrapper));
+        return Result.success(userService.list(new QueryWrapper<User>().eq("email", email)));
     }
 
     @ApiOperation("根据用户名修改用户权限")
@@ -91,8 +89,6 @@ public class UserController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             user.setRole(role);
-            // 更新修改时间
-            user.setGmtModified(null);
             if (!userService.update(user, wrapper)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
@@ -123,8 +119,6 @@ public class UserController {
             }
             // 更新用户
             user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
-            // 更新修改时间
-            user.setGmtModified(null);
             userService.update(user, wrapper);
             wrapper = new QueryWrapper<User>().eq("username", username);
             user = userService.getOne(wrapper);
@@ -148,8 +142,6 @@ public class UserController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             user.setEmail(email);
-            // 更新修改时间
-            user.setGmtModified(null);
             if (!userService.update(user, wrapper)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
@@ -186,23 +178,6 @@ public class UserController {
             if (!userService.removeById(id)) {
                 throw new BaseException(Result.BAD_REQUEST);
             }
-            return Result.success();
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
-        }
-    }
-
-    @ApiOperation("根据主键ID进行物理删除")
-    @DeleteMapping("/physicaldeletebyid/{id}")
-    public Result<Void> physicalDeleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
-        try {
-            User user = userService.getUserByIdIgnoreLogicalDeletion(id);
-            if (user == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            userService.physicalDeleteById(id);
             return Result.success();
         } catch (BaseException e) {
             return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);

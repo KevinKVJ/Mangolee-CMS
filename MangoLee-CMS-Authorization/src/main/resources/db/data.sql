@@ -19,3 +19,4 @@ VALUES (1, 'ADMIN'),
        (3, 'TEST');
 
 COMMIT;
+

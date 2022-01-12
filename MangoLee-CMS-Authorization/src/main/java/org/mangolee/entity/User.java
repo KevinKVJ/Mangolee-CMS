@@ -35,24 +35,4 @@ public class User {
     // 角色权限
     @ApiModelProperty(value = "角色权限", example = "ADMIN")
     private String role;
-
-    // 创建时间
-    @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime gmtCreate;
-
-    // 修改时间
-    @ApiModelProperty(value = "修改时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime gmtModified;
-
-    // 乐观锁
-    @ApiModelProperty(value = "乐观锁")
-    @Version
-    private Integer version;
-
-    // 逻辑删除
-    @ApiModelProperty(value = "逻辑删除")
-    @TableLogic
-    private Integer deleted;
 }
