@@ -58,7 +58,15 @@ public class AuthController {
                 throw new BaseException(Result.BAD_REQUEST);
             }
             // 根据User生成对应的UserInfo
-            UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), UUID.randomUUID().toString(), new Date(System.currentTimeMillis()));
+            UserInfo userInfo =
+                    new UserInfo(
+                            user.getId(),
+                            user.getUsername(),
+                            user.getEmail(),
+                            user.getLevel(),
+                            user.getRole(),
+                            UUID.randomUUID().toString(),
+                            new Date());
             // 根据UserInfo生成对应的token
             String token = JwtUtils.createTokenFromUserInfo(userInfo, JwtUtils.SECRET_KEY, JwtUtils.SIGNATURE_ALGORITHM);
             // 判断token是否为null

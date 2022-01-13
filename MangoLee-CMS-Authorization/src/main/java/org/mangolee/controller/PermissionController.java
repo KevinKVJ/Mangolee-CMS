@@ -57,8 +57,32 @@ public class PermissionController {
         }
     }
 
+    @ApiOperation("插入新权限")
+    @PostMapping("/insert/{role}")
+    public Result<Permission> insert(
+            @ApiParam(value = "权限角色", required = true)
+            @PathVariable("role")
+            @NotNull String role
+    ) {
+        try {
+            if (role == null) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            Permission permission = new Permission();
+            permission.setRole(role);
+            if (!permissionService.save(permission)) {
+                throw new BaseException(Result.BAD_REQUEST);
+            }
+            return Result.success(permission);
+        } catch (BaseException e) {
+            return new GlobalExceptionHandler<Permission>().baseExceptionHandler(e);
+        } catch (Exception e) {
+            return new GlobalExceptionHandler<Permission>().exceptionHandler(e);
+        }
+    }
+
     @ApiOperation("根据主键ID和权限角色名修改权限名")
-    @PostMapping("/update/{id}/{role}")
+    @PutMapping("/update/{id}/{role}")
     public Result<Permission> update(
             @ApiParam(value = "主键ID", required = true)
             @PathVariable("id")

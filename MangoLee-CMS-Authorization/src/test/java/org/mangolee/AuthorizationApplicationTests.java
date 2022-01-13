@@ -28,10 +28,11 @@ public class AuthorizationApplicationTests {
     private RedisService redisService;
 
     //@Test
-    public void getAUser() {
+    public void getUserTest() {
         User user = userService.getById(1L);
         System.out.println(user);
-        UserInfo userInfo = new UserInfo(user.getId(), null, user.getEmail(), user.getRole(), UUID.randomUUID().toString(), new Date());
+        UserInfo userInfo = new UserInfo(user.getId(), null, user.getEmail(), user.getLevel(), user.getRole(),
+                UUID.randomUUID().toString(), new Date());
         System.out.println(userInfo);
         String token = JwtUtils.createTokenFromUserInfo(userInfo, JwtUtils.SECRET_KEY, JwtUtils.SIGNATURE_ALGORITHM);
         System.out.println(token);
@@ -40,7 +41,7 @@ public class AuthorizationApplicationTests {
     }
 
     @Test
-    public void getAllUsersTest() {
+    public void getUsersTest() {
         List<User> users = userService.list(null);
         users.forEach(System.out::println);
     }

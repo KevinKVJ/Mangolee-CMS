@@ -25,6 +25,10 @@ public class UserInfo {
     @ApiModelProperty(value = "邮箱", example = "user@mangolee.com")
     private String email;
 
+    // 角色等级
+    @ApiModelProperty(value = "角色等级", example = "1")
+    private Integer level;
+
     // 角色权限
     @ApiModelProperty(value = "角色权限", example = "ADMIN")
     private String role;
