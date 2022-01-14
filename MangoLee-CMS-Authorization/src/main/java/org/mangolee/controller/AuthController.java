@@ -83,10 +83,9 @@ public class AuthController {
     }
 
     @ApiOperation("根据token抽取UserInfo实例")
-    @PostMapping("/verify/{token}")
+    @GetMapping("/verify/{token}")
     public Result<UserInfo> verify(
-            @ApiParam(value = "令牌", required = true)
-            @PathVariable("token") @NotNull String token) {
+            @RequestBody String token) {
         if (token == null) {
             return Result.error(400, "Token is null");
         }

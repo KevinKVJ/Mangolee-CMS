@@ -69,32 +69,25 @@ public class LevelController {
     }
 
     @ApiOperation("插入新等级")
-    @PostMapping("/insert/{level}/{description}")
+    @PostMapping("/insert")
     public Result<Level> insert(
-            @ApiParam(value = "等级", required = true)
-            @PathVariable("level")
-            @NotNull Integer level,
-            @ApiParam(value = "等级描述")
-            @PathVariable("description")
-            @NotNull String description) {
-        if (level == null) {
+            @RequestBody Level newLevel) {
+        if (newLevel == null) {
+            return Result.error(400, "Level object is null");
+        }
+        if (newLevel.getLevel() == null) {
             return Result.error(400, "Level is null");
         }
-        if (description == null) {
+        if (newLevel.getDescription() == null) {
             return Result.error(400, "Description is null");
         }
-        QueryWrapper<Level> queryWrapper = new QueryWrapper<Level>().eq("level", level);
-        Level level1 = levelService.getOne(queryWrapper);
-        if (level1 != null) {
+        if (levelService.getOne(new QueryWrapper<Level>().eq("level", newLevel.getLevel())) != null) {
             return Result.error(400, "Level already exists");
         }
-        Level level2 = new Level();
-        level2.setLevel(level);
-        level2.setDescription(description);
-        if (!levelService.save(level2)) {
+        if (!levelService.save(newLevel)) {
             return Result.error(400, "Failed to insert the item");
         }
-        return Result.success(level2);
+        return Result.success(newLevel);
     }
 
     @ApiOperation("删除等级")

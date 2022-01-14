@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 
 @Validated
@@ -46,17 +47,15 @@ public class PermissionController {
     }
 
     @ApiOperation("插入新权限")
-    @PostMapping("/insert/{role}")
+    @PostMapping("/insert")
     public Result<Permission> insert(
-            @ApiParam(value = "权限角色", required = true)
-            @PathVariable("role")
-            @NotNull String role
-    ) {
-        if (role == null) {
+            @RequestBody HashMap<String, Object> hashMap
+            ) {
+        if (!hashMap.containsKey("role") || hashMap.get("role") == null) {
             return Result.error(400, "role is null");
         }
         Permission permission = new Permission();
-        permission.setRole(role);
+        permission.setRole((String)hashMap.get("role"));
         if (!permissionService.save(permission)) {
             return Result.error(400, "Failed to insert the item");
         }

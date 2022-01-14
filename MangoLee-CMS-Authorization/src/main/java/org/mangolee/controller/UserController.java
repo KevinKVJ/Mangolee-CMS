@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 
 @Validated
@@ -184,35 +185,31 @@ public class UserController {
     }
 
     @ApiOperation("根据用户名密码邮箱权限创建新账号")
-    @PostMapping("/create/{username}/{password}/{email}/{role}")
-    public Result<User> createUser(@ApiParam(value = "用户名", required = true) @PathVariable("username") @NotNull String username,
-                                   @ApiParam(value = "密码", required = true) @PathVariable("password") @NotNull String password,
-                                   @ApiParam(value = "邮箱", required = true) @PathVariable("email") @Email(message = "邮箱格式不正确") String email,
-                                   @ApiParam(value = "权限角色", required = true) @PathVariable("role") @NotNull String role
-
-    ) {
-        if (username == null) {
+    @PostMapping("/create")
+    public Result<User> createUser(
+            @RequestBody HashMap<String,Object> hashMap) {
+        if (!hashMap.containsKey("username") || hashMap.get("username") == null) {
             return Result.error(400, "username is null");
         }
-        if (password == null) {
+        if (!hashMap.containsKey("password") || hashMap.get("password") == null) {
             return Result.error(400, "password is null");
         }
-        if (email == null) {
+        if (!hashMap.containsKey("email") || hashMap.get("email") == null) {
             return Result.error(400, "email is null");
         }
-        if (role == null) {
+        if (!hashMap.containsKey("role") || hashMap.get("role") == null) {
             return Result.error(400, "role is null");
         }
-        Permission  permission = permissionService.getOne(new QueryWrapper<Permission>().eq("role", role));
+        Permission  permission = permissionService.getOne(new QueryWrapper<Permission>().eq("role", hashMap.get("role")));
         if (permission == null) {
             return Result.error(400, "Such role does not exist");
         }
         User user = new User();
-        user.setUsername(username);
-        user.setPassword(new BCryptPasswordEncoder().encode(password));
-        user.setEmail(email);
-        user.setRole(role);
-        if ("ADMIN".equals(role)) {
+        user.setUsername((String)hashMap.get("username"));
+        user.setPassword(new BCryptPasswordEncoder().encode((String)hashMap.get("password")));
+        user.setEmail((String)hashMap.get("email"));
+        user.setRole((String)hashMap.get("role"));
+        if ("ADMIN".equals(user.getRole())) {
             user.setLevel(0);
         } else {
             user.setLevel(1);
@@ -220,6 +217,7 @@ public class UserController {
         if (!userService.save(user)) {
             return Result.error(400, "Failed to insert the item");
         }
-        return Result.success(userService.getOne(new QueryWrapper<User>().eq("username", username)));
+        return Result.success(userService.getOne(new QueryWrapper<User>().eq("username",
+                user.getUsername())));
     }
 }
