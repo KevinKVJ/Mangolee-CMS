@@ -22,10 +22,13 @@ COMMIT;
 
 /** 插入初始等级 **/
 DELETE
-FROM `level`
+FROM `level`;
 INSERT INTO `level` (`level`, `description`)
 VALUES
 (0, 'ADMIN DEFAULT LEVEL'),
-(1, 'GUEST DEFAULT LEVEL');
+(1, 'GUEST DEFAULT LEVEL'),
+(2, 'LEVEL 2'),
+(3, 'LEVEL 3'),
+(4, 'LEVEL 4');
 COMMIT;
 

@@ -33,28 +33,16 @@ public class PermissionController {
     @ApiOperation("根据主键ID获取权限")
     @GetMapping("/getbyid/{id}")
     public Result<Permission> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
-        try {
-            if (id == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success(permissionService.getById(id));
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Permission>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Permission>().exceptionHandler(e);
+        if (id == null) {
+            return Result.error(400, "id is null");
         }
+        return Result.success(permissionService.getById(id));
     }
 
     @ApiOperation("获取所有权限")
     @GetMapping("/get")
     public Result<List<Permission>> get() {
-        try {
-            return Result.success(permissionService.list());
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<List<Permission>>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<List<Permission>>().exceptionHandler(e);
-        }
+        return Result.success(permissionService.list());
     }
 
     @ApiOperation("插入新权限")
@@ -64,21 +52,15 @@ public class PermissionController {
             @PathVariable("role")
             @NotNull String role
     ) {
-        try {
-            if (role == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            Permission permission = new Permission();
-            permission.setRole(role);
-            if (!permissionService.save(permission)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success(permission);
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Permission>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Permission>().exceptionHandler(e);
+        if (role == null) {
+            return Result.error(400, "role is null");
         }
+        Permission permission = new Permission();
+        permission.setRole(role);
+        if (!permissionService.save(permission)) {
+            return Result.error(400, "Failed to insert the item");
+        }
+        return Result.success(permission);
     }
 
     @ApiOperation("根据主键ID和权限角色名修改权限名")
@@ -91,34 +73,30 @@ public class PermissionController {
             @PathVariable("role")
             @NotNull String newRole
     ) {
-        try {
-            if (id == null || newRole == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            // 判断权限是否为null
-            Permission permission = permissionService.getById(id);
-            if (permission == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            String oldRole = permission.getRole();
-            // 更新权限名称
-            permission.setRole(newRole);
-            if (!permissionService.updateById((permission))) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            // 批量更新User
-            User user = new User();
-            user.setRole(newRole);
-            if (!userService.update(user, new QueryWrapper<User>().eq("role", oldRole))) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            permission = permissionService.getById(id);
-            return Result.success(permission);
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Permission>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Permission>().exceptionHandler(e);
+        if (id == null) {
+            return Result.error(400, "id is null");
         }
+        if (newRole == null) {
+            return Result.error(400, "role is null");
+        }
+        // 判断权限是否为null
+        Permission permission = permissionService.getById(id);
+        if (permission == null) {
+            return Result.error(400, "Cannot find the item with such id");
+        }
+        String oldRole = permission.getRole();
+        // 更新权限名称
+        permission.setRole(newRole);
+        if (!permissionService.updateById((permission))) {
+            return Result.error(400, "Failed to update the item");
+        }
+        // 批量更新User
+        User user = new User();
+        user.setRole(newRole);
+        if (!userService.update(user, new QueryWrapper<User>().eq("role", oldRole))) {
+            return Result.error(400, "Failed to update the item");
+        }
+        return Result.success(permissionService.getById(id));
     }
 
     @ApiOperation("根据主键ID进行删除")
@@ -127,24 +105,18 @@ public class PermissionController {
             @ApiParam(value = "主键ID", required = true)
             @PathVariable("id")
             @NotNull Long id) {
-        try {
-            if (id == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            Permission permission = permissionService.getById(id);
-            if (permission == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            String role = permission.getRole();
-            if (!permissionService.removeById(id)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            userService.updateRoleBatchWithNull(role);
-            return Result.success();
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
+        if (id == null) {
+            return Result.error(400, "id is null");
         }
+        Permission permission = permissionService.getById(id);
+        if (permission == null) {
+            return Result.error(400, "Cannot find item with such id");
+        }
+        String role = permission.getRole();
+        if (!permissionService.removeById(id)) {
+            return Result.error(400, "Failed to delete the item");
+        }
+        userService.updateRoleBatchWithNull(role);
+        return Result.success();
     }
 }

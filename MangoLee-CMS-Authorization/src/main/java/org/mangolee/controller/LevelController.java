@@ -6,9 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.Level;
 import org.mangolee.entity.Result;
-import org.mangolee.exception.BaseException;
 import org.mangolee.service.LevelService;
-import org.mangolee.utils.GlobalExceptionHandler;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +26,7 @@ public class LevelController {
     @ApiOperation("获取所有等级")
     @GetMapping("/get")
     public Result<List<Level>> get() {
-        try {
-            return Result.success(levelService.list());
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<List<Level>>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<List<Level>>().exceptionHandler(e);
-        }
+        return Result.success(levelService.list());
     }
 
     @ApiOperation("查询单个等级")
@@ -43,16 +35,10 @@ public class LevelController {
             @ApiParam(value = "等级", required = true)
             @PathVariable("level")
             @NotNull Integer level) {
-        try {
-            if (level == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success(levelService.getOne(new QueryWrapper<Level>().eq("level", level)));
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Level>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Level>().exceptionHandler(e);
+        if (level == null) {
+            return Result.error(400, "Level is null");
         }
+        return Result.success(levelService.getOne(new QueryWrapper<Level>().eq("level", level)));
     }
 
     @ApiOperation("根据等级修改等级描述")
@@ -64,22 +50,22 @@ public class LevelController {
             @ApiParam(value = "等级描述")
             @PathVariable("description")
             @NotNull String description) {
-        try {
-            if (level == null || description == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            QueryWrapper<Level> queryWrapper = new QueryWrapper<Level>().eq("level", level);
-            Level level1 = levelService.getOne(queryWrapper);
-            level1.setDescription(description);
-            if (!levelService.update(level1, queryWrapper)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success(levelService.getOne(queryWrapper));
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Level>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Level>().exceptionHandler(e);
+        if (level == null) {
+            return Result.error(400, "Level is null");
         }
+        if (description == null) {
+            return Result.error(400, "Description is null");
+        }
+        QueryWrapper<Level> queryWrapper = new QueryWrapper<Level>().eq("level", level);
+        Level level1 = levelService.getOne(queryWrapper);
+        if (level1 == null) {
+            return Result.error(400, "Such level does not exist");
+        }
+        level1.setDescription(description);
+        if (!levelService.update(level1, queryWrapper)) {
+            return Result.error(400, "Failed to update the item");
+        }
+        return Result.success(levelService.getOne(queryWrapper));
     }
 
     @ApiOperation("插入新等级")
@@ -91,27 +77,24 @@ public class LevelController {
             @ApiParam(value = "等级描述")
             @PathVariable("description")
             @NotNull String description) {
-        try {
-            if (level == null || description == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            QueryWrapper<Level> queryWrapper = new QueryWrapper<Level>().eq("level", level);
-            Level level1 = levelService.getOne(queryWrapper);
-            if (level1 != null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            Level level2 = new Level();
-            level2.setLevel(level);
-            level2.setDescription(description);
-            if (!levelService.update(level2, queryWrapper)) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success(level2);
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Level>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Level>().exceptionHandler(e);
+        if (level == null) {
+            return Result.error(400, "Level is null");
         }
+        if (description == null) {
+            return Result.error(400, "Description is null");
+        }
+        QueryWrapper<Level> queryWrapper = new QueryWrapper<Level>().eq("level", level);
+        Level level1 = levelService.getOne(queryWrapper);
+        if (level1 != null) {
+            return Result.error(400, "Level already exists");
+        }
+        Level level2 = new Level();
+        level2.setLevel(level);
+        level2.setDescription(description);
+        if (!levelService.save(level2)) {
+            return Result.error(400, "Failed to insert the item");
+        }
+        return Result.success(level2);
     }
 
     @ApiOperation("删除等级")
@@ -121,18 +104,12 @@ public class LevelController {
             @PathVariable("level")
             @NotNull Integer level
     ) {
-        try {
-            if (level == null) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            if (!levelService.remove(new QueryWrapper<Level>().eq("level", level))) {
-                throw new BaseException(Result.BAD_REQUEST);
-            }
-            return Result.success();
-        } catch (BaseException e) {
-            return new GlobalExceptionHandler<Void>().baseExceptionHandler(e);
-        } catch (Exception e) {
-            return new GlobalExceptionHandler<Void>().exceptionHandler(e);
+        if (level == null) {
+            return Result.error(400, "Level is null");
         }
+        if (!levelService.remove(new QueryWrapper<Level>().eq("level", level))) {
+            return Result.error(400, "Failed to delete the item");
+        }
+        return Result.success();
     }
 }
