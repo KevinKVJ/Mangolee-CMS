@@ -9,6 +9,34 @@ spring:
       discovery:
         server-addr: localhost:8848
     gateway:
+      filter:
+        remove-hop-by-hop:
+          headers:
+            # 以下是去掉网关默认去掉的请求响应头
+            - trailer
+            - te
+            - keep-alive
+            - transfer-encoding
+            - upgrade
+            - proxy-authenticate
+            - connection
+            - proxy-authorization
+            - x-application-context
+            # 以下是去掉服务层面定义的跨域
+            - access-control-allow-credentials
+            - access-control-allow-headers
+            - access-control-allow-methods
+            - access-control-allow-origin
+            - access-control-max-age
+            - vary
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowCredentials: true
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+            maxAge: 3628800
       routes:
         - id: Redis
           uri: lb://redis-service-providers
