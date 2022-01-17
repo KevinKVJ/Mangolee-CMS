@@ -1,4 +1,5 @@
 SET NAMES utf8mb4;
+SET foreign_key_checks = 0;
 
 /** 用户表 **/
 DROP TABLE IF EXISTS `user`;
@@ -9,11 +10,7 @@ CREATE TABLE `user`
     `password`     VARCHAR(255) NOT NULL COMMENT '加密密码',
     `email`        VARCHAR(50)  NULL DEFAULT NULL COMMENT '邮箱',
     `role`         VARCHAR(30)  NULL DEFAULT NULL COMMENT '角色权限',
-    `deleted`      INT               DEFAULT '0' COMMENT '逻辑删除',
-    `version`      INT               DEFAULT '1' COMMENT '乐观锁',
-    `gmt_create`   datetime          DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `gmt_modified` datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE
-        CURRENT_TIMESTAMP COMMENT '修改时间',
+    `level`        INT          NOT NULL DEFAULT 1 COMMENT '用户等级',
     PRIMARY KEY (`id`),
     UNIQUE KEY `username` (`username`)
 ) ENGINE = InnoDB
@@ -27,30 +24,18 @@ CREATE TABLE `permission`
     `id`           BIGINT               NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `role`         VARCHAR(30) UNIQUE   NOT NULL COMMENT '权限角色名称', /** 管理员:ADMIN 普通用户:GUEST **/
     `mount`        INT      DEFAULT '1' NOT NULL COMMENT '启用状态', /** 默认启用 **/
-    `deleted`      INT      DEFAULT '0' COMMENT '逻辑删除',
-    `version`      INT      DEFAULT '1' COMMENT '乐观锁',
-    `gmt_create`   datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE
-        CURRENT_TIMESTAMP COMMENT '修改时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='权限';
 
-/** 日志表 **/
-DROP TABLE IF EXISTS `log`;
-CREATE TABLE `log`
+/** 等级表(静态表) **/
+DROP TABLE IF EXISTS `level`;
+CREATE TABLE `level`
 (
-    `id`           BIGINT               NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `user_id`      BIGINT               NOT NULL COMMENT '用户主键ID',
-    `ip_address`   VARCHAR(15)          NOT NULL COMMENT '操作IPv4',
-    `message`      VARCHAR(50)          DEFAULT NULL COMMENT '日志信息',
-    `status_code`  INT                  DEFAULT NULL COMMENT '状态码',
-    `deleted`      INT      DEFAULT '0' COMMENT '逻辑删除',
-    `version`      INT      DEFAULT '1' COMMENT '乐观锁',
-    `gmt_create`   datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    `level`    INT NOT NULL DEFAULT 0 COMMENT '用户等级',    /** 管理员等级默认为0 guest等级从1开始 **/
+    `description`   VARCHAR(512) NOT NULL COMMENT '等级描述',
+    PRIMARY KEY (`level`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT ='日志';
+  COLLATE = utf8mb4_general_ci COMMENT ='等级';

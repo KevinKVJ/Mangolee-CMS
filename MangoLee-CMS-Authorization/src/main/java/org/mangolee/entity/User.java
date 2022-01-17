@@ -1,13 +1,12 @@
 package org.mangolee.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -36,23 +35,7 @@ public class User {
     @ApiModelProperty(value = "角色权限", example = "ADMIN")
     private String role;
 
-    // 创建时间
-    @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime gmtCreate;
-
-    // 修改时间
-    @ApiModelProperty(value = "修改时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime gmtModified;
-
-    // 乐观锁
-    @ApiModelProperty(value = "乐观锁")
-    @Version
-    private Integer version;
-
-    // 逻辑删除
-    @ApiModelProperty(value = "逻辑删除")
-    @TableLogic
-    private Integer deleted;
+    // 角色等级
+    @ApiModelProperty(value = "角色等级", example = "1")
+    private Integer level;
 }

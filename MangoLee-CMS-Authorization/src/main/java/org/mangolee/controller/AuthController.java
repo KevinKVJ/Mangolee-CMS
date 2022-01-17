@@ -14,7 +14,6 @@ import org.mangolee.service.UserService;
 import org.mangolee.utils.GlobalExceptionHandler;
 import org.mangolee.utils.JwtUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,30 +41,29 @@ public class AuthController {
             @PathVariable("username") @NotNull String username,
             @ApiParam(value = "密码", required = true)
             @PathVariable("password") @NotNull String password) {
-        // 判断用户名是否为null或者空
-        if (username == null || StringUtils.isEmpty(username)) {
-            return Result.error(400,"Invalid empty username");
+
+        // 判断用户名是否为null
+        if (username == null) {
+            return Result.error(400, "Username cannot be null");
         }
-        // 判断密码是否为null或者空
-        if (password == null || StringUtils.isEmpty(password)) {
-            return Result.error(400,"Invalid empty password");
+        // 判断用户名是否为null
+        if (password == null) {
+            return Result.error(400, "Password cannot be null");
         }
         // 根据用户生成User实体 并查询其在数据库是否存在
-        User user = new User();
-        user.setUsername(username);
         QueryWrapper<User> queryWrapper = new QueryWrapper<User>().eq("username", username);
-        user = userService.getOne(queryWrapper);
+        User user = userService.getOne(queryWrapper);
         // 判断拥有该用户名的用户是否存在
         if (user == null) {
-            return Result.error(400,"User does not exist");
+            return Result.error(400,"Username does not exist");
         }
         // 判断密码是否匹配
         if (!new BCryptPasswordEncoder().matches(password, user.getPassword())) {
             return Result.error(400,"Password does not match");
         }
         // 根据User生成对应的UserInfo
-        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), user.getEmail(),
-                user.getRole(), UUID.randomUUID().toString(), new Date(System.currentTimeMillis()));
+        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), user.getEmail(), user.getLevel(),
+                user.getRole(), UUID.randomUUID().toString(), new Date());
         // 根据UserInfo生成对应的token
         String token = JwtUtils.createTokenFromUserInfo(userInfo, JwtUtils.SECRET_KEY
                 , JwtUtils.SIGNATURE_ALGORITHM);
@@ -84,21 +82,24 @@ public class AuthController {
         return Result.success(token);
     }
 
-    // Verify token
     @ApiOperation("根据token抽取UserInfo实例")
-    @PostMapping("/verify/{token}")
+    @GetMapping("/verify/{token}")
     public Result<UserInfo> verify(
-            @ApiParam(value = "令牌", required = true)
-            @PathVariable("token") @NotNull String token) {
+            @RequestBody String token) {
+        if (token == null) {
+            return Result.error(400, "Token is null");
+        }
         return redisService.verify(token);
     }
 
-    // Logout
-    @ApiOperation("删除redis中的令牌")
+    @ApiOperation("登出 即删除redis中的令牌")
     @DeleteMapping("/delete/{token}")
     public Result<Void> logout(
             @ApiParam(value = "令牌", required = true)
             @PathVariable("token") @NotNull String token) {
+        if (token == null) {
+            return Result.error(400, "Token is null");
+        }
         return redisService.delete(token);
     }
 }

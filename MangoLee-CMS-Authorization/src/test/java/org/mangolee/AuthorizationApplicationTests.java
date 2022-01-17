@@ -7,7 +7,6 @@ import org.mangolee.entity.UserInfo;
 import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
 import org.mangolee.utils.JwtUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = AuthorizationApplication.class)
@@ -30,11 +28,11 @@ public class AuthorizationApplicationTests {
     private RedisService redisService;
 
     //@Test
-    public void getAUser() {
+    public void getUserTest() {
         User user = userService.getById(1L);
         System.out.println(user);
-        UserInfo userInfo = new UserInfo(user.getId(), null, user.getEmail(), user.getRole(),
-                UUID.randomUUID().toString(), new Date(System.currentTimeMillis()));
+        UserInfo userInfo = new UserInfo(user.getId(), null, user.getEmail(), user.getLevel(), user.getRole(),
+                UUID.randomUUID().toString(), new Date());
         System.out.println(userInfo);
         String token = JwtUtils.createTokenFromUserInfo(userInfo, JwtUtils.SECRET_KEY, JwtUtils.SIGNATURE_ALGORITHM);
         System.out.println(token);
@@ -43,7 +41,7 @@ public class AuthorizationApplicationTests {
     }
 
     @Test
-    public void getAllUsersTest() {
+    public void getUsersTest() {
         List<User> users = userService.list(null);
         users.forEach(System.out::println);
     }
@@ -102,13 +100,6 @@ public class AuthorizationApplicationTests {
     public void logicalDeleteByIdTest() {
         Long id = 1L;
         assertTrue(userService.removeById(id));
-    }
-
-    //@Test
-    public void physicalDeleteByIdTest() {
-        Long id = 1L;
-        userService.physicalDeleteById(id);
-        assertNull(userService.getById(id));
     }
 
     //@Test
