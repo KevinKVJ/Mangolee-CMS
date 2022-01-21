@@ -7,10 +7,8 @@ import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.Permission;
 import org.mangolee.entity.Result;
 import org.mangolee.entity.User;
-import org.mangolee.exception.BaseException;
 import org.mangolee.service.PermissionService;
 import org.mangolee.service.UserService;
-import org.mangolee.utils.GlobalExceptionHandler;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +32,8 @@ public class UserController {
     private PermissionService permissionService;
 
     @ApiOperation("根据主键ID获取用户")
-    @GetMapping("/getbyid/{id}")
-    public Result<User> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
+    @GetMapping("/getbyid")
+    public Result<User> getById(@ApiParam(value = "主键ID", required = true) @RequestParam("id") @NotNull Long id) {
         if (id == null) {
             return Result.error(400, "id is null");
         }
@@ -49,8 +47,8 @@ public class UserController {
     }
 
     @ApiOperation("根据用户名获取用户")
-    @GetMapping("/getbyusername/{username}")
-    public Result<User> getByUsername(@ApiParam(value = "用户名", required = true) @PathVariable(
+    @GetMapping("/getbyusername")
+    public Result<User> getByUsername(@ApiParam(value = "用户名", required = true) @RequestParam(
             "username") @NotNull String username) {
         if (username == null) {
             return Result.error(400, "username is null");
@@ -59,8 +57,8 @@ public class UserController {
     }
 
     @ApiOperation("根据邮箱获取用户")
-    @GetMapping("/getbyemail/{email}")
-    public Result<List<User>> getUsersByEmail(@ApiParam(value = "邮箱", required = true) @PathVariable(
+    @GetMapping("/getbyemail")
+    public Result<List<User>> getUsersByEmail(@ApiParam(value = "邮箱", required = true) @RequestParam(
             "email") @Email(message = "邮箱格式不正确") String email) {
         if (email == null) {
             return Result.error(400, "email is null");
@@ -69,14 +67,14 @@ public class UserController {
     }
 
     @ApiOperation("根据用户名修改用户权限")
-    @PutMapping("/updaterole/{username}/{role}")
+    @PutMapping("/updaterole")
     public Result<User> updateRole(
             @ApiParam(value = "用户名", required = true)
-            @PathVariable("username")
+            @RequestParam("username")
             @NotNull
                     String username,
             @ApiParam(value = "权限名称", required = true)
-            @PathVariable("role")
+            @RequestParam("role")
             @NotNull
                     String role) {
         if (username == null) {
@@ -104,11 +102,11 @@ public class UserController {
     }
 
     @ApiOperation("根据用户名和旧密码修改密码")
-    @PutMapping("/updatepassword/{username}/{password}/{newpassword}")
+    @PutMapping("/updatepassword")
     public Result<User> updatePassword(
-            @ApiParam(value = "用户名", required = true) @PathVariable("username") @NotNull String username,
-            @ApiParam(value = "密码", required = true) @PathVariable("password") @NotNull String password,
-            @ApiParam(value = "新密码", required = true) @PathVariable("newpassword") @NotNull String newPassword) {
+            @ApiParam(value = "用户名", required = true) @RequestParam("username") @NotNull String username,
+            @ApiParam(value = "密码", required = true) @RequestParam("password") @NotNull String password,
+            @ApiParam(value = "新密码", required = true) @RequestParam("newpassword") @NotNull String newPassword) {
         if (username == null) {
             return Result.error(400, "role is null");
         }
@@ -137,9 +135,9 @@ public class UserController {
     }
 
     @ApiOperation("根据用户名修改邮箱")
-    @PutMapping("/updateemail/{username}/{email}")
-    public Result<User> updateEmail(@ApiParam(value = "用户名", required = true) @PathVariable("username") @NotNull String username,
-                                    @ApiParam(value = "新邮箱", required = true) @PathVariable("email") @Email(message = "邮箱格式不正确") String email) {
+    @PutMapping("/updateemail")
+    public Result<User> updateEmail(@ApiParam(value = "用户名", required = true) @RequestParam("username") @NotNull String username,
+                                    @ApiParam(value = "新邮箱", required = true) @RequestParam("email") @Email(message = "邮箱格式不正确") String email) {
         if (username == null) {
             return Result.error(400, "Username is null");
         }
@@ -159,10 +157,10 @@ public class UserController {
     }
 
     @ApiOperation("根据用户名进行删除")
-    @DeleteMapping("/deletebyusername/{username}")
+    @DeleteMapping("/deletebyusername")
     public Result<Void> deleteByUsername(
             @ApiParam(value = "用户名", required = true)
-            @PathVariable("username") @NotNull String username) {
+            @RequestParam("username") @NotNull String username) {
         if (username == null) {
             return Result.error(400, "Username is null");
         }
@@ -173,8 +171,8 @@ public class UserController {
     }
 
     @ApiOperation("根据主键ID进行删除")
-    @DeleteMapping("/deletebyid/{id}")
-    public Result<Void> deleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
+    @DeleteMapping("/deletebyid")
+    public Result<Void> deleteById(@ApiParam(value = "主键ID", required = true) @RequestParam("id") @NotNull Long id) {
         if (id == null) {
             return Result.error(400, "id is null");
         }

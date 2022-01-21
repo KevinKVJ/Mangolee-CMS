@@ -7,10 +7,8 @@ import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.Permission;
 import org.mangolee.entity.Result;
 import org.mangolee.entity.User;
-import org.mangolee.exception.BaseException;
 import org.mangolee.service.PermissionService;
 import org.mangolee.service.UserService;
-import org.mangolee.utils.GlobalExceptionHandler;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +31,7 @@ public class PermissionController {
 
     @ApiOperation("根据主键ID获取权限")
     @GetMapping("/getbyid/{id}")
-    public Result<Permission> getById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") @NotNull Long id) {
+    public Result<Permission> getById(@ApiParam(value = "主键ID", required = true) @RequestParam("id") @NotNull Long id) {
         if (id == null) {
             return Result.error(400, "id is null");
         }
@@ -63,13 +61,13 @@ public class PermissionController {
     }
 
     @ApiOperation("根据主键ID和权限角色名修改权限名")
-    @PutMapping("/update/{id}/{role}")
+    @PutMapping("/update")
     public Result<Permission> update(
             @ApiParam(value = "主键ID", required = true)
-            @PathVariable("id")
+            @RequestParam("id")
             @NotNull Long id,
             @ApiParam(value = "权限角色", required = true)
-            @PathVariable("role")
+            @RequestParam("role")
             @NotNull String newRole
     ) {
         if (id == null) {
@@ -99,10 +97,10 @@ public class PermissionController {
     }
 
     @ApiOperation("根据主键ID进行删除")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete")
     public Result<Void> deleteById(
             @ApiParam(value = "主键ID", required = true)
-            @PathVariable("id")
+            @RequestParam("id")
             @NotNull Long id) {
         if (id == null) {
             return Result.error(400, "id is null");

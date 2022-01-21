@@ -8,10 +8,8 @@ import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.Result;
 import org.mangolee.entity.User;
 import org.mangolee.entity.UserInfo;
-import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
 import org.mangolee.service.UserService;
-import org.mangolee.utils.GlobalExceptionHandler;
 import org.mangolee.utils.JwtUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -35,12 +33,12 @@ public class AuthController {
     private RedisService redisService;
 
     @ApiOperation("判断用户名和密码并在成功后生成token")
-    @GetMapping("/login/{username}/{password}")
+    @GetMapping("/login")
     public Result<String> login(
             @ApiParam(value = "用户名", required = true)
-            @PathVariable("username") @NotNull String username,
+            @RequestParam("username") @NotNull String username,
             @ApiParam(value = "密码", required = true)
-            @PathVariable("password") @NotNull String password) {
+            @RequestParam("password") @NotNull String password) {
 
         // 判断用户名是否为null
         if (username == null) {
@@ -83,9 +81,9 @@ public class AuthController {
     }
 
     @ApiOperation("根据token抽取UserInfo实例")
-    @GetMapping("/verify/{token}")
+    @GetMapping("/verify")
     public Result<UserInfo> verify(
-            @RequestBody String token) {
+            @RequestParam String token) {
         if (token == null) {
             return Result.error(400, "Token is null");
         }
@@ -93,10 +91,10 @@ public class AuthController {
     }
 
     @ApiOperation("登出 即删除redis中的令牌")
-    @DeleteMapping("/delete/{token}")
+    @DeleteMapping("/delete")
     public Result<Void> logout(
             @ApiParam(value = "令牌", required = true)
-            @PathVariable("token") @NotNull String token) {
+            @RequestParam("token") @NotNull String token) {
         if (token == null) {
             return Result.error(400, "Token is null");
         }
