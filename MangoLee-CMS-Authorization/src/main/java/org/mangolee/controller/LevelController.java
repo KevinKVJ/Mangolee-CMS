@@ -30,10 +30,10 @@ public class LevelController {
     }
 
     @ApiOperation("查询单个等级")
-    @GetMapping("/getbylevel/{level}")
+    @GetMapping("/getbylevel")
     public Result<Level> getByLevel(
             @ApiParam(value = "等级", required = true)
-            @PathVariable("level")
+            @RequestParam("level")
             @NotNull Integer level) {
         if (level == null) {
             return Result.error(400, "Level is null");
@@ -42,13 +42,13 @@ public class LevelController {
     }
 
     @ApiOperation("根据等级修改等级描述")
-    @PutMapping("/update/{level}/{description}")
+    @PutMapping("/update")
     public Result<Level> update(
             @ApiParam(value = "等级", required = true)
-            @PathVariable("level")
+            @RequestParam("level")
             @NotNull Integer level,
             @ApiParam(value = "等级描述")
-            @PathVariable("description")
+            @RequestParam("description")
             @NotNull String description) {
         if (level == null) {
             return Result.error(400, "Level is null");
@@ -91,10 +91,10 @@ public class LevelController {
     }
 
     @ApiOperation("删除等级")
-    @DeleteMapping("/delete/{level}")
+    @DeleteMapping("/delete")
     public Result<Void> delete(
             @ApiParam(value = "等级", required = true)
-            @PathVariable("level")
+            @RequestParam("level")
             @NotNull Integer level
     ) {
         if (level == null) {
