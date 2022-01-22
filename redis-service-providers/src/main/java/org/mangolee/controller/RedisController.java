@@ -5,9 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.mangolee.entity.Result;
 import org.mangolee.entity.UserInfo;
-import org.mangolee.exception.BaseException;
 import org.mangolee.service.RedisService;
-import org.mangolee.utils.GlobalExceptionHandler;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
