@@ -1,0 +1,2084 @@
+{
+  "info": {
+    "_postman_id": "544a49a1-de5c-4d74-be2c-8e052c36ef7a",
+    "name": "MangoLee-CMS-Authorization模块接口测试",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "授权Controller",
+      "item": [
+        {
+          "name": "判断用户名和密码并在成功后生成token 正例",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"Jack\",\n    \"password\": \"password1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "判断用户名和密码并在成功后生成token username不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"Username不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"Username不存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"nimabinimabi\",\n    \"password\": \"password1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "判断用户名和密码并在成功后生成token password不匹配",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"Password不匹配\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"Password不匹配\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"Nick\",\n    \"password\": \"nimabi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "sunt",
+                  "disabled": true
+                },
+                {
+                  "key": "password",
+                  "value": "sunt",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据token抽取UserInfo实例 空参数",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "verify"
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "sunt",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "登出 即删除redis中的令牌 空参数",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/delete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "delete"
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKYWNrIiwiaWQiOjEsInVzZXJuYW1lIjoiSmFjayIsImVtYWlsIjoiamFja0BtYW5nb2xlZS5jb20iLCJyb2xlIjoiQURNSU4iLCJ1dWlkIjoiOGFiY2UxYmYtZDRiZC00ZjI0LTk3NTUtZDQ5OGM2ZDYyMjBiIiwiZ210Q3JlYXRlIjoxNjQyODM4MDYyNDU4fQ.f-HBQXu5DI36K0XtrLZ2wS_SEFMN_GStauTUG8L2HxcUIjYC6UMq92jlIQ8GfKPdJCG8LwxaZdil93idOti-_g",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "登出 即删除redis中的令牌 token不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"key不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"key不存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/delete?token=fuckasiodh98asdh09ash90d90asd",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "delete"
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "fuckasiodh98asdh09ash90d90asd"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "权限Controller",
+      "item": [
+        {
+          "name": "根据主键ID进行删除",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/permission/delete?id=3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "delete"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID进行删除 id不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"id不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"id不存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/permission/delete?id=3000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "delete"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "3000"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "获取所有权限",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/permission/get",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "get"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID获取权限 ADMIN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});",
+                  "pm.test(\"role为ADMIN\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData[\"data\"][\"role\"]).to.eql(\"ADMIN\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/permission/getbyid/?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "getbyid",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID获取权限 id不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});",
+                  "pm.test(\"data is null\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.eql(null);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/permission/getbyid/?id=1999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "getbyid",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1999"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID获取权限 GUEST",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});",
+                  "pm.test(\"role为GUEST\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData[\"data\"][\"role\"]).to.eql(\"GUEST\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/permission/getbyid/?id=2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "getbyid",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "插入新权限",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});",
+                  "pm.test(\"role为NEW ROLE\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData[\"data\"][\"role\"]).to.eql(\"NEW ROLE\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"role\":\"NEW ROLE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/permission/insert",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "insert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "插入新权限 role已经存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"role已经存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"role已经存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"role\":\"ADMIN\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/permission/insert",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "insert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID修改权限名role已经存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"GUEST已经存在\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Duplicate entry 'GUEST'\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/permission/update?id=1&role=GUEST",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "update"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                },
+                {
+                  "key": "role",
+                  "value": "GUEST"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID修改权限名",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/permission/update?id=1&role=ADMIN",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "update"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                },
+                {
+                  "key": "role",
+                  "value": "ADMIN"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID修改权限名 id不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"id不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"id不存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/permission/update?id=10000&role=NEW RANDOM ROLE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "permission",
+                "update"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "10000"
+                },
+                {
+                  "key": "role",
+                  "value": "NEW RANDOM ROLE"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "用户Controller",
+      "item": [
+        {
+          "name": "根据用户名密码邮箱权限创建新账号",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"Fucker\",\n    \"password\": \"mamaibi\",\n    \"email\": \"Fucker@mangolee.com\",\n    \"role\": \"ADMIN\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名密码邮箱权限创建新账号 role不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"role值非法\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"role值非法\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"Fuck2\",\n    \"password\": \"mamaibi\",\n    \"email\": \"Fuck2@mangolee.com\",\n    \"role\": \"FUCK\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名密码邮箱权限创建新账号 用户名存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"Duplicate entry\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Duplicate entry\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"Jack\",\n    \"password\": \"mamaibi\",\n    \"email\": \"Fuck@mangolee.com\",\n    \"role\": \"ADMIN\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID进行删除",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/deletebyid?id=3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "deletebyid"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID进行删除 ID不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"删除条目失败\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"删除条目失败\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/deletebyid?id=400",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "deletebyid"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "400"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名进行删除",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/deletebyusername?username=Tester",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "deletebyusername"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "Tester"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名进行删除 用户名不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"删除条目失败\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"删除条目失败\");",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/deletebyusername?username=nimamaibi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "deletebyusername"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "nimamaibi"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "获取所有用户",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/get",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "get"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据邮箱获取用户",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/getbyemail?email=jack@mangolee.com",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "getbyemail"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "jack@mangolee.com"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据邮箱获取用户 邮箱不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});",
+                  "pm.test(\"结果为空\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.eql([]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/getbyemail?email=jack@nimabi.com",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "getbyemail"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "jack@nimabi.com"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID获取用户",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/getbyid?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "getbyid"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据主键ID获取用户 id不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});",
+                  "pm.test(\"id不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.eql(null);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/getbyid?id=12798311",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "getbyid"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "12798311"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名获取用户",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/getbyusername?username=Jack",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "getbyusername"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "Jack"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名获取用户 用户不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});",
+                  "pm.test(\"用户名不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.eql(null);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/getbyusername?username=niambi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "getbyusername"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "niambi"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名修改邮箱",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/updateemail?username=Jack&email=jack@new.mangolee.com",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "updateemail"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "Jack"
+                },
+                {
+                  "key": "email",
+                  "value": "jack@new.mangolee.com"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名修改邮箱 用户不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"Username不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"Username不存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/updateemail?username=nimabi&email=jack@new.mangolee.com",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "updateemail"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "nimabi"
+                },
+                {
+                  "key": "email",
+                  "value": "jack@new.mangolee.com"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名和旧密码修改密码",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/updatepassword?username=Jack&password=password1&newpassword=password1password1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "updatepassword"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "Jack"
+                },
+                {
+                  "key": "password",
+                  "value": "password1"
+                },
+                {
+                  "key": "newpassword",
+                  "value": "password1password1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名和旧密码修改密码 旧密码不对",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"Password不匹配\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"Password不匹配\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/updatepassword?username=Jack&password=passwordya98syd98asd&newpassword=password1password1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "updatepassword"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "Jack"
+                },
+                {
+                  "key": "password",
+                  "value": "passwordya98syd98asd"
+                },
+                {
+                  "key": "newpassword",
+                  "value": "password1password1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名和旧密码修改密码 用户名不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"Username不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"Username不存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/updatepassword?username=SamFake&password=password2&newpassword=password2password2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "updatepassword"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "SamFake"
+                },
+                {
+                  "key": "password",
+                  "value": "password2"
+                },
+                {
+                  "key": "newpassword",
+                  "value": "password2password2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名修改用户权限",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/updaterole?username=Jack&role=GUEST",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "updaterole"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "Jack"
+                },
+                {
+                  "key": "role",
+                  "value": "GUEST"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名修改用户权限 用户名不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"Username不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"Username不存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/updaterole?username=Jacknimabi&role=GUEST",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "updaterole"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "Jacknimabi"
+                },
+                {
+                  "key": "role",
+                  "value": "GUEST"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据用户名修改用户权限 权限不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"Role不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"Role不存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/updaterole?username=Jack&role=NIMABI",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "updaterole"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "Jack"
+                },
+                {
+                  "key": "role",
+                  "value": "NIMABI"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "等级Controller",
+      "item": [
+        {
+          "name": "获取所有等级",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/level/get",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "level",
+                "get"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "查询单个等级",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/level/getbylevel?level=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "level",
+                "getbylevel"
+              ],
+              "query": [
+                {
+                  "key": "level",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "查询单个等级 id不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});",
+                  "pm.test(\"data is null\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.eql(null);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/level/getbylevel?level=6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "level",
+                "getbylevel"
+              ],
+              "query": [
+                {
+                  "key": "level",
+                  "value": "6"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "插入新等级",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"level\": 15,\n    \"description\": \"15级描述\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/level/insert",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "level",
+                "insert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "插入新等级 id已经存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"Level已经存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"Level已经存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"level\": 1,\n    \"description\": \"1级新描述\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/level/insert",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "level",
+                "insert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据等级修改等级描述",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/level/update?level=2&description=2级描述更新",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "level",
+                "update"
+              ],
+              "query": [
+                {
+                  "key": "level",
+                  "value": "2"
+                },
+                {
+                  "key": "description",
+                  "value": "2级描述更新"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "根据等级修改等级描述 level不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"Level不存在\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"Level不存在\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/level/update?level=1000&description=1000级描述更新",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "level",
+                "update"
+              ],
+              "query": [
+                {
+                  "key": "level",
+                  "value": "1000"
+                },
+                {
+                  "key": "description",
+                  "value": "1000级描述更新"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "删除等级 level不存在",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(400);",
+                  "});",
+                  "pm.test(\"删除条目失败\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.eql(\"删除条目失败\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/level/delete?level=1000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "level",
+                "delete"
+              ],
+              "query": [
+                {
+                  "key": "level",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "删除等级",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.code).to.eql(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/level/delete?level=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "level",
+                "delete"
+              ],
+              "query": [
+                {
+                  "key": "level",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}

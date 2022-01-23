@@ -30,7 +30,7 @@ public class PermissionController {
     UserService userService;
 
     @ApiOperation("根据主键ID获取权限")
-    @GetMapping("/getbyid/{id}")
+    @GetMapping("/getbyid")
     public Result<Permission> getById(@ApiParam(value = "主键ID", required = true) @RequestParam("id") @NotNull Long id) {
         if (id == null) {
             return Result.error(400, "id不能为空");
@@ -58,15 +58,19 @@ public class PermissionController {
         if (hashMap.get("role") == null) {
             return Result.error(400, "role不能为空");
         }
+        String role = (String) hashMap.get("role");
+        if (permissionService.getOne(new QueryWrapper<Permission>().eq("role", role)) != null) {
+            return Result.error(400, "role已经存在");
+        }
         Permission permission = new Permission();
-        permission.setRole((String) hashMap.get("role"));
+        permission.setRole(role);
         if (!permissionService.save(permission)) {
             return Result.error(400, "插入条目失败");
         }
         return Result.success(permission);
     }
 
-    @ApiOperation("根据主键ID和权限角色名修改权限名")
+    @ApiOperation("根据主键ID修改权限名")
     @PutMapping("/update")
     public Result<Permission> update(
             @ApiParam(value = "主键ID", required = true)

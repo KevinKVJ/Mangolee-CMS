@@ -182,7 +182,7 @@ public class UserController {
         return Result.success();
     }
 
-    @ApiOperation("根据用户名密码邮箱权限创建新账号")
+    @ApiOperation("根据用户名密码邮箱权限创建新账号 即注册")
     @PostMapping("/create")
     public Result<User> createUser(
             @RequestBody HashMap<String,Object> hashMap) {

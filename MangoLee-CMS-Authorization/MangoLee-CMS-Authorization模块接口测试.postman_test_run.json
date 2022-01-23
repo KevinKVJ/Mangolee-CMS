@@ -1,0 +1,1668 @@
+{
+  "id": "ec395726-ccb1-4d78-bf7b-5b3bf689ce8a",
+  "name": "MangoLee-CMS-Authorization模块接口测试",
+  "timestamp": "2022-01-23T06:50:33.913Z",
+  "collection_id": "14575151-d6b9578d-049a-4fcf-942e-2437db9b55c6",
+  "folder_id": 0,
+  "environment_id": "0",
+  "totalPass": 75,
+  "totalFail": 0,
+  "results": [
+    {
+      "id": "0e275a45-2cdf-4db7-89ea-b707d7ff7ba8",
+      "name": "判断用户名和密码并在成功后生成token 正例",
+      "url": "http://localhost:8080/auth/login",
+      "time": 2114,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        2114
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "52bbaf78-389b-4ae0-bd68-5a563617fb18",
+      "name": "判断用户名和密码并在成功后生成token username不存在",
+      "url": "http://localhost:8080/auth/login",
+      "time": 12,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "Username不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Username不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        12
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "Username不存在": true
+        }
+      ]
+    },
+    {
+      "id": "62a256fd-5c75-4f1d-8bfc-c338ed612e68",
+      "name": "判断用户名和密码并在成功后生成token password不匹配",
+      "url": "http://localhost:8080/auth/login",
+      "time": 88,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "Password不匹配": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Password不匹配": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        88
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "Password不匹配": true
+        }
+      ]
+    },
+    {
+      "id": "feb6500d-2e42-48d6-b948-6d6486976eed",
+      "name": "根据token抽取UserInfo实例 空参数",
+      "url": "http://localhost:8080/auth/verify",
+      "time": 10,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        10
+      ],
+      "allTests": [
+        {
+          "状态码为400": true
+        }
+      ]
+    },
+    {
+      "id": "17884b40-f79b-42ca-a13a-4e6f56abd90c",
+      "name": "登出 即删除redis中的令牌 空参数",
+      "url": "http://localhost:8080/auth/delete",
+      "time": 5,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        5
+      ],
+      "allTests": [
+        {
+          "状态码为400": true
+        }
+      ]
+    },
+    {
+      "id": "a1a3b94c-a012-4ff0-9ada-0eadf425f0ae",
+      "name": "登出 即删除redis中的令牌 token不存在",
+      "url": "http://localhost:8080/auth/delete?token=fuckasiodh98asdh09ash90d90asd",
+      "time": 90,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "key不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "key不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        90
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "key不存在": true
+        }
+      ]
+    },
+    {
+      "id": "fba670cf-43b4-48f3-a5d8-92bc5b95a685",
+      "name": "根据主键ID进行删除",
+      "url": "http://localhost:8080/permission/delete?id=3",
+      "time": 29,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        29
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "d14c597d-f5c5-497b-849c-51155c614ac0",
+      "name": "根据主键ID进行删除 id不存在",
+      "url": "http://localhost:8080/permission/delete?id=3000",
+      "time": 7,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "id不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "id不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        7
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "id不存在": true
+        }
+      ]
+    },
+    {
+      "id": "c250201b-a0f1-470b-8c2a-f476c96addee",
+      "name": "获取所有权限",
+      "url": "http://localhost:8080/permission/get",
+      "time": 15,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        15
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "05fe80b2-9f74-4429-a40a-e20d5dcdd24c",
+      "name": "根据主键ID获取权限 ADMIN",
+      "url": "http://localhost:8080/permission/getbyid/?id=1",
+      "time": 9,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true,
+        "role为ADMIN": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "role为ADMIN": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        9
+      ],
+      "allTests": [
+        {
+          "状态码为200": true,
+          "role为ADMIN": true
+        }
+      ]
+    },
+    {
+      "id": "67351722-a31e-415b-aa4c-54fb6de33875",
+      "name": "根据主键ID获取权限 id不存在",
+      "url": "http://localhost:8080/permission/getbyid/?id=1999",
+      "time": 7,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true,
+        "data is null": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "data is null": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        7
+      ],
+      "allTests": [
+        {
+          "状态码为200": true,
+          "data is null": true
+        }
+      ]
+    },
+    {
+      "id": "3a212ca9-ea36-41be-b7b3-a29f9f9af091",
+      "name": "根据主键ID获取权限 GUEST",
+      "url": "http://localhost:8080/permission/getbyid/?id=2",
+      "time": 9,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true,
+        "role为GUEST": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "role为GUEST": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        9
+      ],
+      "allTests": [
+        {
+          "状态码为200": true,
+          "role为GUEST": true
+        }
+      ]
+    },
+    {
+      "id": "a4ab2d1d-b20b-4d59-8a9f-4a931426c244",
+      "name": "插入新权限",
+      "url": "http://localhost:8080/permission/insert",
+      "time": 19,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true,
+        "role为NEW ROLE": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "role为NEW ROLE": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        19
+      ],
+      "allTests": [
+        {
+          "状态码为200": true,
+          "role为NEW ROLE": true
+        }
+      ]
+    },
+    {
+      "id": "9713ba41-8569-4cd8-b80f-efbf6fd58248",
+      "name": "插入新权限 role已经存在",
+      "url": "http://localhost:8080/permission/insert",
+      "time": 10,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "role已经存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "role已经存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        10
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "role已经存在": true
+        }
+      ]
+    },
+    {
+      "id": "d4a9ec3d-990b-43e0-9ee2-bbdcfb53dee6",
+      "name": "根据主键ID修改权限名role已经存在",
+      "url": "http://localhost:8080/permission/update?id=1&role=GUEST",
+      "time": 86,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "GUEST已经存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "GUEST已经存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        86
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "GUEST已经存在": true
+        }
+      ]
+    },
+    {
+      "id": "f86d3506-d0a7-4ca4-bb1c-5e917e1a007e",
+      "name": "根据主键ID修改权限名",
+      "url": "http://localhost:8080/permission/update?id=1&role=ADMIN",
+      "time": 18,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        18
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "bbc0cbee-2ee8-433d-9d6b-01d9b82a1378",
+      "name": "根据主键ID修改权限名 id不存在",
+      "url": "http://localhost:8080/permission/update?id=10000&role=NEW%20RANDOM%20ROLE",
+      "time": 7,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "id不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "id不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        7
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "id不存在": true
+        }
+      ]
+    },
+    {
+      "id": "faaa6899-aa13-4e2d-adc6-3ec1c1d264aa",
+      "name": "根据用户名密码邮箱权限创建新账号",
+      "url": "http://localhost:8080/user/create",
+      "time": 129,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        129
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "beca7965-5253-4a97-b70b-f9c8378f8a68",
+      "name": "根据用户名密码邮箱权限创建新账号 role不存在",
+      "url": "http://localhost:8080/user/create",
+      "time": 9,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "role值非法": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "role值非法": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        9
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "role值非法": true
+        }
+      ]
+    },
+    {
+      "id": "c475d0e6-5280-4280-b4c5-9660a3634384",
+      "name": "根据用户名密码邮箱权限创建新账号 用户名存在",
+      "url": "http://localhost:8080/user/create",
+      "time": 113,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "Duplicate entry": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Duplicate entry": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        113
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "Duplicate entry": true
+        }
+      ]
+    },
+    {
+      "id": "931f634b-a035-4e02-b10f-738d00abc976",
+      "name": "根据主键ID进行删除",
+      "url": "http://localhost:8080/user/deletebyid?id=3",
+      "time": 11,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        11
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "be9ae181-616e-4b3f-949c-32fa48a41c8f",
+      "name": "根据主键ID进行删除 ID不存在",
+      "url": "http://localhost:8080/user/deletebyid?id=400",
+      "time": 8,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "删除条目失败": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "删除条目失败": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        8
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "删除条目失败": true
+        }
+      ]
+    },
+    {
+      "id": "85520d55-61b1-4771-9c57-a6fd46e2fe00",
+      "name": "根据用户名进行删除",
+      "url": "http://localhost:8080/user/deletebyusername?username=Tester",
+      "time": 10,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        10
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "78ccd9d4-93bc-4ad2-a059-bdc43f276d54",
+      "name": "根据用户名进行删除 用户名不存在",
+      "url": "http://localhost:8080/user/deletebyusername?username=nimamaibi",
+      "time": 10,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "删除条目失败": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "删除条目失败": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        10
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "删除条目失败": true
+        }
+      ]
+    },
+    {
+      "id": "9a1d09bc-6869-4b76-b83a-4c2d8b4842fa",
+      "name": "获取所有用户",
+      "url": "http://localhost:8080/user/get",
+      "time": 11,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        11
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "0d5bb25e-56fc-4609-8085-96b578baf33e",
+      "name": "根据邮箱获取用户",
+      "url": "http://localhost:8080/user/getbyemail?email=jack@mangolee.com",
+      "time": 31,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        31
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "4d2ef143-a7da-4a14-827a-648d24adad44",
+      "name": "根据邮箱获取用户 邮箱不存在",
+      "url": "http://localhost:8080/user/getbyemail?email=jack@nimabi.com",
+      "time": 12,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true,
+        "结果为空": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "结果为空": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        12
+      ],
+      "allTests": [
+        {
+          "状态码为200": true,
+          "结果为空": true
+        }
+      ]
+    },
+    {
+      "id": "fb9894db-2742-4d0e-8dcb-42a0966b9ffe",
+      "name": "根据主键ID获取用户",
+      "url": "http://localhost:8080/user/getbyid?id=1",
+      "time": 8,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        8
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "772a3078-823e-4ff7-8cbd-fd05faf6ade7",
+      "name": "根据主键ID获取用户 id不存在",
+      "url": "http://localhost:8080/user/getbyid?id=12798311",
+      "time": 7,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true,
+        "id不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "id不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        7
+      ],
+      "allTests": [
+        {
+          "状态码为200": true,
+          "id不存在": true
+        }
+      ]
+    },
+    {
+      "id": "9e4744be-1d3f-44c8-bc56-ff7c3e11c49a",
+      "name": "根据用户名获取用户",
+      "url": "http://localhost:8080/user/getbyusername?username=Jack",
+      "time": 10,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        10
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "37454d40-da28-43f0-855f-668e0053a6d3",
+      "name": "根据用户名获取用户 用户不存在",
+      "url": "http://localhost:8080/user/getbyusername?username=niambi",
+      "time": 8,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true,
+        "用户名不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "用户名不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        8
+      ],
+      "allTests": [
+        {
+          "状态码为200": true,
+          "用户名不存在": true
+        }
+      ]
+    },
+    {
+      "id": "bfd22f57-459e-4836-99fa-ab16271f4dfc",
+      "name": "根据用户名修改邮箱",
+      "url": "http://localhost:8080/user/updateemail?username=Jack&email=jack@new.mangolee.com",
+      "time": 18,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        18
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "6850aa14-ad55-4eda-977a-d365c6d55a52",
+      "name": "根据用户名修改邮箱 用户不存在",
+      "url": "http://localhost:8080/user/updateemail?username=nimabi&email=jack@new.mangolee.com",
+      "time": 9,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "Username不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Username不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        9
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "Username不存在": true
+        }
+      ]
+    },
+    {
+      "id": "d447e131-56bc-44df-b5d8-ae2830f0030a",
+      "name": "根据用户名和旧密码修改密码",
+      "url": "http://localhost:8080/user/updatepassword?username=Jack&password=password1&newpassword=password1password1",
+      "time": 179,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        179
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "e2227383-97bf-4994-bf89-b53ccb010ab8",
+      "name": "根据用户名和旧密码修改密码 旧密码不对",
+      "url": "http://localhost:8080/user/updatepassword?username=Jack&password=passwordya98syd98asd&newpassword=password1password1",
+      "time": 98,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "Password不匹配": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Password不匹配": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        98
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "Password不匹配": true
+        }
+      ]
+    },
+    {
+      "id": "adfe2b62-d863-4911-b6da-b421c97a76ec",
+      "name": "根据用户名和旧密码修改密码 用户名不存在",
+      "url": "http://localhost:8080/user/updatepassword?username=SamFake&password=password2&newpassword=password2password2",
+      "time": 8,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "Username不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Username不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        8
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "Username不存在": true
+        }
+      ]
+    },
+    {
+      "id": "64545b1d-8142-430c-b3bd-ab9e814a8ad4",
+      "name": "根据用户名修改用户权限",
+      "url": "http://localhost:8080/user/updaterole?username=Jack&role=GUEST",
+      "time": 21,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        21
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "b5a5e2ae-14f4-49f7-a7ff-b2e9a8e51088",
+      "name": "根据用户名修改用户权限 用户名不存在",
+      "url": "http://localhost:8080/user/updaterole?username=Jacknimabi&role=GUEST",
+      "time": 10,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "Username不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Username不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        10
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "Username不存在": true
+        }
+      ]
+    },
+    {
+      "id": "2c1b1b4d-30ff-4666-b329-d98973a599fd",
+      "name": "根据用户名修改用户权限 权限不存在",
+      "url": "http://localhost:8080/user/updaterole?username=Jack&role=NIMABI",
+      "time": 14,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "Role不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Role不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        14
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "Role不存在": true
+        }
+      ]
+    },
+    {
+      "id": "bceb5f00-2a6f-44a0-843d-f5ca45f29f28",
+      "name": "获取所有等级",
+      "url": "http://localhost:8080/level/get",
+      "time": 20,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        20
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "07b3182d-9d09-4fe6-92b5-f4703a0d5a55",
+      "name": "查询单个等级",
+      "url": "http://localhost:8080/level/getbylevel?level=1",
+      "time": 11,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        11
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "15fc68f7-c257-4290-92f1-c616321782e4",
+      "name": "查询单个等级 id不存在",
+      "url": "http://localhost:8080/level/getbylevel?level=6",
+      "time": 8,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true,
+        "data is null": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "data is null": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        8
+      ],
+      "allTests": [
+        {
+          "状态码为200": true,
+          "data is null": true
+        }
+      ]
+    },
+    {
+      "id": "08a48d41-ad41-4dd3-9c21-c2fc62d3f001",
+      "name": "插入新等级",
+      "url": "http://localhost:8080/level/insert",
+      "time": 16,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        16
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "42fc9efb-c0b1-432b-9d70-760f204eee17",
+      "name": "插入新等级 id已经存在",
+      "url": "http://localhost:8080/level/insert",
+      "time": 9,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "Level已经存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Level已经存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        9
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "Level已经存在": true
+        }
+      ]
+    },
+    {
+      "id": "7409b998-26ac-455c-acce-a8c90d5ddbf1",
+      "name": "根据等级修改等级描述",
+      "url": "http://localhost:8080/level/update?level=2&description=2%E7%BA%A7%E6%8F%8F%E8%BF%B0%E6%9B%B4%E6%96%B0",
+      "time": 16,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        16
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    },
+    {
+      "id": "898fea83-29a1-4122-87cd-bc1ba31406d0",
+      "name": "根据等级修改等级描述 level不存在",
+      "url": "http://localhost:8080/level/update?level=1000&description=1000%E7%BA%A7%E6%8F%8F%E8%BF%B0%E6%9B%B4%E6%96%B0",
+      "time": 7,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "Level不存在": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Level不存在": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        7
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "Level不存在": true
+        }
+      ]
+    },
+    {
+      "id": "61299001-263a-4d67-a4e5-8a18a14b30f3",
+      "name": "删除等级 level不存在",
+      "url": "http://localhost:8080/level/delete?level=1000",
+      "time": 8,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为400": true,
+        "删除条目失败": true
+      },
+      "testPassFailCounts": {
+        "状态码为400": {
+          "pass": 1,
+          "fail": 0
+        },
+        "删除条目失败": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        8
+      ],
+      "allTests": [
+        {
+          "状态码为400": true,
+          "删除条目失败": true
+        }
+      ]
+    },
+    {
+      "id": "ea423f73-95d7-42e0-b55f-277c92e316fa",
+      "name": "删除等级",
+      "url": "http://localhost:8080/level/delete?level=1",
+      "time": 9,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "状态码为200": true
+      },
+      "testPassFailCounts": {
+        "状态码为200": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [
+        9
+      ],
+      "allTests": [
+        {
+          "状态码为200": true
+        }
+      ]
+    }
+  ],
+  "count": 1,
+  "totalTime": 3373,
+  "collection": {
+    "requests": [
+      {
+        "id": "0e275a45-2cdf-4db7-89ea-b707d7ff7ba8",
+        "method": "POST"
+      },
+      {
+        "id": "52bbaf78-389b-4ae0-bd68-5a563617fb18",
+        "method": "POST"
+      },
+      {
+        "id": "62a256fd-5c75-4f1d-8bfc-c338ed612e68",
+        "method": "POST"
+      },
+      {
+        "id": "feb6500d-2e42-48d6-b948-6d6486976eed",
+        "method": "GET"
+      },
+      {
+        "id": "17884b40-f79b-42ca-a13a-4e6f56abd90c",
+        "method": "DELETE"
+      },
+      {
+        "id": "a1a3b94c-a012-4ff0-9ada-0eadf425f0ae",
+        "method": "DELETE"
+      },
+      {
+        "id": "fba670cf-43b4-48f3-a5d8-92bc5b95a685",
+        "method": "DELETE"
+      },
+      {
+        "id": "d14c597d-f5c5-497b-849c-51155c614ac0",
+        "method": "DELETE"
+      },
+      {
+        "id": "c250201b-a0f1-470b-8c2a-f476c96addee",
+        "method": "GET"
+      },
+      {
+        "id": "05fe80b2-9f74-4429-a40a-e20d5dcdd24c",
+        "method": "GET"
+      },
+      {
+        "id": "67351722-a31e-415b-aa4c-54fb6de33875",
+        "method": "GET"
+      },
+      {
+        "id": "3a212ca9-ea36-41be-b7b3-a29f9f9af091",
+        "method": "GET"
+      },
+      {
+        "id": "a4ab2d1d-b20b-4d59-8a9f-4a931426c244",
+        "method": "POST"
+      },
+      {
+        "id": "9713ba41-8569-4cd8-b80f-efbf6fd58248",
+        "method": "POST"
+      },
+      {
+        "id": "d4a9ec3d-990b-43e0-9ee2-bbdcfb53dee6",
+        "method": "PUT"
+      },
+      {
+        "id": "f86d3506-d0a7-4ca4-bb1c-5e917e1a007e",
+        "method": "PUT"
+      },
+      {
+        "id": "bbc0cbee-2ee8-433d-9d6b-01d9b82a1378",
+        "method": "PUT"
+      },
+      {
+        "id": "faaa6899-aa13-4e2d-adc6-3ec1c1d264aa",
+        "method": "POST"
+      },
+      {
+        "id": "beca7965-5253-4a97-b70b-f9c8378f8a68",
+        "method": "POST"
+      },
+      {
+        "id": "c475d0e6-5280-4280-b4c5-9660a3634384",
+        "method": "POST"
+      },
+      {
+        "id": "931f634b-a035-4e02-b10f-738d00abc976",
+        "method": "DELETE"
+      },
+      {
+        "id": "be9ae181-616e-4b3f-949c-32fa48a41c8f",
+        "method": "DELETE"
+      },
+      {
+        "id": "85520d55-61b1-4771-9c57-a6fd46e2fe00",
+        "method": "DELETE"
+      },
+      {
+        "id": "78ccd9d4-93bc-4ad2-a059-bdc43f276d54",
+        "method": "DELETE"
+      },
+      {
+        "id": "9a1d09bc-6869-4b76-b83a-4c2d8b4842fa",
+        "method": "GET"
+      },
+      {
+        "id": "0d5bb25e-56fc-4609-8085-96b578baf33e",
+        "method": "GET"
+      },
+      {
+        "id": "4d2ef143-a7da-4a14-827a-648d24adad44",
+        "method": "GET"
+      },
+      {
+        "id": "fb9894db-2742-4d0e-8dcb-42a0966b9ffe",
+        "method": "GET"
+      },
+      {
+        "id": "772a3078-823e-4ff7-8cbd-fd05faf6ade7",
+        "method": "GET"
+      },
+      {
+        "id": "9e4744be-1d3f-44c8-bc56-ff7c3e11c49a",
+        "method": "GET"
+      },
+      {
+        "id": "37454d40-da28-43f0-855f-668e0053a6d3",
+        "method": "GET"
+      },
+      {
+        "id": "bfd22f57-459e-4836-99fa-ab16271f4dfc",
+        "method": "PUT"
+      },
+      {
+        "id": "6850aa14-ad55-4eda-977a-d365c6d55a52",
+        "method": "PUT"
+      },
+      {
+        "id": "d447e131-56bc-44df-b5d8-ae2830f0030a",
+        "method": "PUT"
+      },
+      {
+        "id": "e2227383-97bf-4994-bf89-b53ccb010ab8",
+        "method": "PUT"
+      },
+      {
+        "id": "adfe2b62-d863-4911-b6da-b421c97a76ec",
+        "method": "PUT"
+      },
+      {
+        "id": "64545b1d-8142-430c-b3bd-ab9e814a8ad4",
+        "method": "PUT"
+      },
+      {
+        "id": "b5a5e2ae-14f4-49f7-a7ff-b2e9a8e51088",
+        "method": "PUT"
+      },
+      {
+        "id": "2c1b1b4d-30ff-4666-b329-d98973a599fd",
+        "method": "PUT"
+      },
+      {
+        "id": "bceb5f00-2a6f-44a0-843d-f5ca45f29f28",
+        "method": "GET"
+      },
+      {
+        "id": "07b3182d-9d09-4fe6-92b5-f4703a0d5a55",
+        "method": "GET"
+      },
+      {
+        "id": "15fc68f7-c257-4290-92f1-c616321782e4",
+        "method": "GET"
+      },
+      {
+        "id": "08a48d41-ad41-4dd3-9c21-c2fc62d3f001",
+        "method": "POST"
+      },
+      {
+        "id": "42fc9efb-c0b1-432b-9d70-760f204eee17",
+        "method": "POST"
+      },
+      {
+        "id": "7409b998-26ac-455c-acce-a8c90d5ddbf1",
+        "method": "PUT"
+      },
+      {
+        "id": "898fea83-29a1-4122-87cd-bc1ba31406d0",
+        "method": "PUT"
+      },
+      {
+        "id": "61299001-263a-4d67-a4e5-8a18a14b30f3",
+        "method": "DELETE"
+      },
+      {
+        "id": "ea423f73-95d7-42e0-b55f-277c92e316fa",
+        "method": "DELETE"
+      }
+    ]
+  }
+}
