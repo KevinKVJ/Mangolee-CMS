@@ -35,7 +35,7 @@ public class UserController {
     @GetMapping("/getbyid")
     public Result<User> getById(@ApiParam(value = "主键ID", required = true) @RequestParam("id") @NotNull Long id) {
         if (id == null) {
-            return Result.error(400, "id is null");
+            return Result.error(400, "id不能为空");
         }
         return Result.success(userService.getById(id));
     }
@@ -51,7 +51,7 @@ public class UserController {
     public Result<User> getByUsername(@ApiParam(value = "用户名", required = true) @RequestParam(
             "username") @NotNull String username) {
         if (username == null) {
-            return Result.error(400, "username is null");
+            return Result.error(400, "Username不能为空");
         }
         return Result.success(userService.getOne(new QueryWrapper<User>().eq("username", username)));
     }
@@ -61,7 +61,7 @@ public class UserController {
     public Result<List<User>> getUsersByEmail(@ApiParam(value = "邮箱", required = true) @RequestParam(
             "email") @Email(message = "邮箱格式不正确") String email) {
         if (email == null) {
-            return Result.error(400, "email is null");
+            return Result.error(400, "Email不能为空");
         }
         return Result.success(userService.list(new QueryWrapper<User>().eq("email", email)));
     }
@@ -78,25 +78,25 @@ public class UserController {
             @NotNull
                     String role) {
         if (username == null) {
-            return Result.error(400, "username is null");
+            return Result.error(400, "Username不能为空");
         }
         if (role == null) {
-            return Result.error(400, "role is null");
+            return Result.error(400, "Role不能为空");
         }
         QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
         User               user    = userService.getOne(wrapper);
         // 若找不到用户则抛出异常
         if (user == null) {
-            return Result.error(400,"Can not find user");
+            return Result.error(400, "Username不存在");
         }
         // 若找不到权限则抛出异常
         Permission permission = permissionService.getOne(new QueryWrapper<Permission>().eq("role", role));
         if (permission == null) {
-            return Result.error(400,"Can not find permission with such role");
+            return Result.error(400, "Role不存在");
         }
         user.setRole(role);
         if (!userService.update(user, wrapper)) {
-            return Result.error(400,"Failed to update the item");
+            return Result.error(400, "更新条目失败");
         }
         return Result.success(user);
     }
@@ -108,28 +108,28 @@ public class UserController {
             @ApiParam(value = "密码", required = true) @RequestParam("password") @NotNull String password,
             @ApiParam(value = "新密码", required = true) @RequestParam("newpassword") @NotNull String newPassword) {
         if (username == null) {
-            return Result.error(400, "role is null");
+            return Result.error(400, "Username不能为空");
         }
         if (password == null) {
-            return Result.error(400, "password is null");
+            return Result.error(400, "旧Password不能为空");
         }
         if (newPassword == null) {
-            return Result.error(400, "new password is null");
+            return Result.error(400, "新Password不能为空");
         }
         QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
         User               user    = userService.getOne(wrapper);
         // 若找不到用户则抛出异常
         if (user == null) {
-            return Result.error(400,"Can not find user with such username");
+            return Result.error(400, "Username不存在");
         }
         // 若找到用户但密码不正确则抛出异常
         if (!new BCryptPasswordEncoder().matches(password, user.getPassword())) {
-            return Result.error(400,"Password does not match");
+            return Result.error(400, "Password不匹配");
         }
         // 更新用户
         user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
         if (!userService.update(user, wrapper)) {
-            return Result.error(400,"Failed to update the user");
+            return Result.error(400, "更新条目失败");
         }
         return Result.success(userService.getOne(new QueryWrapper<User>().eq("username", username)));
     }
@@ -139,19 +139,19 @@ public class UserController {
     public Result<User> updateEmail(@ApiParam(value = "用户名", required = true) @RequestParam("username") @NotNull String username,
                                     @ApiParam(value = "新邮箱", required = true) @RequestParam("email") @Email(message = "邮箱格式不正确") String email) {
         if (username == null) {
-            return Result.error(400, "Username is null");
+            return Result.error(400, "Username不能为空");
         }
         if (email == null) {
-            return Result.error(400, "email is null");
+            return Result.error(400, "Email不能为空");
         }
         QueryWrapper<User> wrapper = new QueryWrapper<User>().eq("username", username);
         User               user    = userService.getOne(wrapper);
         if (user == null) {
-            return Result.error(400, "Failed to find the user with such username");
+            return Result.error(400, "Username不存在");
         }
         user.setEmail(email);
         if (!userService.update(user, wrapper)) {
-            return Result.error(400, "Failed to update the user");
+            return Result.error(400, "更新条目失败");
         }
         return Result.success(user);
     }
@@ -162,10 +162,10 @@ public class UserController {
             @ApiParam(value = "用户名", required = true)
             @RequestParam("username") @NotNull String username) {
         if (username == null) {
-            return Result.error(400, "Username is null");
+            return Result.error(400, "Username不能为空");
         }
         if (!userService.remove(new QueryWrapper<User>().eq("username", username))) {
-            return Result.error(400, "Failed to delete the item");
+            return Result.error(400, "删除条目失败");
         }
         return Result.success();
     }
@@ -174,46 +174,61 @@ public class UserController {
     @DeleteMapping("/deletebyid")
     public Result<Void> deleteById(@ApiParam(value = "主键ID", required = true) @RequestParam("id") @NotNull Long id) {
         if (id == null) {
-            return Result.error(400, "id is null");
+            return Result.error(400, "id不能为空");
         }
         if (!userService.removeById(id)) {
-            return Result.error(400, "Failed to delete the item");
+            return Result.error(400, "删除条目失败");
         }
         return Result.success();
     }
 
-    @ApiOperation("根据用户名密码邮箱权限创建新账号")
+    @ApiOperation("根据用户名密码邮箱权限创建新账号 即注册")
     @PostMapping("/create")
     public Result<User> createUser(
             @RequestBody HashMap<String,Object> hashMap) {
-        if (!hashMap.containsKey("username") || hashMap.get("username") == null) {
-            return Result.error(400, "username is null");
+        if (hashMap == null) {
+            return Result.error(400, "参数对象不能为空");
         }
-        if (!hashMap.containsKey("password") || hashMap.get("password") == null) {
-            return Result.error(400, "password is null");
+        if (!hashMap.containsKey("username")) {
+            return Result.error(400, "username不存在");
         }
-        if (!hashMap.containsKey("email") || hashMap.get("email") == null) {
-            return Result.error(400, "email is null");
+        if (hashMap.get("username") == null) {
+            return Result.error(400, "username不能为空");
         }
-        if (!hashMap.containsKey("role") || hashMap.get("role") == null) {
-            return Result.error(400, "role is null");
+        if (!hashMap.containsKey("password")) {
+            return Result.error(400, "password不存在");
         }
-        Permission  permission = permissionService.getOne(new QueryWrapper<Permission>().eq("role", hashMap.get("role")));
+        if (hashMap.get("password") == null) {
+            return Result.error(400, "password不能为空");
+        }
+        if (!hashMap.containsKey("email")) {
+            return Result.error(400, "email不存在");
+        }
+        if (hashMap.get("email") == null) {
+            return Result.error(400, "email不能为空");
+        }
+        if (!hashMap.containsKey("role")) {
+            return Result.error(400, "role不存在");
+        }
+        if (hashMap.get("role") == null) {
+            return Result.error(400, "role不能为空");
+        }
+        Permission permission = permissionService.getOne(new QueryWrapper<Permission>().eq("role", hashMap.get("role")));
         if (permission == null) {
-            return Result.error(400, "Such role does not exist");
+            return Result.error(400, "role值非法");
         }
         User user = new User();
-        user.setUsername((String)hashMap.get("username"));
-        user.setPassword(new BCryptPasswordEncoder().encode((String)hashMap.get("password")));
-        user.setEmail((String)hashMap.get("email"));
-        user.setRole((String)hashMap.get("role"));
+        user.setUsername((String) hashMap.get("username"));
+        user.setPassword(new BCryptPasswordEncoder().encode((String) hashMap.get("password")));
+        user.setEmail((String) hashMap.get("email"));
+        user.setRole((String) hashMap.get("role"));
         if ("ADMIN".equals(user.getRole())) {
             user.setLevel(0);
         } else {
             user.setLevel(1);
         }
         if (!userService.save(user)) {
-            return Result.error(400, "Failed to insert the item");
+            return Result.error(400, "插入失败");
         }
         return Result.success(userService.getOne(new QueryWrapper<User>().eq("username",
                 user.getUsername())));

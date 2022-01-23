@@ -30,10 +30,10 @@ public class PermissionController {
     UserService userService;
 
     @ApiOperation("根据主键ID获取权限")
-    @GetMapping("/getbyid/{id}")
+    @GetMapping("/getbyid")
     public Result<Permission> getById(@ApiParam(value = "主键ID", required = true) @RequestParam("id") @NotNull Long id) {
         if (id == null) {
-            return Result.error(400, "id is null");
+            return Result.error(400, "id不能为空");
         }
         return Result.success(permissionService.getById(id));
     }
@@ -49,18 +49,28 @@ public class PermissionController {
     public Result<Permission> insert(
             @RequestBody HashMap<String, Object> hashMap
             ) {
-        if (!hashMap.containsKey("role") || hashMap.get("role") == null) {
-            return Result.error(400, "role is null");
+        if (hashMap == null) {
+            return Result.error(400, "参数对象不能为空");
+        }
+        if (!hashMap.containsKey("role")) {
+            return Result.error(400, "role不存在");
+        }
+        if (hashMap.get("role") == null) {
+            return Result.error(400, "role不能为空");
+        }
+        String role = (String) hashMap.get("role");
+        if (permissionService.getOne(new QueryWrapper<Permission>().eq("role", role)) != null) {
+            return Result.error(400, "role已经存在");
         }
         Permission permission = new Permission();
-        permission.setRole((String)hashMap.get("role"));
+        permission.setRole(role);
         if (!permissionService.save(permission)) {
-            return Result.error(400, "Failed to insert the item");
+            return Result.error(400, "插入条目失败");
         }
         return Result.success(permission);
     }
 
-    @ApiOperation("根据主键ID和权限角色名修改权限名")
+    @ApiOperation("根据主键ID修改权限名")
     @PutMapping("/update")
     public Result<Permission> update(
             @ApiParam(value = "主键ID", required = true)
@@ -71,27 +81,27 @@ public class PermissionController {
             @NotNull String newRole
     ) {
         if (id == null) {
-            return Result.error(400, "id is null");
+            return Result.error(400, "id不能为空");
         }
         if (newRole == null) {
-            return Result.error(400, "role is null");
+            return Result.error(400, "role不能为空");
         }
         // 判断权限是否为null
         Permission permission = permissionService.getById(id);
         if (permission == null) {
-            return Result.error(400, "Cannot find the item with such id");
+            return Result.error(400, "id不存在");
         }
         String oldRole = permission.getRole();
         // 更新权限名称
         permission.setRole(newRole);
         if (!permissionService.updateById((permission))) {
-            return Result.error(400, "Failed to update the item");
+            return Result.error(400, "更新条目失败");
         }
         // 批量更新User
         User user = new User();
         user.setRole(newRole);
         if (!userService.update(user, new QueryWrapper<User>().eq("role", oldRole))) {
-            return Result.error(400, "Failed to update the item");
+            return Result.error(400, "更新条目失败");
         }
         return Result.success(permissionService.getById(id));
     }
@@ -103,15 +113,15 @@ public class PermissionController {
             @RequestParam("id")
             @NotNull Long id) {
         if (id == null) {
-            return Result.error(400, "id is null");
+            return Result.error(400, "id不能为空");
         }
         Permission permission = permissionService.getById(id);
         if (permission == null) {
-            return Result.error(400, "Cannot find item with such id");
+            return Result.error(400, "id不存在");
         }
         String role = permission.getRole();
         if (!permissionService.removeById(id)) {
-            return Result.error(400, "Failed to delete the item");
+            return Result.error(400, "更新条目失败");
         }
         userService.updateRoleBatchWithNull(role);
         return Result.success();
